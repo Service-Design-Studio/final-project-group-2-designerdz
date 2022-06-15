@@ -1,16 +1,20 @@
 import './App.css';
-import Button from './components/button.js';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Landing from './pages/Landing.js';
+import Details from './pages/Details.js';
+import Passport from './pages/Passport.js';
+import Review from './pages/Review.js';
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <Button text="NOT A CUSTOMER YET?" bgcolor="bg-red-500" hovercolor = "hover:bg-red-700" onClick={() => alert('You clicked me!')} />
-      <Button text="LOG IN" bgcolor="bg-slate-500" hovercolor="hover:bg-slate-700" onClick={() => alert('You clicked me!')} />
-      <h1>Hello World!</h1>
-      <h2 className='bg-green-400'>Testing</h2>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing/>}>
+        <Route path="/details" element = {<Details/>}/>
+        <Route path="/passport" element = {<Passport/>}/>
+        <Route path="/review" element = {<Review/>}/>
+        </ Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
-
