@@ -4,9 +4,10 @@ import Button from './components/button.js';
 function App() {
   return (
     <div className="App">
-      <Button text="NOT A CUSTOMER YET?" color="bg-red" onClick={() => alert('You clicked me!')} />
-      <Button text="LOG IN" color="bg-slate" onClick={() => alert('You clicked me!')} />
-      <Button text="LOG IN" color="bg-slate" onClick={() => alert('You clicked me!')} />
+      <Button text="NOT A CUSTOMER YET?" bgcolor="bg-red-500" hovercolor = "hover:bg-red-700" onClick={() => alert('You clicked me!')} />
+      <Button text="LOG IN" bgcolor="bg-slate-500" hovercolor="hover:bg-slate-700" onClick={() => alert('You clicked me!')} />
+      <h1>Hello World!</h1>
+      <h2 className='bg-green-400'>Testing</h2>
     </div>
   );
 }
