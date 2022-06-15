@@ -5,3 +5,4 @@ export default function Button({text, color, onClick}) {
     </button>
   );
 }
+
