@@ -13,6 +13,7 @@ export default function Passport() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col ">
+      <input type="file" placeholder = "Passport" {...register("Passport", {required: true})} />
       <input type="text" placeholder="Full Name" {...register("Full Name", {required: true})} />
       <input type="text" placeholder="Passport Number" {...register("Passport Number", {required: true})} />
       <input type="datetime" placeholder="Passport Expiry" {...register("Passport Expiry", {})} />
@@ -22,7 +23,7 @@ export default function Passport() {
         <option value="Female">Female</option>
       </select>
       <input type="datetime" placeholder="Date of Birth" {...register("Date of Birth", {required: true})} />
-      <input type="submit" className="bg-red-500" />
+      <input type="submit" className="w-full bg-red-500" />
   </form>
   );
 }
