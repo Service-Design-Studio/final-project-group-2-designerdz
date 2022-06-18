@@ -3,6 +3,7 @@
 - TailwindCSS: For CSS Styling
 - Axios: A HTTP Library For interacting with our backend APIs
 - React-Router: Server Side routing library
+- React-Hook-Form: A library for creating forms in React
 
 # References 
 - https://www.codingdeft.com/posts/react-deploy-google-cloud-app-engine/
@@ -15,6 +16,7 @@
 1. Follow instructions in https://tailwindcss.com/docs/guides/create-react-app to set up React and Tailwind basic app structure
 2. Install Axios using `npm install axios`. This is used for interacting with backend APIs
 3. Install React Router using `npm install react-router-dom`. This is used for server side routing
+4. Install React Hook Form using `npm install react-hook-form`. This is used for creating forms in React
 
 # Development in Local
     npm run start
