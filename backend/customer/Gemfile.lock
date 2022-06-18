@@ -110,6 +110,9 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.6-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.13.6-x86_64-linux)
+      racc (~> 1.4)
+    pg (0.21.0)
     puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
@@ -160,18 +163,20 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   bootsnap
   debug
+  pg (~> 0.21)
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.3)
-  sqlite3 (~> 1.4)
+  sqlite3
   tzinfo-data
 
 RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.16
+   2.3.7
