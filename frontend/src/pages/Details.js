@@ -62,19 +62,6 @@ export default function Details() {
 				<div class="mb-3">
 					<label 
 						className="block font-medium">
-							Email Address
-					</label>
-					<input 
-						type="email" 
-						className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-						placeholder="Email Address (Optional)"
-						{...register("Email Address (Optional)", {})}
-					/>
-				</div>
-
-				<div class="mb-3">
-					<label 
-						className="block font-medium">
 							Phone Number
 					</label>
 					<input 
@@ -82,6 +69,19 @@ export default function Details() {
 						className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" 
 						placeholder="Phone Number"
 						{...register("Phone Number", { required: true })}
+					/>
+				</div>
+
+				<div class="mb-3">
+					<label 
+						className="block font-medium">
+							Email Address (Optional)
+					</label>
+					<input 
+						type="email" 
+						className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+						placeholder="Email Address (Optional)"
+						{...register("Email Address (Optional)", {})}
 					/>
 				</div>
 
