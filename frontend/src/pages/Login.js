@@ -3,8 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
     const navigate = useNavigate();
+    const onSubmit = data => {
+        console.log('Submitted');
+        console.log(data);
+        navigate("/landing");
+    }
     console.log(errors);
     
     // TODO: Think of how to use this form to get the login state. Should the loggedIn boolean be passed back up to App.js?
