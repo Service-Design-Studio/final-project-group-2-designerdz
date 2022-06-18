@@ -167,14 +167,15 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  pg (~> 0.21)
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.3)
-  sqlite3 (~> 1.4)
+  sqlite3
   tzinfo-data
 
 RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.16
+   2.3.7

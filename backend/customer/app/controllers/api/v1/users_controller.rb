@@ -13,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
     render json: @user
   end
 
-  # POST /users
+  # POST /users ## when users click on next after submitting phone number
   def create
     @user = User.new(user_params)
 
@@ -24,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /users/1
+  # PATCH/PUT /users/1 ## when users click on next buttons
   def update
     if @user.update(user_params)
       render json: @user
