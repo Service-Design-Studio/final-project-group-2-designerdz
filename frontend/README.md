@@ -6,6 +6,7 @@
 - React-Hook-Form: A library for creating forms in React
 - PactumJS: A rest API testing tool
 - Cucumber: A BDD testing tool
+- Selenium: A webdriver for testing
 
 
 # References 
@@ -25,12 +26,15 @@
 3. Install React Router using `npm install react-router-dom`. This is used for server side routing
 4. Install React Hook Form using `npm install react-hook-form`. This is used for creating forms in React
 5. Install PactumJS using `npm install pactum`. This is used for testing REST APIs
-6. Install Cucumber using `$ npm install @cucumber/cucumber`. This is used for creating BDD tests
-
+6. Install Cucumber using `npm install @cucumber/cucumber`. This is used for creating BDD tests
+7. Install Selenium using `npm install selenium-webdriver`. This is used for testing webpages
 
 # Development in Local
 
     npm run start
+
+# Running Cucumber Tests
+    npx cucumber-js # Ensure you are in src folder
 
 # Deployment to Production
 
