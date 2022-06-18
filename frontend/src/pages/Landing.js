@@ -6,33 +6,37 @@ import Customers from "../components/Customers.js";
 import { API_URL } from "../utilities/constants.js";
 
 function getAPIData() {
-  return axios.get(API_URL).then((response) => response.data);
+	return axios.get(API_URL).then((response) => response.data);
 }
 
 export default function Landing() {
-  const navigate = useNavigate();
-  const [customers, setCustomers] = useState([]);
+	const navigate = useNavigate();
+	const [customers, setCustomers] = useState([]);
 
-  useEffect(() => {
-    let mounted = true;
-    getAPIData()
-      .then((items) => {
-        if (mounted) {
-          setCustomers(items);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    return () => (mounted = false);
-  }, []);
+	useEffect(() => {
+		let mounted = true;
+		getAPIData()
+			.then((items) => {
+				if (mounted) {
+					setCustomers(items);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		return () => (mounted = false);
+	}, []);
 
-  console.log(customers);
+	console.log(customers);
 
-  return (
+	return (
     <div>
-      <h1>Not a customer yet?</h1>
-      <div className="flex flex-col px-8 space-y-3 bottom">
+      <img 
+        className="flex flex-col px-8 space-y-3 bottom my-20"
+        src="https://1000logos.net/wp-content/uploads/2020/04/DBS-logo.jpg" alt="DBS Logo" 
+      />
+
+      <div className="flex flex-col px-8 space-y-3 bottom my-8">
         <Button
           text="NOT A CUSTOMER YET?"
           bgcolor="bg-red-500"
@@ -45,8 +49,7 @@ export default function Landing() {
           hovercolor="hover:bg-slate-700"
           onClick={() => alert("Sorry we are not DBS!")}
         />
-        <Customers customers={customers} />
       </div>
     </div>
-  );
+	);
 }
