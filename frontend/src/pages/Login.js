@@ -1,10 +1,13 @@
 import { useForm } from 'react-hook-form';
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => console.log(data);
+    const navigate = useNavigate();
     console.log(errors);
     
+    // TODO: Think of how to use this form to get the login state. Should the loggedIn boolean be passed back up to App.js?
     return (
       <form className='flex flex-col justify-around bg-gray-300 mx-0 my-auto px-2 py-4' onSubmit={handleSubmit(onSubmit)}>
         <input 
