@@ -1,4 +1,4 @@
-import Button from "../components/Button.js";
+import Button from "../components/Buttons.js";
 import { useNavigate } from "react-router-dom";
 
 export default function Review() {
