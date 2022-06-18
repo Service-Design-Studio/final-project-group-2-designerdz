@@ -1,18 +1,22 @@
 FROM ruby:3.1.2
 
+
+
+
+# Install production dependencies.
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
+
 RUN apt-get update 
-
-COPY . .
-
 RUN gem install bundler && bundler install 
 
-# ENV RAILS_ENV=production
-# # Redirect Rails log to STDOUT for Cloud Run to capture
-# ENV RAILS_LOG_TO_STDOUT=true
-# # [START cloudrun_rails_dockerfile_key]
-# ARG MASTER_KEY
-# ENV RAILS_MASTER_KEY=${MASTER_KEY}
-# # [END cloudrun_rails_dockerfile_key]
+
+COPY . /app
+
+RUN bundle exec rails db:create
+RUN bundle exec rails db:migrate
+RUN bundle exec rails db:seed
 
 EXPOSE 8080
 

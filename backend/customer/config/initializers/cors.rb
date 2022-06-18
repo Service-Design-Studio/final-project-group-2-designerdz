@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "http://localhost:3001" # Replace example.com with your own domain
+    origins "*" # Replace example.com with your own domain
 
     resource "*",
       headers: :any,
