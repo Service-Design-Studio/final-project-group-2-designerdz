@@ -1,10 +1,19 @@
 import Button from "../components/Buttons.js";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../components/BackButton.js";
+import ProgressBar from "../components/ProgressBar.js";
 
 export default function Review() {
 	const navigate = useNavigate();
 	return (
-		<div>
+		// TODO: Get data from the past few pages and finish here
+		<div className="m-2">
+			<div className="mb-10">
+				<BackButton	onClick={() => navigate("/")}/>
+				<ProgressBar percent="100%" />
+			</div>
+
+			{/* TODO: Beautify this using class flex for the information posted*/}
 			<h1>
 				<b>Review your banking details</b>
 			</h1>
@@ -24,7 +33,10 @@ export default function Review() {
 			<p>Gender:</p>
 			<p>Date of Birth:</p>
 
-			<Button text="Submit" bgcolor="bg-red-500" />
+			<Button 
+				text="Submit" 
+				bgcolor="bg-red-500" 
+			/>
 		</div>
 	);
 }
