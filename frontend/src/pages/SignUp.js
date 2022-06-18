@@ -31,20 +31,25 @@ export default function Landing() {
 
 	return (
 		<div>
-			<h1>Not a customer yet?</h1>
+			<Button text="Back" bgcolor="bg-gray-500" />
+
+			{/* FIXME: Can this back button be a common feature in all? */}
+
+			{/* TODO: Add in progress bar here */}
+
+			<h1>Setting up multiple accounts?</h1>
+			<h2>Let us making it easier for your family</h2>
+
 			<Button
-				text="NOT A CUSTOMER YET?"
-				bgcolor="bg-red-500"
-				hovercolor="hover:bg-red-700"
-				onClick={() => navigate("/signup")}
-			/>
-			<Button
-				text="LOG IN"
+				text="No, just for myself only"
 				bgcolor="bg-slate-500"
-				hovercolor="hover:bg-slate-700"
-				onClick={() => alert("Sorry we are not DBS!")}
+				onClick={() => navigate("/details")}
 			/>
-			<Customers customers={customers} />
+
+			<Button
+				text="Yes, for me and my children..."
+				bgcolor="bg-slate-500"
+			/>
 		</div>
 	);
 }
