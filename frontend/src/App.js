@@ -8,17 +8,17 @@ import SignUp from "./pages/SignUp.js";
 import Restore from "./pages/Restore.js";
 
 export default function App() {
-	const loggedIn = false;
-	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<Landing />} />
-				<Route path="signup" element={<SignUp />} />
-				<Route path="/details" element={<Details />} />
-				<Route path="/passport" element={<Passport />} />
-				<Route path="/review" element={<Review />} />
-				<Route path="restore" element={<Restore />} />
-			</Routes>
-		</BrowserRouter>
-	);
+  const loggedIn = false;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="details" element={<Details />} />
+        <Route path="passport" element={<Passport />} />
+        <Route path="review" element={<Review />} />
+        <Route path="restore" element={<Restore />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }

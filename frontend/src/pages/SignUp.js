@@ -1,67 +1,64 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "../components/Buttons.js";
-import Customers from "../components/Customers.js";
+import { BackButton } from "../components/Buttons.js";
 import { API_URL } from "../utilities/constants.js";
-import BackButton from "../components/BackButton.js";
 import ProgressBar from "../components/ProgressBar.js";
+import TextDesc from "../components/TextDesc.js";
+import Customers from "../components/Customers.js";
 
+//get customer info at signUp page, show popup to continue if cookies exist
 function getAPIData() {
-	return axios.get(API_URL).then((response) => response.data);
+  return axios.get(API_URL).then((response) => response.data);
 }
 
 export default function Landing() {
-	const navigate = useNavigate();
-	const [customers, setCustomers] = useState([]);
+  const navigate = useNavigate();
+  const [customers, setCustomers] = useState([]);
 
-	useEffect(() => {
-		let mounted = true;
-		getAPIData()
-			.then((items) => {
-				if (mounted) {
-					setCustomers(items);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-		return () => (mounted = false);
-	}, []);
+  useEffect(() => {
+    let mounted = true;
+    getAPIData()
+      .then((items) => {
+        if (mounted) {
+          setCustomers(items);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return () => (mounted = false);
+  }, []);
 
-	console.log(customers);
+  return (
+    <div>
+      <BackButton onClick={() => navigate(-1)} />
+      <ProgressBar percent="0%" />
+      <TextDesc
+        headerText="Setting up multiple accounts?"
+        bodyText="Let us make it easier for your family"
+      />
 
-	return (
-		<div className="m-2">
-			{/* TODO: Make them side by side using flex*/}
-			<div className="mb-10">
-				<BackButton	onClick={() => navigate("/")}/>
-				<ProgressBar percent="0%" />
-			</div>
+      <div className="flex flex-col absolute w-screen bottom-0 top-0 items-center place-content-center space-y-4">
+        <button
+          className="bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
+          onClick={() => navigate("/details")}
+        >
+          No, just for myself only
+        </button>
 
-			{/* TODO: Give these some style */}
-			<h1 className="text-center font-bold">
-				Setting up multiple accounts?
-			</h1>
-
-			<h2 className="text-center font-semibold">
-				Let us making it easier for your family
-			</h2>
-			
-			{/* TODO: Give this some height? */}
-			<div className="flex flex-col px-8 space-y-3 bottom my-8">
-				<Button
-					text="No, just for myself only"
-					bgcolor="bg-slate-500"
-					onClick={() => navigate("/details")}
-				/>
-
-				{/* TODO: Add feature into another page here once multi-user is out */}
-				<Button
-					text="Yes, for me and my children..."
-					bgcolor="bg-slate-500"
-				/>
-			</div>
-		</div>
-	);
+        {/* TODO: Add feature into another page here once multi-user is out */}
+        <button
+          className="bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
+          onClick={() => navigate("/details")}
+        >
+          Yes, for me and my children...
+        </button>
+      </div>
+      <p className="absolute bottom-0 mb-10 mx-8 w-10/12 ">
+        Only have a bit of time bla bla Only have a bit of time bla bla Only
+        have a bit of time bla bla Only have a bit of time bla bla
+      </p>
+    </div>
+  );
 }
