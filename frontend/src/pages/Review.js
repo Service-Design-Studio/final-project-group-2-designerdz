@@ -71,7 +71,7 @@ export default function Review() {
       <div className="flex flex-col absolute w-screen bottom-0 mb-10 items-center">
         <Button
           className="absolute w-screen bottom-0"
-          text="Next"
+          text="Submit"
           bgcolor="bg-red-500"
           hovercolor="hover:bg-red-700"
           onClick={() => {
