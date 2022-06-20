@@ -51,7 +51,7 @@ export default function Passport() {
 
           <FormFill text="Full Name" />
           <FormFill text="Passport Number" />
-          <FormFill/>
+  
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
@@ -59,7 +59,12 @@ export default function Passport() {
             {/* TODO: Make this button correctly to work with proper dates */}
 
             <div>
-              <Calendar/>
+              <Calendar 
+                startyear={2020}
+                endyear={2050}
+
+              
+              />
             </div>
             
 
@@ -102,7 +107,12 @@ export default function Passport() {
 
             {/* TODO: Make this button correctly to work with proper dates */}
           
-          <Calendar></Calendar>
+            <Calendar 
+                startyear={1900}
+                endyear={2022}
+
+              
+              />
 
 
           </div>
