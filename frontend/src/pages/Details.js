@@ -27,6 +27,7 @@ export default function Details() {
     
   };
 
+
   return (
     <div>
       <div className="flex flex-end">
@@ -96,6 +97,8 @@ export default function Details() {
               {...register("email", {})}
             />
           </div>
+          
+            {/* Im putting this here first yida, im not sure how to pass data using your Button class*/}
             <input
             className="w-full bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
             type="submit"
