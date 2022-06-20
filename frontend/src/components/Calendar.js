@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { getMonth, getYear } from 'date-fns';
+import range from "lodash/range";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 export default function Customers() {
     const [startDate, setStartDate] = useState(new Date());
@@ -25,21 +30,12 @@ export default function Customers() {
           date,
           changeYear,
           changeMonth,
-          decreaseMonth,
-          increaseMonth,
-          prevMonthButtonDisabled,
-          nextMonthButtonDisabled,
-        }) => (
-          <div
-            style={{
-              margin: 10,
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-              {"<"}
-            </button>
+}) => (
+            
+          <div>
+
+
+
             <select
               value={getYear(date)}
               onChange={({ target: { value } }) => changeYear(value)}
@@ -48,9 +44,14 @@ export default function Customers() {
                 <option key={option} value={option}>
                   {option}
                 </option>
+
               ))}
+
             </select>
   
+
+
+
             <select
               value={months[getMonth(date)]}
               onChange={({ target: { value } }) =>
@@ -64,13 +65,10 @@ export default function Customers() {
               ))}
             </select>
   
-            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-              {">"}
-            </button>
+
           </div>
         )}
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
+
       />
     );
   };

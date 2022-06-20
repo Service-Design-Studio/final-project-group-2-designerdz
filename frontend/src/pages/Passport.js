@@ -51,12 +51,17 @@ export default function Passport() {
 
           <FormFill text="Full Name" />
           <FormFill text="Passport Number" />
+          <FormFill/>
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
 
             {/* TODO: Make this button correctly to work with proper dates */}
-            <Calendar></Calendar>
+
+            <div>
+              <Calendar/>
+            </div>
+            
 
 
 
