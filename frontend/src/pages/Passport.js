@@ -27,7 +27,7 @@ export default function Passport() {
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
       <div className="fixed flex flex-row top-0 left-0 right-0 z-50">
-        <BackButton onClick={() => navigate(-1)} />
+        <BackButton onClick={() => navigate("/details")} />
         <ProgressBar percent="66%" />
       </div>
 
@@ -118,7 +118,7 @@ export default function Passport() {
           </div>
         </form>
         <div className="flex flex-col w-screen bottom-0 mb-10 space-y-4 items-center">
-          <Button
+          <Button 
             text="Next"
             bgcolor="bg-red-500"
             hovercolor="hover:bg-red-700"

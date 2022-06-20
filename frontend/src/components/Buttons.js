@@ -1,7 +1,7 @@
 function Button({ text, bgcolor, hovercolor, onClick }) {
   return (
     <button
-      className={`${bgcolor} ${hovercolor} text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+      className={`next ${bgcolor} ${hovercolor} text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
       onClick={onClick}
     >
       {text}
@@ -11,7 +11,7 @@ function Button({ text, bgcolor, hovercolor, onClick }) {
 
 function BackButton({ onClick }) {
   return (
-    <button className="absolute left-4 top-5" onClick={onClick}>
+    <button className="back absolute left-4 top-5" onClick={onClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-10 w-10 stroke-gray-300"
