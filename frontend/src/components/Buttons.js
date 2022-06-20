@@ -1,7 +1,7 @@
 function Button({ text, bgcolor, hovercolor, onClick }) {
   return (
     <button
-      className={`${bgcolor} ${hovercolor} text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+      className={`next ${bgcolor} ${hovercolor} text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
       onClick={onClick}
     >
       {text}

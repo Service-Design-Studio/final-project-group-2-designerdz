@@ -22,20 +22,23 @@ Before(function(){
 After(async function(){
     await driver.quit()
 })
+ 
 
-Given('I am on the landing page', async function () {
-    await driver.get(base_url);
+// "^I login with "([^\"]*)\" and "([^\"]*)\"$"
+
+Given("I am on the {string} page", async function (current) {
+    await driver.get(base_url + current);
     await driver.sleep(3*1000)
 });
 
-When('I click on the registration button', async function () {
-    const registration_button = await driver.findElement(By.xpath('//button[contains(text(), "NOT A CUSTOMER YET")]'))
+When('I click on the next button', async function () {
+    const registration_button = await driver.findElement(By.className('next'));
     await registration_button.click()
     await driver.sleep(3*1000);
 });
 
-Then('I should navigate to the signup page', async function () {
-    var expected_url = "signup";
+Then("I should navigate to the {string} page", async function (next) {
+    var expected_url = next;
     var actual_url = await driver.getCurrentUrl();
     actual_url = actual_url.split("/")[3]
     expect(actual_url).to.equal(expected_url);

@@ -108,7 +108,7 @@ export default function Passport() {
           </div>
         </form>
         <div className="flex flex-col w-screen bottom-0 mb-10 space-y-4 items-center">
-          <Button
+          <Button 
             text="Next"
             bgcolor="bg-red-500"
             hovercolor="hover:bg-red-700"

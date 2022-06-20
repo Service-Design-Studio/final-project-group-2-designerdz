@@ -40,8 +40,8 @@ export default function Landing() {
       />
 
       <div className="flex flex-col absolute w-screen bottom-0 top-0 items-center place-content-center space-y-4">
-        <button
-          className="bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
+        <button 
+          className="next bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
           onClick={() => navigate("/details")}
         >
           No, just for myself only

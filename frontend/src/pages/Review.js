@@ -69,7 +69,7 @@ export default function Review() {
         </div>
       </div>
       <div className="flex flex-col absolute w-screen bottom-0 mb-10 items-center">
-        <Button
+        <Button id="next"
           className="absolute w-screen bottom-0"
           text="Submit"
           bgcolor="bg-red-500"
