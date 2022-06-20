@@ -60,11 +60,11 @@ export default function Details() {
 
             <h3 className="opacity-50 text-xs mb-4">
               This is how you will be acknowledged on PayLah! and digibank.
+
               <a
-                className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                className="text-blue-600 hover:text-blue-800 visited:text-purple-600"
                 href="https://google.com"
-              >
-                Find out more
+                > Find out more
               </a>
             </h3>
           </div>
