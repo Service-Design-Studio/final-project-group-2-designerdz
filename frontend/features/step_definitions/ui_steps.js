@@ -7,7 +7,11 @@ const pactum = require('pactum');
 
 let spec = pactum.spec();
 
-base_url = 'http://localhost:3000/'
+// WITHOUT BACKEND
+//base_url = 'http://localhost:3000/'
+
+// WITH BACKEND
+base_url = 'http://localhost:3001/'
 
 setDefaultTimeout(60*1000)
 

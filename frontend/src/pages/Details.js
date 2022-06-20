@@ -24,9 +24,7 @@ export default function Details() {
       navigate("/passport");
     return () => (posted = false);
 
-    
   };
-
 
   return (
     <div>

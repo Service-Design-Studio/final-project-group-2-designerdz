@@ -7,7 +7,7 @@ export function getUserData(API_URL) {
 }
 
 export function postUserData(data, API_URL) {
-  return axios.post(API_URL, { data });
+  return axios.post(API_URL,  data);
 }
 
 export default { getUserData, postUserData };

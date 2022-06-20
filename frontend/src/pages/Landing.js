@@ -12,7 +12,7 @@ function getAPIData() {
 export default function Landing() {
 	const navigate = useNavigate();
 
-	// FOR JARRON'S TESTING PURPOSES USING GET REQUEST
+	// ***** FOR JARRON'S TESTING PURPOSES USING GET REQUEST *****
 
 	// initialize state using hooks, returns the current state and a function to update it
 	const [customers, setCustomers] = useState([]);
@@ -36,7 +36,7 @@ export default function Landing() {
 
 	console.log(customers);
 
-	// UP TILL HERE
+	// *****UP TILL HERE ******
 
 	return (
 		<div>
@@ -60,7 +60,7 @@ export default function Landing() {
 			/>
 
 		  </div>
-		  
+
 		  {/* For Jarron's testing purpose */}
 		  <Customers customers={customers} />
 
