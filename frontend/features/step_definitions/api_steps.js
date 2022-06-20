@@ -2,9 +2,6 @@ const pactum = require('pactum');
 const { Given, When, Then, Before } = require('@cucumber/cucumber');
 const request = pactum.request; //for API responses
 
-request.setBaseUrl('https://dbs-service-qz6esvmepq-as.a.run.app/api/v1/users"');
-
-
 let spec = pactum.spec();
 
 Before(() => { spec = pactum.spec(); });
