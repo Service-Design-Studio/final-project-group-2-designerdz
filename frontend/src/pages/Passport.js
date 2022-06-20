@@ -27,7 +27,7 @@ export default function Passport() {
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
       <div className="fixed flex flex-row top-0 left-0 right-0 z-50">
-        <BackButton onClick={() => navigate(-1)} />
+        <BackButton onClick={() => navigate("/details")} />
         <ProgressBar percent="66%" />
       </div>
 

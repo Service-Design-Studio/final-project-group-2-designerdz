@@ -32,14 +32,16 @@ export default function Landing() {
 
   return (
     <div>
-      <BackButton onClick={() => navigate(-1)} />
-      <ProgressBar percent="0%" />
+      <div className="flex flex-end">
+        <BackButton onClick={() => navigate("/")} />
+        <ProgressBar percent="0%" />
+        </div>
       <TextDesc
         headerText="Setting up multiple accounts?"
         bodyText="Let us make it easier for your family"
       />
 
-      <div className="flex flex-col absolute w-screen bottom-0 top-0 items-center place-content-center space-y-4">
+      <div className="flex flex-col absolute w-screen items-center top-0 bottom-0 m-auto place-content-center space-y-4 -z-50">
         <button 
           className="next bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
           onClick={() => navigate("/details")}

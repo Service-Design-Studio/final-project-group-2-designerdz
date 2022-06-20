@@ -26,7 +26,7 @@ export default function Details() {
   return (
     <div>
       <div className="flex flex-end">
-        <BackButton onClick={() => navigate(-1)} />
+        <BackButton onClick={() => navigate("/signup")} />
         <ProgressBar percent="33%" />
       </div>
       <TextDesc

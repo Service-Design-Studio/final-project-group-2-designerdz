@@ -11,7 +11,6 @@ base_url = 'http://localhost:3000/'
 
 setDefaultTimeout(60*1000)
 
-// driver setup
 let driver;
 
 Before(function(){
@@ -24,10 +23,8 @@ After(async function(){
 })
  
 
-// "^I login with "([^\"]*)\" and "([^\"]*)\"$"
-
-Given("I am on the {string} page", async function (current) {
-    await driver.get(base_url + current);
+Given("I am on the {string} page", async function (previous) {
+    await driver.get(base_url + previous);
     await driver.sleep(3*1000)
 });
 
@@ -37,8 +34,27 @@ When('I click on the next button', async function () {
     await driver.sleep(3*1000);
 });
 
-Then("I should navigate to the {string} page", async function (next) {
+Then("I should move forward to the {string} page", async function (next) {
     var expected_url = next;
+    var actual_url = await driver.getCurrentUrl();
+    actual_url = actual_url.split("/")[3]
+    expect(actual_url).to.equal(expected_url);
+});
+
+
+Given("I am now on the {string} page", async function (next) {
+    await driver.get(base_url + next);
+    await driver.sleep(3*1000)
+});
+
+When('I click on the back button', async function () {
+    const registration_button = await driver.findElement(By.className('back'));
+    await registration_button.click()
+    await driver.sleep(3*1000);
+});
+
+Then("I should go back to the {string} page", async function (previous) {
+    var expected_url = previous;
     var actual_url = await driver.getCurrentUrl();
     actual_url = actual_url.split("/")[3]
     expect(actual_url).to.equal(expected_url);
