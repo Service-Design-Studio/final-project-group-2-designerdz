@@ -1,55 +1,66 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "../components/Buttons.js";
-import Customers from "../components/Customers.js";
+import { BackButton } from "../components/Buttons.js";
 import { API_URL } from "../utilities/constants.js";
+import ProgressBar from "../components/ProgressBar.js";
+import TextDesc from "../components/TextDesc.js";
+import Customers from "../components/Customers.js";
 
+//get customer info at signUp page, show popup to continue if cookies exist
 function getAPIData() {
-	return axios.get(API_URL).then((response) => response.data);
+  return axios.get(API_URL).then((response) => response.data);
 }
 
 export default function Landing() {
-	const navigate = useNavigate();
-	const [customers, setCustomers] = useState([]);
+  const navigate = useNavigate();
+  const [customers, setCustomers] = useState([]);
 
-	useEffect(() => {
-		let mounted = true;
-		getAPIData()
-			.then((items) => {
-				if (mounted) {
-					setCustomers(items);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-		return () => (mounted = false);
-	}, []);
+  useEffect(() => {
+    let mounted = true;
+    getAPIData()
+      .then((items) => {
+        if (mounted) {
+          setCustomers(items);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return () => (mounted = false);
+  }, []);
 
-	console.log(customers);
+  return (
+    <div>
+      <div className="flex flex-end">
+        <BackButton onClick={() => navigate("/")} />
+        <ProgressBar percent="0%" />
+        </div>
+      <TextDesc
+        headerText="Setting up multiple accounts?"
+        bodyText="Let us make it easier for your family"
+      />
 
-	return (
-		<div>
-			<Button text="Back" bgcolor="bg-gray-500" />
+      <div className="flex flex-col absolute w-screen items-center top-0 bottom-0 m-auto place-content-center space-y-4 -z-50">
+        <button 
+          className="next bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
+          onClick={() => navigate("/details")}
+        >
+          No, just for myself only
+        </button>
 
-			{/* FIXME: Can this back button be a common feature in all? */}
-
-			{/* TODO: Add in progress bar here */}
-
-			<h1>Setting up multiple accounts?</h1>
-			<h2>Let us making it easier for your family</h2>
-
-			<Button
-				text="No, just for myself only"
-				bgcolor="bg-slate-500"
-				onClick={() => navigate("/details")}
-			/>
-
-			<Button
-				text="Yes, for me and my children..."
-				bgcolor="bg-slate-500"
-			/>
-		</div>
-	);
+        {/* TODO: Add feature into another page here once multi-user is out */}
+        <button
+          className="bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
+          onClick={() => navigate("/details")}
+        >
+          Yes, for me and my children...
+        </button>
+      </div>
+      <p className="absolute bottom-0 mb-10 mx-8 w-10/12 ">
+        Only have a bit of time bla bla Only have a bit of time bla bla Only
+        have a bit of time bla bla Only have a bit of time bla bla
+      </p>
+    </div>
+  );
 }
