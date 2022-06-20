@@ -12,6 +12,8 @@ function getAPIData() {
 export default function Landing() {
 	const navigate = useNavigate();
 
+	// FOR JARRON'S TESTING PURPOSES USING GET REQUEST
+
 	// initialize state using hooks, returns the current state and a function to update it
 	const [customers, setCustomers] = useState([]);
 
@@ -34,6 +36,8 @@ export default function Landing() {
 
 	console.log(customers);
 
+	// UP TILL HERE
+
 	return (
 		<div>
 		  <img
@@ -54,7 +58,12 @@ export default function Landing() {
 			  hovercolor="hover:bg-slate-800"
 			  onClick={() => alert("Sorry we are not DBS!")}
 			/>
-		  </div><Customers customers={customers} />
+
+		  </div>
+		  
+		  {/* For Jarron's testing purpose */}
+		  <Customers customers={customers} />
+
 		</div>
 	  );
 }
