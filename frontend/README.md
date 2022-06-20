@@ -7,6 +7,8 @@
 - PactumJS: A rest API testing tool
 - Cucumber: A BDD testing tool
 - Selenium: A webdriver for testing
+- Chromedriver: Required dependency to use Selenium in chromedriver
+- Chai: An assertion library for testing
 
 
 # References 
@@ -28,6 +30,8 @@
 5. Install PactumJS using `npm install pactum`. This is used for testing REST APIs
 6. Install Cucumber using `npm install @cucumber/cucumber`. This is used for creating BDD tests
 7. Install Selenium using `npm install selenium-webdriver`. This is used for testing webpages
+8. Install Chromedriver using `npm install chromedriver`. This is required to use Selenium in chromedriver
+9. Install Chai using `npm install chai`. This is an assertion library for testing
 
 # Development in Local
 
