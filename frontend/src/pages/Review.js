@@ -1,13 +1,29 @@
 import { useNavigate } from "react-router-dom";
-
+import { useEffect } from "react";
+import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
+import { getUserData } from "../services/axiosUsers.js";
 
 export default function Review() {
   const navigate = useNavigate();
 
   //TODO: get data from the past few pages
+  useEffect(() => {
+    let mounted = true;
+    getUserData(API_URL)
+      .then((items) => {
+        if (mounted) {
+          console.log(items);
+          // setCustomers(items);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return () => (mounted = false);
+  }, []);
 
   //TODO: do on click handler to do sth???
   const onClick = () => {
@@ -69,7 +85,8 @@ export default function Review() {
         </div>
       </div>
       <div className="flex flex-col absolute w-screen bottom-0 mb-10 items-center">
-        <Button id="next"
+        <Button
+          id="next"
           className="absolute w-screen bottom-0"
           text="Submit"
           bgcolor="bg-red-500"
