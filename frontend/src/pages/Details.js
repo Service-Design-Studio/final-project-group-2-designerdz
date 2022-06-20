@@ -5,29 +5,24 @@ import axios from "axios";
 
 export default function Details() {
 	const navigate = useNavigate();
-	// const [info, setInfo] = useState({
-		
-	// });
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm();
+
+
 	const onSubmit = (data) => {
 		console.log(data);
 
-		/* PROBLEM: active record not properly updating fields
-			TODO: fix this in backend, find out how to create new rows with given in the form below
-			Getting NoMethodError in Api::V1::UserController#create
-		 */
-
-		const test = {
-			title: "Mr",
-			display_name: "John Doe",
-			phone_number: "1234567890",
-			email: "123@gmail.com"
-		};
+	// seeding w random data for POST request
+	// 	const test = {
+	// 		title: "Mr",
+	// 		display_name: "John Doe",
+	// 		phone_number: "1234567890",
+	// 		email: "123@gmail.com"
+	// 	};
 
 		axios.post(API_URL, data, { headers: { 'Content-Type': 'application/json' }})
 		.then(response => {console.log(response.data)})
