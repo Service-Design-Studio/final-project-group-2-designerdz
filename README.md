@@ -1,1 +1,39 @@
 Setup using instructions in https://tailwindcss.com/docs/guides/create-react-app
+
+
+## For backend routes
+
+Controller actions/methods by convention is done on **users_controller.rb**
+
+
+**Endpoint API for GET request**
+> localhost:3000/api/v1/users
+> returns **all** existing records in ActiveRecord by calling User.all and renders the json request
+
+**GET route with params[:id]**
+> localhost:3000/api/v1/users/:id
+> :id is an integer, returns the specific record as specified by the id
+> same concept can be used to get phone number e.g params[:phone_number]
+
+**POST request**
+> Need to explicity declare the route for POST in **routes.rb**, resources :users does not automatically declare this for you not sure why
+> Upon clicking next in web-app, users#create controller action is invoked, specifically api/v1/users#create. Adds a new record
+
+
+# TODO:
+1. Standardize the keys in the passport.js such that the keys can be readily passed to a JSON object e.g. "passport_no" : "1234556A"
+
+2. Since details.js already updates activerecord, I do not want to create a new record when the **SAME** user enter their details in the passport page
+I want to somehow extract the id of that particular user and continue to populate the remaining fields of the activerecord e.g. passport_no, dob, full_name etc
+
+3. Return the user's data to frontend once phone_number is passed to the backend to repopulate the form
+
+4. **Next Sprint**: Multi-user registration, nested database is expected, how to populate and retrieve data from activerecord
+
+## Database schema (unconfirmed for passport)
+> passport records is from full_name onwards
+The headers are exactly what is used when passing the JSON data from frontend to rails endpoint API. So try to stick to this convention where it is easily readible
+
+| id | display_name | title | email | phone_number | full_name | passport_no | passport_expiry | nationality | gender | dob |
+
+
