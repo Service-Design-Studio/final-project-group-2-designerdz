@@ -5,6 +5,7 @@ import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
+import Calendar from "../components/Calendar";
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function Passport() {
   };
   console.log(errors);
 
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -28,10 +30,12 @@ export default function Passport() {
         <BackButton onClick={() => navigate(-1)} />
         <ProgressBar percent="66%" />
       </div>
+
       <TextDesc
         headerText="Fill up your passport details"
         bodyText="important for us verify bla bla"
       />
+
       <div className="absolute left-0 right-0 top-36 items-center ">
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
           <div>
@@ -47,30 +51,21 @@ export default function Passport() {
 
           <FormFill text="Full Name" />
           <FormFill text="Passport Number" />
+          <FormFill/>
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
 
             {/* TODO: Make this button correctly to work with proper dates */}
-            <div className="flex">
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
 
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
+            <div>
+              <Calendar/>
             </div>
+            
+
+
+
+            
           </div>
 
           <FormFill text="Nationality" />
@@ -106,34 +101,10 @@ export default function Passport() {
             </label>
 
             {/* TODO: Make this button correctly to work with proper dates */}
-            <div className="flex">
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
+          
+          <Calendar></Calendar>
 
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
 
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-            </div>
           </div>
         </form>
         <div className="flex flex-col w-screen bottom-0 mb-10 space-y-4 items-center">
