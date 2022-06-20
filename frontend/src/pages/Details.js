@@ -29,6 +29,7 @@ export default function Details() {
         <BackButton onClick={() => navigate(-1)} />
         <ProgressBar percent="33%" />
       </div>
+      
       <TextDesc
         headerText="Tell me about yourself first"
         bodyText="sth know you better sth know you better"

@@ -32,6 +32,7 @@
 7. Install Selenium using `npm install selenium-webdriver`. This is used for testing webpages
 8. Install Chromedriver using `npm install chromedriver`. This is required to use Selenium in chromedriver
 9. Install Chai using `npm install chai`. This is an assertion library for testing
+10. Install datepicker `using npm install react-datepicker --save`. This is for the Calendar dates on the Details page. 
 
 # Development in Local
 
