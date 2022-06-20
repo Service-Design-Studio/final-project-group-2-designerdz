@@ -16,13 +16,15 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = (data) => {
+    console.log(data)
     let posted = true;
     postUserData(data, API_URL)
       .then((response) => {})
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(error => {console.log(error.response.data)});
+      navigate("/passport");
     return () => (posted = false);
+
+    
   };
 
   return (
@@ -44,7 +46,7 @@ export default function Details() {
             <div className="flex">
               <select
                 className="inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-400 dark:border-gray-600"
-                {...register("Title", { required: true })}
+                {...register("title", { required: true })}
               >
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
@@ -57,7 +59,7 @@ export default function Details() {
                 type="text"
                 className="rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
-                {...register("Last / Display Name", { required: true })}
+                {...register("display_name", { required: true })}
               />
             </div>
 
@@ -79,7 +81,7 @@ export default function Details() {
               type="number"
               className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Phone Number"
-              {...register("Phone Number", { required: true })}
+              {...register("phone_number", { required: true })}
             />
           </div>
 
@@ -91,13 +93,17 @@ export default function Details() {
               type="email"
               className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Email Address (Optional)"
-              {...register("Email Address (Optional)", {})}
+              {...register("email", {})}
             />
           </div>
+            <input
+            className="w-full bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
+            type="submit"
+            />
         </form>
       </div>
 
-      <div className="flex flex-col absolute w-screen bottom-0 mb-10 space-y-4 items-center">
+      {/* <div className="flex flex-col absolute w-screen bottom-0 mb-10 space-y-4 items-center">
         <Button
           text="Next"
           bgcolor="bg-red-500"
@@ -107,7 +113,7 @@ export default function Details() {
             onSubmit();
           }}
         />
-      </div>
+      </div> */}
     </div>
   );
 }
