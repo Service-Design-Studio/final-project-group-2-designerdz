@@ -1,16 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+
 import { BackButton } from "../components/Buttons.js";
 import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import TextDesc from "../components/TextDesc.js";
-import Customers from "../components/Customers.js";
-
-//get customer info at signUp page, show popup to continue if cookies exist
-function getAPIData() {
-  return axios.get(API_URL).then((response) => response.data);
-}
+import { getUserData } from "../services/axiosUsers.js";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -18,7 +13,7 @@ export default function Landing() {
 
   useEffect(() => {
     let mounted = true;
-    getAPIData()
+    getUserData(API_URL)
       .then((items) => {
         if (mounted) {
           setCustomers(items);
@@ -30,19 +25,21 @@ export default function Landing() {
     return () => (mounted = false);
   }, []);
 
+  console.log(customers);
+
   return (
     <div>
       <div className="flex flex-end">
         <BackButton onClick={() => navigate("/")} />
         <ProgressBar percent="0%" />
-        </div>
+      </div>
       <TextDesc
         headerText="Setting up multiple accounts?"
         bodyText="Let us make it easier for your family"
       />
 
       <div className="flex flex-col absolute w-screen items-center top-0 bottom-0 m-auto place-content-center space-y-4 -z-50">
-        <button 
+        <button
           className="next bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
           onClick={() => navigate("/details")}
         >

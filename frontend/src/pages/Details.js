@@ -1,27 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
+import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
+import { postUserData } from "../services/axiosUsers";
 
 export default function Details() {
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  //to do POST request to rails api for saving of progress
-  //also need to save phone number to cookies upon clicking submit button
-  //need to implement axiosUser.js to handle post/get request to handle rails api
+  //post request to database backend
   const onSubmit = (data) => {
-    console.log("submitted");
+    let posted = true;
+    postUserData(data, API_URL)
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    return () => (posted = false);
   };
-
-  console.log(errors);
 
   return (
     <div>
@@ -29,7 +31,7 @@ export default function Details() {
         <BackButton onClick={() => navigate("/signup")} />
         <ProgressBar percent="33%" />
       </div>
-      
+
       <TextDesc
         headerText="Tell me about yourself first"
         bodyText="sth know you better sth know you better"
@@ -61,11 +63,12 @@ export default function Details() {
 
             <h3 className="opacity-50 text-xs mb-4">
               This is how you will be acknowledged on PayLah! and digibank.
-
               <a
                 className="text-blue-600 hover:text-blue-800 visited:text-purple-600"
                 href="https://google.com"
-                > Find out more
+              >
+                {" "}
+                Find out more
               </a>
             </h3>
           </div>
