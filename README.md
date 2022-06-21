@@ -36,7 +36,7 @@ Type this command in the terminal:
 - curl -d"user[full_name]=dyima" -X PATCH http://127.0.0.1:3000/api/v1/profile/98765432
 This command performs a PATCH request to the specified URL with data field "full_name": dyima
 -d flag is to write to the URL
-
+- Awesome curl tutorial: https://gist.github.com/subfuzion/08c5d85437d5d4f00e58
 ## Database schema
 > passport records is from full_name onwards
 The headers are exactly what is used when passing the JSON data from frontend to rails endpoint API.
