@@ -1,54 +1,38 @@
 Feature: Saving of progress
     Scenario:  
-        Given that I am on the <current> page
+        Given I am on <page>
         When I click on the next button
-        Then my details on <page> should be saved to the database
+        Then I will make a request to <url>
+        When I receive a response within 0.5 seconds
+        Then response should have a status 200
+    
+    Examples:
+        | page    |  url                                                             |
+        | "details"  | "https://dbs-service-qz6esvmepq-as.a.run.app/api/v1/users"       |
+        | "passport" | "https://dbs-service-qz6esvmepq-as.a.run.app/api/v1/profile/98765432"   |
+
+    Scenario:
+        Given I am on <page>
+        When I restart the app
+        Then I should be redirected back to <page> where I left off
     
     Examples:
         | page       |
-        | "signup"   |
-        | "details"  |
-        | "passport" |
-
-    Scenario:
-        Given that I am on the <current> page 
-        When I exit the app
-        Then my details on <page> should be saved to the database
-
-    Scenario:  
-        Given that I am on the <current> page
-        When I click on the back button
-        Then my previously filled details should be shown
-        
-    Examples:
-        | page       |
         | "details"  |
         | "passport" |
         | "review"   |
 
-    Scenario:
-        Given that I exit the app
-        When I come back to the app
-        Then I should be on the landing page
 
-    Examples:
-        | page       |
-        | "signup"   |
-        | "details"  |
-        | "passport" |
-        | "review"   |
+    # FIXME:
+    # Scenario:
+    #     Given I am on the restore page
+    #     When I submit my <number> and OTP
+    #     Then I should be redirected back to <page> where I left off
 
-    Scenario:
-        Given that I am on the restore page
-        When I submit my <number> and OTP
-        Then I should be redirected back to the <page> where I left off
-
-    # TODO: Seed the database
-
-    Examples:
-        | number      | page        |
-        | "98512101"  | "details"   |
-        | "87678121"  |  "passport" |
-        | "87545311"  |  "review"   |
-        | "98857412"  |  "signup"   |
+    # Examples:
+    #     | number      | page        |
+    #     | "98512101"  | "signup"    |
+    #     | "87678121"  | "signup"    |
+    #     | "87545311"  | "signup"    |
+    #     | "98857412"  | "signup"    |
 

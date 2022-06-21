@@ -98,7 +98,7 @@ export default function Details() {
 
             <div className="flex">
               <select
-                className="inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-900 dark:border-gray-600"
+                className="name inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-900 dark:border-gray-600"
                 {...register("title", {})}
               >
                 <option value="Mr">Mr</option>
@@ -142,7 +142,7 @@ export default function Details() {
 
           <button
             className={
-              "absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12"
+              "next absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12"
             }
             type="submit"
           >
