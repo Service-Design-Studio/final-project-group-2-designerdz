@@ -11,39 +11,43 @@ import { API_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
-  let isValid = false; //turns to true when information are filled and valid
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  const [passportDate,setPassportDate] = useState(new Date());
+  const [birthDate,setBirthDate] = useState(new Date());
+  const [curGender, setCurGender] = useState("MALE");
+  const {register,handleSubmit,formState: { errors }} = useForm();
   const onSubmit = (data) => {
-    let posted = true;
-    postUserData(data, API_URL)
+    console.log("START")
+    data['passportDate'] = passportDate
+    data['birthDate'] = birthDate
+    data['curGender'] = curGender
+    console.log(data)
+    let jsonData = JSON.stringify(data)
+    console.log(jsonData)
+    console.log("END")
+    let posted = true
+    postUserData(jsonData, API_URL)
       .then((response) => {})
       .catch((error) => {
         console.log(error);
+        posted = false
       });
-    return () => (posted = false);
+    if (posted == true) {
+      navigate('/review')
+    }
+
   };
+  console.log("Errors")
   console.log(errors);
 
-  const [curGender, setCurGender] = useState("MALE");
-
   const toggleGenderToMale = () => {
-    console.log(curGender);
     if (curGender == "FEMALE") {
       setCurGender("MALE");
     }
-    console.log(curGender);
   };
   const toggleGenderToFemale = () => {
-    console.log(curGender);
     if (curGender == "MALE") {
       setCurGender("FEMALE");
     }
-    console.log(curGender);
   };
 
   return (
@@ -61,9 +65,9 @@ export default function Passport() {
 
       <div className="absolute left-0 right-0 top-36 items-center ">
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
+          
           <div>
             <label className="block font-medium">Upload Passport</label>
-
             <input
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
@@ -82,14 +86,10 @@ export default function Passport() {
             type="text"
             onFill = {register("Passport Number", { required: true })} />
   
-
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
-
-            {/* TODO: Make this button correctly to work with proper dates */}
-
             <div>
-              <Calendar startyear={2020} endyear={2050} />
+              <Calendar curDate={passportDate} setDate={setPassportDate} startYear={2020} endYear={2050} />
             </div>
           </div>
 
@@ -100,9 +100,9 @@ export default function Passport() {
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
-
             <div className="flex justify-around">
               <button
+                type='button'
                 className={`${
                   curGender == "MALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
@@ -111,6 +111,7 @@ export default function Passport() {
                 MALE
               </button>
               <button
+                type = 'button'
                 className={`${
                   curGender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
@@ -120,17 +121,12 @@ export default function Passport() {
               </button>
             </div>
           </div>
+          
           <div className="mb-3">
             <label className="block font-medium">
               Date of Birth (DD/MM/YYYY)
             </label>
-
-            <Calendar 
-                startyear={1900}
-                endyear={2022}
-
-              
-              />
+            <Calendar curDate={birthDate} setDate={setBirthDate} startYear={1900} endYear={2022} />
           </div>
 
           <button
@@ -139,7 +135,7 @@ export default function Passport() {
             Next
           </button>
         </form>
-        </div>
+      </div>
       </div>
 
   );

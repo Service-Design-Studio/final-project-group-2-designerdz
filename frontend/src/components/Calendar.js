@@ -4,9 +4,8 @@ import range from "lodash/range";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Customers(props) {
-  const [startDate, setStartDate] = useState(new Date());
-  const years = range(props.startyear, props.endyear, 1);
+export default function Customers({curDate, setDate, startYear, endYear}) {
+  const years = range(startYear, endYear, 1);
   const months = [
     "January",
     "February",
@@ -24,7 +23,7 @@ export default function Customers(props) {
   return (
     <DatePicker
       renderCustomHeader={({
-        date,
+        curDate,
         changeYear,
         changeMonth,
         decreaseMonth,
@@ -43,7 +42,7 @@ export default function Customers(props) {
             {"<"}
           </button>
           <select
-            value={getYear(date)}
+            value={getYear(curDate)}
             onChange={({ target: { value } }) => changeYear(value)}
           >
             {years.map((option) => (
@@ -54,7 +53,7 @@ export default function Customers(props) {
           </select>
 
           <select
-            value={months[getMonth(date)]}
+            value={months[getMonth(curDate)]}
             onChange={({ target: { value } }) =>
               changeMonth(months.indexOf(value))
             }
@@ -71,8 +70,8 @@ export default function Customers(props) {
           </button>
         </div>
       )}
-      selected={startDate}
-      onChange={(date) => setStartDate(date)}
+      selected={curDate}
+      onChange={(date = Date()) => setDate(date)}
     />
   );
 }
