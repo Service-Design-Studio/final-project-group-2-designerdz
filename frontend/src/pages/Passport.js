@@ -72,8 +72,16 @@ export default function Passport() {
             />
           </div>
 
-          <FormFill text="Full Name" />
-          <FormFill text="Passport Number" />
+          <FormFill
+            text="Full Name"
+            type="text"
+            onFill = {register("Full Name", { required: true })} />
+
+          <FormFill
+            text="Passport Number"
+            type="text"
+            onFill = {register("Passport Number", { required: true })} />
+  
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
@@ -85,7 +93,10 @@ export default function Passport() {
             </div>
           </div>
 
-          <FormFill text="Nationality" />
+          <FormFill
+            text="Nationality"
+            type="text"
+            onFill = {register("Nationality", { required: true })} />
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
@@ -114,23 +125,22 @@ export default function Passport() {
               Date of Birth (DD/MM/YYYY)
             </label>
 
-            <Calendar startyear={1900} endyear={2022} />
+            <Calendar 
+                startyear={1900}
+                endyear={2022}
 
-            <Calendar startyear={1900} endyear={2022} />
+              
+              />
           </div>
+
+          <button
+            className={`absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+            type="submit">
+            Next
+          </button>
         </form>
-        <div className="flex flex-col w-screen bottom-0 mb-10 space-y-4 items-center">
-          <Button
-            text="Next"
-            bgcolor="bg-red-500"
-            hovercolor="hover:bg-red-700"
-            onClick={() => {
-              navigate("/review");
-              onSubmit();
-            }}
-          />
         </div>
       </div>
-    </div>
+
   );
 }

@@ -4,7 +4,7 @@ import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
-import { postUserData } from "../services/axiosUsers";
+import FormFill from "../components/FormFill";
 
 export default function Details() {
   const navigate = useNavigate();
@@ -16,14 +16,8 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = (data) => {
-    console.log(data)
-    let posted = true;
-    postUserData(data, API_URL)
-      .then((response) => {})
-      .catch(error => {console.log(error.response.data)});
-      navigate("/passport");
-    return () => (posted = false);
-
+    console.log(data);
+    navigate("/passport")
   };
 
   return (
@@ -74,47 +68,24 @@ export default function Details() {
             </h3>
           </div>
 
-          <div className="mb-6">
-            <label className="block font-medium">Phone Number</label>
-            <input
-              type="number"
-              className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Phone Number"
-              {...register("phone_number", { required: true })}
-            />
-          </div>
+          <FormFill
+            text="Phone Number"
+            type="number"
+            onFill = {register("Phone Number", { required: true })} />
 
-          <div className="mb-15">
-            <label className="block font-medium">
-              Email Address (Optional)
-            </label>
-            <input
-              type="email"
-              className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Email Address (Optional)"
-              {...register("email", {})}
-            />
-          </div>
-          
-            {/* Im putting this here first yida, im not sure how to pass data using your Button class*/}
-            <input
-            className="w-full bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
-            type="submit"
-            />
+          <FormFill
+            type="email"
+            text="Email Address (Optional)"
+            onFill = {register("Email Address (Optional)", {})} />
+
+          <button
+            className={`absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+            type="submit">
+            Next
+          </button>
+
         </form>
       </div>
-
-      {/* <div className="flex flex-col absolute w-screen bottom-0 mb-10 space-y-4 items-center">
-        <Button
-          text="Next"
-          bgcolor="bg-red-500"
-          hovercolor="hover:bg-red-700"
-          onClick={() => {
-            navigate("/passport");
-            onSubmit();
-          }}
-        />
-      </div> */}
     </div>
   );
 }

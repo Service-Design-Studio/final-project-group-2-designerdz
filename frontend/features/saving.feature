@@ -1,6 +1,6 @@
 Feature: Saving of progress
     Scenario:  
-        Given that I am on the <page>
+        Given that I am on the <current> page
         When I click on the next button
         Then my details on <page> should be saved to the database
     
@@ -9,6 +9,11 @@ Feature: Saving of progress
         | "signup"   |
         | "details"  |
         | "passport" |
+
+    Scenario:
+        Given that I am on the <current> page 
+        When I exit the app
+        Then my details on <page> should be saved to the database
 
     Scenario:  
         Given that I am on the <current> page
@@ -22,10 +27,9 @@ Feature: Saving of progress
         | "review"   |
 
     Scenario:
-        Given that I am on <page>
-        And that I exit the application
+        Given that I exit the app
         When I come back to the app
-        Then I should be redirected back to <page>
+        Then I should be on the landing page
 
     Examples:
         | page       |
