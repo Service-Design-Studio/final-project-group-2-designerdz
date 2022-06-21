@@ -79,7 +79,7 @@ export default function Review() {
           text="Submit"
           bgcolor="bg-red-500"
           hovercolor="hover:bg-red-700"
-          onClick={navigate("/success")}
+          onClick={() => {navigate("/success")}}
         />
       </div>
     </div>

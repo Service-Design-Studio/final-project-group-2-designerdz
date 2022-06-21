@@ -11,22 +11,22 @@ import { API_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
-  const [details, setDetails] = useState({"display_name": "dafsda", "phone_no": "2133", "email": "sadfas"});
-  const [passportDate,setPassportDate] = useState((details.passportDate != null) ? details.passportDate: new Date());
-  const [birthDate,setBirthDate] = useState((details.passportDate != null) ? details.birthDate: new Date());
+  const [details, setDetails] = useState({});
+  const [passportDate,setPassportDate] = useState((details.passport_expiry != null) ? details.passport_expiry: new Date());
+  const [birthDate,setBirthDate] = useState((details.dob != null) ? details.dob: new Date());
   const [curGender, setCurGender] = useState((details.gender != null) ? details.gender: "MALE");
-  const {register,handleSubmit,formState: { errors }} = useForm();
+  const {reset, register,handleSubmit,formState: { errors }} = useForm();
+  
   const onSubmit = (data) => {
     console.log("START")
     data['passportDate'] = passportDate
     data['birthDate'] = birthDate
     data['curGender'] = curGender
     console.log(data)
-    let jsonData = JSON.stringify(data)
-    console.log(jsonData)
+    // let jsonData = JSON.stringify(data)
     console.log("END")
     let posted = true
-    postUserData(jsonData, API_URL)
+    postUserData(data, API_URL)
       .then((response) => {})
       .catch((error) => {
         console.log(error);
@@ -44,16 +44,18 @@ export default function Passport() {
   useEffect(() => {
     let phone_no =localStorage.getItem("phone_no")
     if (phone_no != null) { //if phone_no is in localStorage, do GET request
-    getUserData(phone_no, API_URL)
-      .then((items) => {
-          {
-          setDetails(items);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
+      getUserData(API_URL, phone_no)
+        .then((items) => {
+            {
+            setDetails(items);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      }
+
+    reset({"full_name": details.full_name, "passport_no": details.passport_no, "nationality": details.nationality})
   }, []);
 
   const toggleGenderToMale = () => {
@@ -89,22 +91,22 @@ export default function Passport() {
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
               placeholder="Passport"
-              {...register("Passport", { required: true })}
+              {...register("Passport", { })}
             />
           </div>
 
           <FormFill
             text="Full Name"
             type="text"
-            onFill = {register("Full Name", { required: true })} 
-            defaultValue = {details.full_name}
+            onFill = {register("full_name", { })} 
+            // defaultValue = {details.full_name}
             />
 
           <FormFill
             text="Passport Number"
             type="text"
-            onFill = {register("Passport Number", { required: true })} 
-            defaultValue = {details.passport_no}
+            onFill = {register("passport_no", { })} 
+            // defaultValue = {details.passport_no}
             />
   
           <div className="mb-3">
@@ -117,8 +119,8 @@ export default function Passport() {
           <FormFill
             text="Nationality"
             type="text"
-            onFill = {register("Nationality", { required: true })} 
-            defaultValue = {details.nationality}
+            onFill = {register("nationality", { })} 
+            // defaultValue = {details.nationality}
             />
 
           <div className="mb-3">

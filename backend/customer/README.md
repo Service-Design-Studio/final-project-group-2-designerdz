@@ -69,7 +69,7 @@ rails db:seed
 For MACOS users:<br/>
 Step 1: `HOMEBREW_NO_AUTO_UPDATE=1 brew install dos2unix` <br/>
 Step 2: `git config --global core.autocrlf input`<br/>
-Step 3:` find ./ -type f -exec dos2unix {} \;` (in the repo you were trying to run your task on)
+Step 3: `find ./ -type f -exec dos2unix {} \;` (in the repo you were trying to run your task on)
 
 gcloud url:  
 https://dbs-service-qz6esvmepq-as.a.run.app/

@@ -5,6 +5,7 @@ import Details from "./pages/Details.js";
 import Passport from "./pages/Passport.js";
 import Review from "./pages/Review.js";
 import SignUp from "./pages/SignUp.js";
+import Success from "./pages/Success.js";
 
 export default function App() {
   const loggedIn = false;
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="details" element={<Details />} />
         <Route path="passport" element={<Passport />} />
         <Route path="review" element={<Review />} />
+        <Route path="success" element={<Success />} />
       </Routes>
     </BrowserRouter>
   );
