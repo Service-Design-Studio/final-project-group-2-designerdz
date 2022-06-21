@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
+import { useState } from "react";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
@@ -22,7 +22,23 @@ export default function Passport() {
   };
   console.log(errors);
 
+  const [curGender, setCurGender] = useState("MALE")
 
+  const toggleGenderToMale = () => {
+    console.log(curGender)
+    if (curGender == "FEMALE"){
+      setCurGender("MALE")
+    }
+    console.log(curGender)
+  }
+  const toggleGenderToFemale = () => {
+    console.log(curGender)
+    if (curGender == "MALE"){
+      setCurGender("FEMALE")
+    }
+    console.log(curGender)
+  }
+  
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -78,35 +94,16 @@ export default function Passport() {
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
 
-            {/* TODO: Make this button clickable like pills upon selection */}
-            <div className="flex">
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
+            <div className="flex justify-around">
+              <button className = {`${curGender == "MALE" ? "bg-red-200": "bg-gray-100"} w-1/2 h-10 rounded-md m-1`} onClick={toggleGenderToMale}>MALE</button>
+              <button  className = {`${curGender == "FEMALE" ? "bg-red-200": "bg-gray-100"} w-1/2 h-10 rounded-md m-1`} onClick={toggleGenderToFemale}>FEMALE</button>
             </div>
           </div>
-
           <div className="mb-3">
             <label className="block font-medium">
               Date of Birth (DD/MM/YYYY)
             </label>
 
-            {/* TODO: Make this button correctly to work with proper dates */}
-          
             <Calendar 
                 startyear={1900}
                 endyear={2022}
