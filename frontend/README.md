@@ -9,6 +9,8 @@
 - Selenium: A webdriver for testing
 - Chromedriver: Required dependency to use Selenium in chromedriver
 - Chai: An assertion library for testing
+- Datepicker: For the calendar dates on the details page
+- JS-Cookies: A javascript API for handling cookies
 
 
 # References 
@@ -32,7 +34,8 @@
 7. Install Selenium using `npm install selenium-webdriver`. This is used for testing webpages
 8. Install Chromedriver using `npm install chromedriver`. This is required to use Selenium in chromedriver
 9. Install Chai using `npm install chai`. This is an assertion library for testing
-10. Install datepicker `using npm install react-datepicker --save`. This is for the Calendar dates on the Details page. 
+10. Install datepicker  `npm install react-datepicker`. This is for the Calendar dates on the Details page. 
+11. Install js-cookie using `npm install js-cookie`. This is for us to validate whether a user is a new user or has an active session. 
 
 # Development in Local
 
