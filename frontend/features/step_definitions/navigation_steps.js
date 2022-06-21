@@ -7,7 +7,7 @@ const pactum = require('pactum');
 
 let spec = pactum.spec();
 
-base_url = 'http://localhost:3000/'
+base_url = 'http://localhost:3001/'
 
 setDefaultTimeout(60*1000)
 
@@ -59,3 +59,6 @@ Then("I should go back to the {string} page", async function (previous) {
     actual_url = actual_url.split("/")[3]
     expect(actual_url).to.equal(expected_url);
 });
+
+
+

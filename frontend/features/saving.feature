@@ -1,7 +1,7 @@
 Feature: Saving of progress
     Scenario:  
-        Given that I click on the next button
-        When I am on <page>
+        Given that I am on the <page>
+        When I click on the next button
         Then my details on <page> should be saved to the database
     
     Examples:
@@ -11,20 +11,19 @@ Feature: Saving of progress
         | "passport" |
 
     Scenario:  
-        Given that I click on the back Button
-        And I am on <page>
-        When I navigate to <previous> page
-        Then my previously filled details on the <previous> page should be shown
+        Given that I am on the <current> page
+        When I click on the back button
+        Then my previously filled details should be shown
         
     Examples:
-        | previous   | page      |
-        | "signup"   | "details"  |
-        | "details"  | "passport" |
-        | "passport" | "review"   |
+        | page       |
+        | "details"  |
+        | "passport" |
+        | "review"   |
 
     Scenario:
-        Given that I exit the application
-        And I am on <page> 
+        Given that I am on <page>
+        And that I exit the application
         When I come back to the app
         Then I should be redirected back to <page>
 
@@ -36,14 +35,16 @@ Feature: Saving of progress
         | "review"   |
 
     Scenario:
-        Given that I am on the Continue Progress page
-        And I have keyed in my <number>
+        Given that I am on the restore page
+        When I submit my <number> and OTP
         Then I should be redirected back to the <page> where I left off
 
+    # TODO: Seed the database
+
     Examples:
-        | page       |
-        | "signup"   |
-        | "details"  |
-        | "passport" |
-        | "review"   |
+        | number      | page        |
+        | "98512101"  | "details"   |
+        | "87678121"  |  "passport" |
+        | "87545311"  |  "review"   |
+        | "98857412"  |  "signup"   |
 
