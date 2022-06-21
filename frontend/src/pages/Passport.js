@@ -20,6 +20,8 @@ export default function Passport() {
   //on first render do GET request
   let phone_number;
   let test_data;
+
+
   useEffect(() => {
     phone_number = localStorage.getItem("phone_no")
     phone_number = 98765432 //test phone_number
@@ -61,15 +63,15 @@ export default function Passport() {
     }
 
   console.log(errors);
-
+}
 
   const toggleGenderToMale = () => {
-    if (curGender == "FEMALE") {
+    if (curGender === "FEMALE") {
       setCurGender("MALE");
     }
   };
   const toggleGenderToFemale = () => {
-    if (curGender == "MALE") {
+    if (curGender === "MALE") {
       setCurGender("FEMALE");
     }
   };
@@ -176,8 +178,8 @@ export default function Passport() {
             Next
           </button>
         </form>
-      </div>
+        </div>
       </div>
 
   );
-}}
+}
