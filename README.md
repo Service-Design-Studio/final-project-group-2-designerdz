@@ -26,12 +26,26 @@ Controller actions/methods by convention is done on **users_controller.rb**
 > Adds a new record by calling User.new() in the **create** action
 
 **GET request with phone number**
-> localhost:3000/api/v1/profile/:phone_number ; returns the entire record based on the provide :phone number params
+> **localhost:3000/api/v1/profile/:phone_number** ; returns the entire record based on the provide :phone number params
+
+**PATCH request with phone number**
+> **localhost:3000/api/v1/profile/:phone_number** ; calls the action users#update and updates the activerecord row based on phone number
 
 ## How to access activerecord on terminal
 - bundle exec rails console
 - User.all  // returns all records
 
+## How to get/post/update/delete rails API using cURL without the need of a frontend form
+Type this command in the terminal:
+- curl -d"user[full_name]=dyima" -X PATCH http://127.0.0.1:3000/api/v1/profile/98765432
+This command performs a PATCH request to the specified URL with data field "full_name": dyima
+-d flag is to write to the URL
+
+## Database schema (unconfirmed for passport)
+> passport records is from full_name onwards
+The headers are exactly what is used when passing the JSON data from frontend to rails endpoint API. So try to stick to this convention where it is easily readible
+
+**| id | display_name | title | email | phone_number | full_name | passport_no | passport_expiry | nationality | gender | dob |**
 
 # TODO:
 1. Standardize the keys in the passport.js such that the keys can be readily passed to a JSON object e.g. "passport_no" : "1234556A"
@@ -43,10 +57,6 @@ I want to somehow extract the id of that particular user and continue to populat
 
 4. **Next Sprint**: Multi-user registration, nested database is expected, how to populate and retrieve data from activerecord
 
-## Database schema (unconfirmed for passport)
-> passport records is from full_name onwards
-The headers are exactly what is used when passing the JSON data from frontend to rails endpoint API. So try to stick to this convention where it is easily readible
 
-| id | display_name | title | email | phone_number | full_name | passport_no | passport_expiry | nationality | gender | dob |
 
 
