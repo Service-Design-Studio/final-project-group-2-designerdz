@@ -23,7 +23,7 @@ export default function Customers({curDate, setDate, startYear, endYear}) {
   return (
     <DatePicker
       renderCustomHeader={({
-        date,
+        curDate,
         changeYear,
         changeMonth,
         decreaseMonth,
@@ -71,7 +71,7 @@ export default function Customers({curDate, setDate, startYear, endYear}) {
         </div>
       )}
       selected={curDate}
-      onChange={(curDate) => setDate(curDate)}
+      onChange={(date = Date()) => setDate(date)}
     />
   );
 }

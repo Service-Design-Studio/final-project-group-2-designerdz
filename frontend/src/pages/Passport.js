@@ -16,32 +16,38 @@ export default function Passport() {
   const [curGender, setCurGender] = useState("MALE");
   const {register,handleSubmit,formState: { errors }} = useForm();
   const onSubmit = (data) => {
-    console.log(date)
-    console.log(curGender)
-    postUserData(data, API_URL)
+    console.log("START")
+    data['passportDate'] = passportDate
+    data['birthDate'] = birthDate
+    data['curGender'] = curGender
+    console.log(data)
+    let jsonData = JSON.stringify(data)
+    console.log(jsonData)
+    console.log("END")
+    let posted = true
+    postUserData(jsonData, API_URL)
       .then((response) => {})
       .catch((error) => {
         console.log(error);
+        posted = false
       });
-    return () => (posted = false);
+    if (posted == true) {
+      navigate('/review')
+    }
+
   };
+  console.log("Errors")
   console.log(errors);
 
-
-
   const toggleGenderToMale = () => {
-    console.log(curGender);
     if (curGender == "FEMALE") {
       setCurGender("MALE");
     }
-    console.log(curGender);
   };
   const toggleGenderToFemale = () => {
-    console.log(curGender);
     if (curGender == "MALE") {
       setCurGender("FEMALE");
     }
-    console.log(curGender);
   };
 
   return (
@@ -59,9 +65,9 @@ export default function Passport() {
 
       <div className="absolute left-0 right-0 top-36 items-center ">
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
+          
           <div>
             <label className="block font-medium">Upload Passport</label>
-
             <input
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
@@ -80,12 +86,8 @@ export default function Passport() {
             type="text"
             onFill = {register("Passport Number", { required: true })} />
   
-
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
-
-            {/* TODO: Make this button correctly to work with proper dates */}
-
             <div>
               <Calendar curDate={passportDate} setDate={setPassportDate} startYear={2020} endYear={2050} />
             </div>
@@ -98,9 +100,9 @@ export default function Passport() {
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
-
             <div className="flex justify-around">
               <button
+                type='button'
                 className={`${
                   curGender == "MALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
@@ -109,6 +111,7 @@ export default function Passport() {
                 MALE
               </button>
               <button
+                type = 'button'
                 className={`${
                   curGender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
@@ -132,18 +135,6 @@ export default function Passport() {
             Next
           </button>
         </form>
-
-        <div className="flex flex-col w-screen bottom-0 mb-10 space-y-4 items-center">
-          <Button
-            text="Next"
-            bgcolor="bg-red-500"
-            hovercolor="hover:bg-red-700"
-            onClick={() => {
-              navigate("/review");
-              onSubmit();
-            }}
-          />
-        </div>
       </div>
       </div>
 
