@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
     render json: @users
   end
 
-  # GET /users/1
+  # GET /profile/:phone_number
   def show
     render json: @user
   end
@@ -16,13 +16,18 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /users ## when users click on next after submitting phone number
   def create
-    @user = User.new(user_params)
-
-    if @user.save
-      render json: @user, status: :created, location: @user
+    if User.exists?(phone_number: params[:phone_number])
+      nil
     else
-      render json: @user.errors, status: :unprocessable_entity
+      @user = User.new(user_params)
+      if @user.save
+        render json: @user, status: :created, location: @user
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
     end
+
+    
   end
 
   # PATCH/PUT /users/1 ## when users click on next buttons
