@@ -38,16 +38,35 @@ export default function Passport() {
         for (let i = 0; i < response.data.length; i++) {
           if (response.data[i].phone_number == phone_number) {
             test_data = response.data[i];
-            // console.log(test_data);
-            console.log("passport no is here");
-            console.log(test_data.passport_no);
           }
         }
+        // console.log(details);
+
         setDetails({
           full_name: test_data.full_name,
           passport_no: test_data.passport_no,
           nationality: test_data.nationality,
         });
+        console.log(details["passport_expiry"]);
+        console.log(details["dob"]);
+        console.log(details["gender"]);
+
+        if (details["passport_expiry"] == undefined) {
+          setPassportDate(new Date());
+        } else {
+          setPassportDate(test_data.passport_expiry);
+        }
+        if (details["dob"] == undefined) {
+          setBirthDate(new Date());
+        } else {
+          setBirthDate(test_data.dob);
+        }
+        if (details["gender"] != undefined) {
+          setCurGender("MALE");
+        } else {
+          setCurGender(test_data.gender);
+        }
+
         reset({
           full_name: test_data.full_name,
           title: test_data.title,
@@ -58,6 +77,10 @@ export default function Passport() {
         console.log(error);
       });
   }, []);
+
+  console.log(details);
+  console.log("TEST DATAT HERE");
+  console.log(test_data);
 
   const onSubmit = (data) => {
     data["passport_expiry"] = passportDate;
@@ -93,18 +116,6 @@ export default function Passport() {
       setCurGender("FEMALE");
     }
   };
-
-  //got problem
-
-  // if (details["passport_expiry"] != null) {
-  //   setPassportDate(details["passport_expiry"]);
-  // }
-  // if (details["dob"] != null) {
-  //   setBirthDate(details["dob"]);
-  // }
-  // if (details["gender"] != null) {
-  //   setCurGender(details["gender"]);
-  // }
 
   return (
     <div>
