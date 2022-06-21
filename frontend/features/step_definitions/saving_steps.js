@@ -30,7 +30,7 @@ Then ("my previously filled details should be shown", async function() {
     // TODO: seed database first
 });
 
-Given ("I exit the application", async function() {
+Given ("I exit the app", async function() {
     await driver.quit();
 });
 
