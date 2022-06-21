@@ -1,27 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
+import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
+import { postUserData } from "../services/axiosUsers";
 
 export default function Details() {
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  //to do POST request to rails api for saving of progress
-  //also need to save phone number to cookies upon clicking submit button
-  //need to implement axiosUser.js to handle post/get request to handle rails api
+  //post request to database backend
   const onSubmit = (data) => {
-    console.log("submitted");
-  };
+    console.log(data)
+    let posted = true;
+    postUserData(data, API_URL)
+      .then((response) => {})
+      .catch(error => {console.log(error.response.data)});
+      navigate("/passport");
+    return () => (posted = false);
 
-  console.log(errors);
+  };
 
   return (
     <div>
@@ -29,7 +32,7 @@ export default function Details() {
         <BackButton onClick={() => navigate("/signup")} />
         <ProgressBar percent="33%" />
       </div>
-      
+
       <TextDesc
         headerText="Tell me about yourself first"
         bodyText="sth know you better sth know you better"
@@ -42,7 +45,7 @@ export default function Details() {
             <div className="flex">
               <select
                 className="inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-400 dark:border-gray-600"
-                {...register("Title", { required: true })}
+                {...register("title", { required: true })}
               >
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
@@ -55,17 +58,18 @@ export default function Details() {
                 type="text"
                 className="rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
-                {...register("Last / Display Name", { required: true })}
+                {...register("display_name", { required: true })}
               />
             </div>
 
             <h3 className="opacity-50 text-xs mb-4">
               This is how you will be acknowledged on PayLah! and digibank.
-
               <a
                 className="text-blue-600 hover:text-blue-800 visited:text-purple-600"
                 href="https://google.com"
-                > Find out more
+              >
+                {" "}
+                Find out more
               </a>
             </h3>
           </div>
@@ -76,7 +80,7 @@ export default function Details() {
               type="number"
               className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Phone Number"
-              {...register("Phone Number", { required: true })}
+              {...register("phone_number", { required: true })}
             />
           </div>
 
@@ -88,13 +92,19 @@ export default function Details() {
               type="email"
               className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Email Address (Optional)"
-              {...register("Email Address (Optional)", {})}
+              {...register("email", {})}
             />
           </div>
+          
+            {/* Im putting this here first yida, im not sure how to pass data using your Button class*/}
+            <input
+            className="w-full bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
+            type="submit"
+            />
         </form>
       </div>
 
-      <div className="flex flex-col absolute w-screen bottom-0 mb-10 space-y-4 items-center">
+      {/* <div className="flex flex-col absolute w-screen bottom-0 mb-10 space-y-4 items-center">
         <Button
           text="Next"
           bgcolor="bg-red-500"
@@ -104,7 +114,7 @@ export default function Details() {
             onSubmit();
           }}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
+import { postUserData } from "../services/axiosUsers";
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -17,28 +18,33 @@ export default function Passport() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-    navigate("/review");
+    let posted = true;
+    postUserData(data, API_URL)
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    return () => (posted = false);
   };
   console.log(errors);
 
-  const [curGender, setCurGender] = useState("MALE")
+  const [curGender, setCurGender] = useState("MALE");
 
   const toggleGenderToMale = () => {
-    console.log(curGender)
-    if (curGender == "FEMALE"){
-      setCurGender("MALE")
+    console.log(curGender);
+    if (curGender == "FEMALE") {
+      setCurGender("MALE");
     }
-    console.log(curGender)
-  }
+    console.log(curGender);
+  };
   const toggleGenderToFemale = () => {
-    console.log(curGender)
-    if (curGender == "MALE"){
-      setCurGender("FEMALE")
+    console.log(curGender);
+    if (curGender == "MALE") {
+      setCurGender("FEMALE");
     }
-    console.log(curGender)
-  }
-  
+    console.log(curGender);
+  };
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -67,7 +73,6 @@ export default function Passport() {
 
           <FormFill text="Full Name" />
           <FormFill text="Passport Number" />
-  
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
@@ -75,18 +80,8 @@ export default function Passport() {
             {/* TODO: Make this button correctly to work with proper dates */}
 
             <div>
-              <Calendar 
-                startyear={2020}
-                endyear={2050}
-
-              
-              />
+              <Calendar startyear={2020} endyear={2050} />
             </div>
-            
-
-
-
-            
           </div>
 
           <FormFill text="Nationality" />
@@ -95,8 +90,22 @@ export default function Passport() {
             <label className="block font-medium">Gender</label>
 
             <div className="flex justify-around">
-              <button className = {`${curGender == "MALE" ? "bg-red-200": "bg-gray-100"} w-1/2 h-10 rounded-md m-1`} onClick={toggleGenderToMale}>MALE</button>
-              <button  className = {`${curGender == "FEMALE" ? "bg-red-200": "bg-gray-100"} w-1/2 h-10 rounded-md m-1`} onClick={toggleGenderToFemale}>FEMALE</button>
+              <button
+                className={`${
+                  curGender == "MALE" ? "bg-red-200" : "bg-gray-100"
+                } w-1/2 h-10 rounded-md m-1`}
+                onClick={toggleGenderToMale}
+              >
+                MALE
+              </button>
+              <button
+                className={`${
+                  curGender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
+                } w-1/2 h-10 rounded-md m-1`}
+                onClick={toggleGenderToFemale}
+              >
+                FEMALE
+              </button>
             </div>
           </div>
           <div className="mb-3">
@@ -104,23 +113,18 @@ export default function Passport() {
               Date of Birth (DD/MM/YYYY)
             </label>
 
-            <Calendar 
-                startyear={1900}
-                endyear={2022}
+            <Calendar startyear={1900} endyear={2022} />
 
-              
-              />
-
-
+            <Calendar startyear={1900} endyear={2022} />
           </div>
         </form>
         <div className="flex flex-col w-screen bottom-0 mb-10 space-y-4 items-center">
-          <Button 
+          <Button
             text="Next"
             bgcolor="bg-red-500"
             hovercolor="hover:bg-red-700"
             onClick={() => {
-              navigate("/passport");
+              navigate("/review");
               onSubmit();
             }}
           />

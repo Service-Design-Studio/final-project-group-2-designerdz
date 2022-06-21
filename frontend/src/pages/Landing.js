@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/Buttons.js";
-import Popup from 'reactjs-popup';
+import Popup from "reactjs-popup";
 import Restore from "./Restore.js";
 
 export default function Landing() {
@@ -26,12 +26,21 @@ export default function Landing() {
           hovercolor="hover:bg-slate-800"
           onClick={() => alert("Sorry we are not DBS!")}
         />
-        <Popup trigger={<button className="button"><a>Left registration midway? <span className="underline">Continue where you left off</span></a> </button>}>
-        <div className="fixed top-2/4 left-0 right-0">
-          <div className="w-8/12 m-auto">
-          <Restore/>
+        <Popup
+          trigger={
+            <button className="button">
+              <a>
+                Left registration midway?{" "}
+                <span className="underline">Continue where you left off</span>
+              </a>{" "}
+            </button>
+          }
+        >
+          <div className="fixed top-2/4 left-0 right-0">
+            <div className="w-8/12 m-auto">
+              <Restore />
+            </div>
           </div>
-        </div>
         </Popup>
       </div>
     </div>

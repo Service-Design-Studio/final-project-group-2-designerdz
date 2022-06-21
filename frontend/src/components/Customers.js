@@ -7,8 +7,9 @@ export default function Customers(props) {
       {props.customers.map((customer) => {
         return (
           <div>
-            <h2>{customer.display_name}</h2>
-            <h3>{customer.full_name}</h3>
+            <h2>{customer.title} {" "} {customer.display_name}</h2>
+            <h3>{customer.phone_number}</h3>
+            <h3>{customer.email}</h3>
           </div>
         );
       })}
