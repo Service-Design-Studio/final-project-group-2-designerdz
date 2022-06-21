@@ -7,10 +7,6 @@ const pactum = require('pactum');
 
 let spec = pactum.spec();
 
-// WITHOUT BACKEND
-//base_url = 'http://localhost:3000/'
-
-// WITH BACKEND
 base_url = 'http://localhost:3001/'
 
 setDefaultTimeout(60*1000)
@@ -25,41 +21,58 @@ Before(function(){
 After(async function(){
     await driver.quit()
 })
- 
 
-Given("I am on the {string} page", async function (previous) {
-    await driver.get(base_url + previous);
-    await driver.sleep(3*1000)
+Then ("my details on {page} should be saved to the database", async function (page) {
+    // TODO: should this be under API?
 });
 
-When('I click on the next button', async function () {
-    const registration_button = await driver.findElement(By.className('next'));
-    await registration_button.click()
+Then ("my previously filled details should be shown", async function() {
+    // TODO: seed database first
+});
+
+Given ("I exit the app", async function() {
+    await driver.quit();
+});
+
+When ("I come back to the app", async function() {
+    driver = initDriver();
     await driver.sleep(3*1000);
 });
 
-Then("I should move forward to the {string} page", async function (next) {
-    var expected_url = next;
+Then ("I should be redirected back to {page}", async function(page) {
+    var expected_url = page;
+    var actual_url = await driver.getCurrentUrl();
+    actual_url = actual_url.split("/")[3]
+    expect(actual_url).to.equal(expected_url);
+});
+
+Given ("I am on the restore page", async function() {
+    await driver.get(base_url + "restore");
+    await driver.sleep(3*1000)
+});
+
+When ("I submit my {number} and OTP", async function(number) {
+    const number_input = await driver.findElement(By.name('submit'));
+    await number_input.sendKeys(number);
+});
+
+Then ("I should be redirected back to the {page} where I left off", async function(page) {
+    var expected_url = page;
     var actual_url = await driver.getCurrentUrl();
     actual_url = actual_url.split("/")[3]
     expect(actual_url).to.equal(expected_url);
 });
 
 
-Given("I am now on the {string} page", async function (next) {
-    await driver.get(base_url + next);
-    await driver.sleep(3*1000)
-});
 
-When('I click on the back button', async function () {
-    const registration_button = await driver.findElement(By.className('back'));
-    await registration_button.click()
-    await driver.sleep(3*1000);
-});
 
-Then("I should go back to the {string} page", async function (previous) {
-    var expected_url = previous;
-    var actual_url = await driver.getCurrentUrl();
-    actual_url = actual_url.split("/")[3]
-    expect(actual_url).to.equal(expected_url);
-});
+
+
+
+
+
+
+
+
+
+

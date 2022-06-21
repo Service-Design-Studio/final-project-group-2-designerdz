@@ -4,26 +4,80 @@ import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
-import { postUserData } from "../services/axiosUsers";
+import FormFill from "../components/FormFill";
+import { postUserData, getUserData } from "../services/axiosUsers.js";
+import { useEffect, useState } from "react";
 
 export default function Details() {
   const navigate = useNavigate();
+  const [details, setDetails] = useState({});
   const {
+    reset,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  var test_data;
+  let phone_number;
+  phone_number = localStorage.getItem("phone_number");
+  //on first render do GET request
+  useEffect(() => {
+    getUserData(API_URL, phone_number)
+      .then((response) => {
+        // iterate through response.data and find where the phone_number == phone_number
+        console.log("RESPONSE DATA LENGTH");
+        console.log(response.data.length);
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].phone_number == phone_number) {
+            test_data = response.data[i];
+            console.log(test_data);
+          }
+        }
+        console.log("test_data");
+        console.log(test_data);
+        setDetails({
+          display_name: test_data.display_name,
+          title: test_data.title,
+          phone_number: test_data.phone_number,
+          email: test_data.email,
+        });
+        reset({
+          display_name: test_data.display_name,
+          title: test_data.title,
+          phone_number: test_data.phone_number,
+          email: test_data.email,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  console.log(details);
+  console.log("title");
+  console.log(details.title);
+  console.log(typeof details.title);
+
   //post request to database backend
   const onSubmit = (data) => {
-    console.log(data)
+    console.log("inside onSubmit");
+    console.log(data);
     let posted = true;
-    postUserData(data, API_URL)
-      .then((response) => {})
-      .catch(error => {console.log(error.response.data)});
-      navigate("/passport");
-    return () => (posted = false);
+    postUserData(API_URL, data)
+      .then((response) => {
+        console.log("post response below");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        posted = false;
+      });
+    if (posted == true) {
+      console.log("Inside posted true");
+      localStorage.setItem("phone_number", data.phone_number);
 
+      navigate("/passport");
+    }
   };
 
   return (
@@ -44,8 +98,8 @@ export default function Details() {
 
             <div className="flex">
               <select
-                className="inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-400 dark:border-gray-600"
-                {...register("title", { required: true })}
+                className="inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-900 dark:border-gray-600"
+                {...register("title", {})}
               >
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
@@ -58,7 +112,7 @@ export default function Details() {
                 type="text"
                 className="rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
-                {...register("display_name", { required: true })}
+                {...register("display_name", {})}
               />
             </div>
 
@@ -74,47 +128,28 @@ export default function Details() {
             </h3>
           </div>
 
-          <div className="mb-6">
-            <label className="block font-medium">Phone Number</label>
-            <input
-              type="number"
-              className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Phone Number"
-              {...register("phone_number", { required: true })}
-            />
-          </div>
+          <FormFill
+            text="Phone Number"
+            type="number"
+            onFill={register("phone_number", {})}
+          />
 
-          <div className="mb-15">
-            <label className="block font-medium">
-              Email Address (Optional)
-            </label>
-            <input
-              type="email"
-              className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Email Address (Optional)"
-              {...register("email", {})}
-            />
-          </div>
-          
-            {/* Im putting this here first yida, im not sure how to pass data using your Button class*/}
-            <input
-            className="w-full bg-red-500 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
+          <FormFill
+            type="email"
+            text="Email Address (Optional)"
+            onFill={register("email", {})}
+          />
+
+          <button
+            className={
+              "absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12"
+            }
             type="submit"
-            />
+          >
+            Next
+          </button>
         </form>
       </div>
-
-      {/* <div className="flex flex-col absolute w-screen bottom-0 mb-10 space-y-4 items-center">
-        <Button
-          text="Next"
-          bgcolor="bg-red-500"
-          hovercolor="hover:bg-red-700"
-          onClick={() => {
-            navigate("/passport");
-            onSubmit();
-          }}
-        />
-      </div> */}
     </div>
   );
 }

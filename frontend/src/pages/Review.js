@@ -1,37 +1,41 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import { getUserData } from "../services/axiosUsers.js";
 
+let test_data;
 export default function Review() {
   const navigate = useNavigate();
-
-  //TODO: get data from the past few pages
+  const [details, setDetails] = useState({});
   useEffect(() => {
-    let mounted = true;
-    getUserData(API_URL)
-      .then((items) => {
-        if (mounted) {
-          console.log(items);
-          // setCustomers(items);
+    let phone_number = localStorage.getItem("phone_number");
+
+    getUserData(API_URL, phone_number)
+      .then((response) => {
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].phone_number == phone_number) {
+            // console.log("SUCCESSFULLY SET TEST_DATA");
+            test_data = response.data[i];
+            console.log(test_data);
+          }
         }
+        setDetails(test_data);
       })
       .catch((error) => {
         console.log(error);
       });
-    return () => (mounted = false);
   }, []);
 
-  //TODO: do on click handler to do sth???
-  const onClick = () => {
-    navigate("/");
+  const submitData = () => {
+    console.log("Success!");
+
+    navigate("/success");
   };
 
   return (
-    // TODO: Get data from the past few pages and finish here
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
       <div className="fixed flex flex-row top-0 left-0 right-0 z-50">
@@ -52,9 +56,9 @@ export default function Review() {
           className="flex flex-col float-right space-y-2 text-right max-w-[55%] 
           text-ellipsis overflow-hidden whitespace-nowrap"
         >
-          <p>some dp name</p>
-          <p>some phone no</p>
-          <p>some email</p>
+          <p>{details.display_name}</p>
+          <p>{details.phone_number}</p>
+          <p>{details.email}</p>
         </div>
         {/* <div className="flex flex-col "> */}
         <div className="flex flex-row float-left mt-5 w-full justify-between">
@@ -76,12 +80,13 @@ export default function Review() {
           className="flex flex-col float-right space-y-2 text-right mt-5 
           max-w-[55%] text-ellipsis overflow-hidden whitespace-nowrap"
         >
-          <p className="overflow-scroll">some full name i am typing</p>
-          <p>some passport number</p>
-          <p>some passport expiry</p>
-          <p>some nationality</p>
-          <p>some gender</p>
-          <p>some date of birth</p>
+          <p className="overflow-scroll"></p>
+          <p>{details.full_name}</p>
+          <p>{details.passport_no}</p>
+          <p>{details.passport_expiry}</p>
+          <p>{details.nationality}</p>
+          <p>{details.gender}</p>
+          <p>{details.dob}</p>
         </div>
       </div>
       <div className="flex flex-col absolute w-screen bottom-0 mb-10 items-center">
@@ -91,9 +96,7 @@ export default function Review() {
           text="Submit"
           bgcolor="bg-red-500"
           hovercolor="hover:bg-red-700"
-          onClick={() => {
-            onClick();
-          }}
+          onClick={submitData}
         />
       </div>
     </div>

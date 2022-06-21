@@ -1,30 +1,120 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { API_URL } from "../utilities/constants.js";
+import { useState, useEffect } from "react";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
-import { postUserData } from "../services/axiosUsers";
+import {
+  getUserData,
+  postUserData,
+  patchUserData,
+} from "../services/axiosUsers";
+import { API_URL, PATCH_API_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
-  let isValid = false; //turns to true when information are filled and valid
+  const [details, setDetails] = useState({});
+  const [passportDate, setPassportDate] = useState(new Date());
+  const [birthDate, setBirthDate] = useState(new Date());
+  const [curGender, setCurGender] = useState("MALE");
   const {
+    reset,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    let posted = true;
-    postUserData(data, API_URL)
-      .then((response) => {})
+  //on first render do GET request
+  let phone_number;
+  let test_data;
+  phone_number = localStorage.getItem("phone_number");
+
+  useEffect(() => {
+    getUserData(API_URL, phone_number)
+      .then((response) => {
+        // iterate through response.data and find where the phone_number == phone_number
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].phone_number == phone_number) {
+            test_data = response.data[i];
+          }
+        }
+        // console.log(details);
+
+        setDetails({
+          full_name: test_data.full_name,
+          passport_no: test_data.passport_no,
+          nationality: test_data.nationality,
+        });
+        console.log(details["passport_expiry"]);
+        console.log(details["dob"]);
+        console.log(details["gender"]);
+
+        if (details["passport_expiry"] == undefined) {
+          setPassportDate(new Date());
+        } else {
+          setPassportDate(test_data.passport_expiry);
+        }
+        if (details["dob"] == undefined) {
+          setBirthDate(new Date());
+        } else {
+          setBirthDate(test_data.dob);
+        }
+        if (details["gender"] != undefined) {
+          setCurGender("MALE");
+        } else {
+          setCurGender(test_data.gender);
+        }
+
+        reset({
+          full_name: test_data.full_name,
+          title: test_data.title,
+          nationality: test_data.nationality,
+        });
+      })
       .catch((error) => {
         console.log(error);
       });
-    return () => (posted = false);
+  }, []);
+
+  console.log(details);
+  console.log("TEST DATAT HERE");
+  console.log(test_data);
+
+  const onSubmit = (data) => {
+    data["passport_expiry"] = passportDate;
+    data["dob"] = birthDate;
+    data["gender"] = curGender;
+    let posted = true;
+    console.log("THE PHONE NUMBER IS...");
+    console.log(phone_number);
+
+    patchUserData(PATCH_API_URL, data, phone_number)
+      .then((response) => {
+        console.log("response is");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        posted = false;
+      });
+    if (posted == true) {
+      navigate("/review");
+    }
+
+    console.log(errors);
+  };
+
+  const toggleGenderToMale = () => {
+    if (curGender === "FEMALE") {
+      setCurGender("MALE");
+    }
+  };
+  const toggleGenderToFemale = () => {
+    if (curGender === "MALE") {
+      setCurGender("FEMALE");
+    }
   };
 
   return (
@@ -44,52 +134,68 @@ export default function Passport() {
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
           <div>
             <label className="block font-medium">Upload Passport</label>
-
             <input
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
               placeholder="Passport"
-              {...register("Passport", { required: true })}
+              {...register("Passport", {})}
             />
           </div>
 
-          <FormFill text="Full Name" />
-          <FormFill text="Passport Number" />
+          <FormFill
+            text="Full Name"
+            type="text"
+            onFill={register("full_name", {})}
+            // defaultValue = {details.full_name}
+          />
+
+          <FormFill
+            text="Passport Number"
+            type="text"
+            onFill={register("passport_no", {})}
+            // defaultValue = {details.passport_no}
+          />
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
-
-            {/* TODO: Make this button correctly to work with proper dates */}
-
             <div>
-              <Calendar startyear={2020} endyear={2050} />
+              <Calendar
+                curDate={passportDate}
+                setDate={setPassportDate}
+                startYear={2020}
+                endYear={2050}
+              />
             </div>
           </div>
 
-          <FormFill text="Nationality" />
+          <FormFill
+            text="Nationality"
+            type="text"
+            onFill={register("nationality", {})}
+            // defaultValue = {details.nationality}
+          />
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
-
-            {/* TODO: Make this button clickable like pills upon selection */}
-            <div className="flex">
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
+            <div className="flex justify-around">
+              <button
+                type="button"
+                className={`${
+                  curGender == "MALE" ? "bg-red-200" : "bg-gray-100"
+                } w-1/2 h-10 rounded-md m-1`}
+                onClick={toggleGenderToMale}
               >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-
-              <select
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                {...register("Date of Birth", { required: true })}
+                MALE
+              </button>
+              <button
+                type="button"
+                className={`${
+                  curGender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
+                } w-1/2 h-10 rounded-md m-1`}
+                onClick={toggleGenderToFemale}
               >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
+                FEMALE
+              </button>
             </div>
           </div>
 
@@ -97,23 +203,21 @@ export default function Passport() {
             <label className="block font-medium">
               Date of Birth (DD/MM/YYYY)
             </label>
-
-            {/* TODO: Make this button correctly to work with proper dates */}
-
-            <Calendar startyear={1900} endyear={2022} />
+            <Calendar
+              curDate={birthDate}
+              setDate={setBirthDate}
+              startYear={1900}
+              endYear={2022}
+            />
           </div>
+
+          <button
+            className={`absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+            type="submit"
+          >
+            Next
+          </button>
         </form>
-        <div className="flex flex-col w-screen bottom-0 mb-10 space-y-4 items-center">
-          <Button
-            text="Next"
-            bgcolor="bg-red-500"
-            hovercolor="hover:bg-red-700"
-            onClick={() => {
-              navigate("/review");
-              onSubmit();
-            }}
-          />
-        </div>
       </div>
     </div>
   );
