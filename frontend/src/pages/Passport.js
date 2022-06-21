@@ -32,30 +32,31 @@ export default function Passport() {
   phone_number = localStorage.getItem("phone_number");
 
   useEffect(() => {
-    if (phone_number != null) {
-      //if phone_no is in localStorage, do GET request
-      getUserData(API_URL, phone_number)
-        .then((response) => {
-          for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i].phone_number == phone_number) {
-              console.log("SUCCESSFULLY SET TEST_DATA");
-              test_data = response.data[i];
-              console.log(test_data);
-            }
+    getUserData(API_URL, phone_number)
+      .then((response) => {
+        // iterate through response.data and find where the phone_number == phone_number
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].phone_number == phone_number) {
+            test_data = response.data[i];
+            // console.log(test_data);
+            console.log("passport no is here");
+            console.log(test_data.passport_no);
           }
-          console.log(test_data); //to check test_data
-          setDetails(test_data);
-        })
-        .catch((error) => {
-          console.log(error);
+        }
+        setDetails({
+          full_name: test_data.full_name,
+          passport_no: test_data.passport_no,
+          nationality: test_data.nationality,
         });
-    }
-
-    reset({
-      full_name: details["full_name"],
-      passport_no: details["passport_no"],
-      nationality: details["nationality"],
-    });
+        reset({
+          full_name: test_data.full_name,
+          title: test_data.title,
+          nationality: test_data.nationality,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const onSubmit = (data) => {
@@ -93,15 +94,17 @@ export default function Passport() {
     }
   };
 
-  if (details["passport_expiry"] != null) {
-    setPassportDate(details["passport_expiry"]);
-  }
-  if (details["dob"] != null) {
-    setBirthDate(details["dob"]);
-  }
-  if (details["gender"] != null) {
-    setCurGender(details["gender"]);
-  }
+  //got problem
+
+  // if (details["passport_expiry"] != null) {
+  //   setPassportDate(details["passport_expiry"]);
+  // }
+  // if (details["dob"] != null) {
+  //   setBirthDate(details["dob"]);
+  // }
+  // if (details["gender"] != null) {
+  //   setCurGender(details["gender"]);
+  // }
 
   return (
     <div>
