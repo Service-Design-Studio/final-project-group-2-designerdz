@@ -47,6 +47,7 @@ class Api::V1::UsersController < ApplicationController
 
     # Assigns a list of allowable attributes through.
     def user_params
-      params.require(:user).permit(:display_name, :title, :phone_number, :email)
+      params.require(:user).permit(:display_name, :title, :phone_number, :email, :full_name, :passport_no, 
+      :passport_expiry, :nationality, :gender, :dob)
     end
 end
