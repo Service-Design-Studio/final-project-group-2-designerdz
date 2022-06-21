@@ -7,19 +7,15 @@ Controller actions/methods by convention is done on **users_controller.rb**
 
 ## A few definitions to state
 - Database Model name is called **User**, every CRUD action is performed on it e.g. User.new(params), User.all etc
-- set_user() method defines an instance **@user** that defines a specific activerecord row according to params[:id]
+### in users_controller.rb
+- set_user() method defines an attribute **@user** that defines a specific activerecord row according to params[:id]
 - user_params() method is used to define the accepted keys/symbol from the JSON acquired from form data
 
 
 **Endpoint API for GET request**
-> localhost:3000/api/v1/users
+> **localhost:3000/api/v1/users**
 > returns **all** existing records in ActiveRecord by calling User.all and renders the json request
-
-**GET route with params[:id]**
-> localhost:3000/api/v1/users/:id;
-> :id is an integer, returns the specific record as specified by the id;
-> same concept can be used to get phone number e.g params[:phone_number]
-
+> 
 **POST request**
 > Need to explicity declare the route for POST in **routes.rb**, resources :users does not automatically declare this for you not sure why.
 > Upon clicking next in web-app, users#create controller action is invoked, specifically api/v1/users#create;
@@ -33,7 +29,7 @@ Controller actions/methods by convention is done on **users_controller.rb**
 
 ## How to access activerecord on terminal
 - bundle exec rails console
-- User.all  // returns all records
+- User.all  --> returns all records
 
 ## How to get/post/update/delete rails API using cURL without the need of a frontend form
 Type this command in the terminal:
@@ -41,9 +37,9 @@ Type this command in the terminal:
 This command performs a PATCH request to the specified URL with data field "full_name": dyima
 -d flag is to write to the URL
 
-## Database schema (unconfirmed for passport)
+## Database schema
 > passport records is from full_name onwards
-The headers are exactly what is used when passing the JSON data from frontend to rails endpoint API. So try to stick to this convention where it is easily readible
+The headers are exactly what is used when passing the JSON data from frontend to rails endpoint API.
 
 **| id | display_name | title | email | phone_number | full_name | passport_no | passport_expiry | nationality | gender | dob |**
 
