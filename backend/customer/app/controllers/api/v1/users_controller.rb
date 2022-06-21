@@ -13,6 +13,7 @@ class Api::V1::UsersController < ApplicationController
     render json: @user
   end
 
+
   # POST /users ## when users click on next after submitting phone number
   def create
     @user = User.new(user_params)
@@ -41,10 +42,10 @@ class Api::V1::UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      @user = User.where(phone_number: params['phone_number'])
     end
 
-    # Only allow a list of trusted parameters through.
+    # Assigns a list of allowable attributes through.
     def user_params
       params.require(:user).permit(:display_name, :title, :phone_number, :email)
     end
