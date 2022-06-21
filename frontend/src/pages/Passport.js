@@ -7,6 +7,7 @@ import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
 import { postUserData } from "../services/axiosUsers";
+import { API_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
