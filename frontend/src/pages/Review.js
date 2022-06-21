@@ -11,15 +11,15 @@ export default function Review() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
   useEffect(() => {
-    let phone_number =localStorage.getItem("phone_number")
-    phone_number = 91234567
+    let phone_number = localStorage.getItem("phone_number");
+
     getUserData(API_URL, phone_number)
       .then((response) => {
         for (let i = 0; i < response.data.length; i++) {
           if (response.data[i].phone_number == phone_number) {
-            console.log("SUCCESSFULLY SET TEST_DATA")
+            // console.log("SUCCESSFULLY SET TEST_DATA");
             test_data = response.data[i];
-            console.log(test_data)
+            console.log(test_data);
           }
         }
         setDetails(test_data);
@@ -30,11 +30,10 @@ export default function Review() {
   }, []);
 
   const submitData = () => {
-    console.log("Success!")
+    console.log("Success!");
 
-
-    navigate("/success")
-  }
+    navigate("/success");
+  };
 
   return (
     <div>

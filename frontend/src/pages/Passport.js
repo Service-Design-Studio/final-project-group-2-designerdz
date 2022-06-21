@@ -6,64 +6,81 @@ import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
-import { getUserData, postUserData, patchUserData } from "../services/axiosUsers";
+import {
+  getUserData,
+  postUserData,
+  patchUserData,
+} from "../services/axiosUsers";
 import { API_URL, PATCH_API_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
-  const [passportDate,setPassportDate] = useState(new Date());
-  const [birthDate,setBirthDate] = useState(new Date());
+  const [passportDate, setPassportDate] = useState(new Date());
+  const [birthDate, setBirthDate] = useState(new Date());
   const [curGender, setCurGender] = useState("MALE");
-  const {reset, register,handleSubmit,formState: { errors }} = useForm();
-  
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   //on first render do GET request
   let phone_number;
   let test_data;
-
+  phone_number = localStorage.getItem("phone_number");
 
   useEffect(() => {
-    phone_number = localStorage.getItem("phone_no")
-    phone_number = 98765432 //test phone_number
-  if (phone_number != null) { //if phone_no is in localStorage, do GET request
-    getUserData(API_URL, phone_number)
-      .then((response) => {
+    if (phone_number != null) {
+      //if phone_no is in localStorage, do GET request
+      getUserData(API_URL, phone_number)
+        .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phone_number) {
-            console.log("SUCCESSFULLY SET TEST_DATA")
-            test_data = response.data[i];
-            console.log(test_data)
+            if (response.data[i].phone_number == phone_number) {
+              console.log("SUCCESSFULLY SET TEST_DATA");
+              test_data = response.data[i];
+              console.log(test_data);
+            }
           }
-        }
-        console.log(test_data) //to check test_data
+          console.log(test_data); //to check test_data
           setDetails(test_data);
-        
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
-  reset({"full_name": details["full_name"], "passport_no": details["passport_no"], "nationality": details["nationality"]})
-}, []);
+    reset({
+      full_name: details["full_name"],
+      passport_no: details["passport_no"],
+      nationality: details["nationality"],
+    });
+  }, []);
 
   const onSubmit = (data) => {
-    data['passport_expiry'] = passportDate
-    data['dob'] = birthDate
-    data['gender'] = curGender
-    let posted = true
-    patchUserData(PATCH_API_URL,data,phone_number)
-      .then((response) => {})
+    data["passport_expiry"] = passportDate;
+    data["dob"] = birthDate;
+    data["gender"] = curGender;
+    let posted = true;
+    console.log("THE PHONE NUMBER IS...");
+    console.log(phone_number);
+
+    patchUserData(PATCH_API_URL, data, phone_number)
+      .then((response) => {
+        console.log("response is");
+        console.log(response);
+      })
       .catch((error) => {
         console.log(error.response);
-        posted = false
+        posted = false;
       });
     if (posted == true) {
-      navigate('/review')
+      navigate("/review");
     }
 
-  console.log(errors);
-}
+    console.log(errors);
+  };
 
   const toggleGenderToMale = () => {
     if (curGender === "FEMALE") {
@@ -77,15 +94,14 @@ export default function Passport() {
   };
 
   if (details["passport_expiry"] != null) {
-    setPassportDate(details["passport_expiry"])
-  } 
+    setPassportDate(details["passport_expiry"]);
+  }
   if (details["dob"] != null) {
-    setBirthDate(details["dob"])
+    setBirthDate(details["dob"]);
   }
   if (details["gender"] != null) {
-    setCurGender(details["gender"])
+    setCurGender(details["gender"]);
   }
-
 
   return (
     <div>
@@ -102,50 +118,54 @@ export default function Passport() {
 
       <div className="absolute left-0 right-0 top-36 items-center ">
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
-          
           <div>
             <label className="block font-medium">Upload Passport</label>
             <input
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
               placeholder="Passport"
-              {...register("Passport", { })}
+              {...register("Passport", {})}
             />
           </div>
 
           <FormFill
             text="Full Name"
             type="text"
-            onFill = {register("full_name", { })} 
+            onFill={register("full_name", {})}
             // defaultValue = {details.full_name}
-            />
+          />
 
           <FormFill
             text="Passport Number"
             type="text"
-            onFill = {register("passport_no", { })} 
+            onFill={register("passport_no", {})}
             // defaultValue = {details.passport_no}
-            />
-  
+          />
+
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
             <div>
-              <Calendar curDate={passportDate} setDate={setPassportDate} startYear={2020} endYear={2050} />
+              <Calendar
+                curDate={passportDate}
+                setDate={setPassportDate}
+                startYear={2020}
+                endYear={2050}
+              />
             </div>
           </div>
 
           <FormFill
             text="Nationality"
             type="text"
-            onFill = {register("nationality", { })} 
+            onFill={register("nationality", {})}
             // defaultValue = {details.nationality}
-            />
+          />
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
             <div className="flex justify-around">
               <button
-                type='button'
+                type="button"
                 className={`${
                   curGender == "MALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
@@ -154,7 +174,7 @@ export default function Passport() {
                 MALE
               </button>
               <button
-                type = 'button'
+                type="button"
                 className={`${
                   curGender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
@@ -164,22 +184,27 @@ export default function Passport() {
               </button>
             </div>
           </div>
-          
+
           <div className="mb-3">
             <label className="block font-medium">
               Date of Birth (DD/MM/YYYY)
             </label>
-            <Calendar curDate={birthDate} setDate={setBirthDate} startYear={1900} endYear={2022} />
+            <Calendar
+              curDate={birthDate}
+              setDate={setBirthDate}
+              startYear={1900}
+              endYear={2022}
+            />
           </div>
 
           <button
             className={`absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
-            type="submit">
+            type="submit"
+          >
             Next
           </button>
         </form>
-        </div>
       </div>
-
+    </div>
   );
 }

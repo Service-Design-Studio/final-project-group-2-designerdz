@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { API_URL} from "../utilities/constants.js";
+import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
 import { postUserData, getUserData } from "../services/axiosUsers.js";
 import { useEffect, useState } from "react";
-
 
 export default function Details() {
   const navigate = useNavigate();
@@ -20,56 +19,64 @@ export default function Details() {
   } = useForm();
 
   var test_data;
-  let phone_number; 
+  let phone_number;
+  phone_number = localStorage.getItem("phone_number");
   //on first render do GET request
   useEffect(() => {
-    phone_number = localStorage.getItem("phone_number")
-    console.log("THE PHONE NUMBER IS...")
-    console.log(phone_number)
-    getUserData(API_URL, phone_number).then(
-      (response) => {
+    getUserData(API_URL, phone_number)
+      .then((response) => {
         // iterate through response.data and find where the phone_number == phone_number
-        console.log("RESPONSE DATA LENGTH")
-        console.log(response.data.length)
+        console.log("RESPONSE DATA LENGTH");
+        console.log(response.data.length);
         for (let i = 0; i < response.data.length; i++) {
           if (response.data[i].phone_number == phone_number) {
-            console.log("SUCCESSFULLY SET TEST_DATA")
             test_data = response.data[i];
-            console.log(test_data)
+            console.log(test_data);
           }
         }
         console.log("test_data");
-        console.log(test_data)
-        setDetails({'display_name': test_data.display_name, 'title': test_data.title, 'phone_number': test_data.phone_number, 'email': test_data.email} )
-        reset({'display_name': test_data.display_name, 'title': test_data.title, 'phone_number': test_data.phone_number, 'email': test_data.email})
-      }).catch((error)=>{console.log(error);})
-      
-
+        console.log(test_data);
+        setDetails({
+          display_name: test_data.display_name,
+          title: test_data.title,
+          phone_number: test_data.phone_number,
+          email: test_data.email,
+        });
+        reset({
+          display_name: test_data.display_name,
+          title: test_data.title,
+          phone_number: test_data.phone_number,
+          email: test_data.email,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
-  console.log(details)
-  console.log("title")
-  console.log(details.title)
-  console.log(typeof details.title)
-
+  console.log(details);
+  console.log("title");
+  console.log(details.title);
+  console.log(typeof details.title);
 
   //post request to database backend
   const onSubmit = (data) => {
-    console.log("inside onSubmit")
+    console.log("inside onSubmit");
     console.log(data);
-    let posted = true
+    let posted = true;
     postUserData(API_URL, data)
       .then((response) => {
-        console.log("post response below")
-        console.log(response)
+        console.log("post response below");
+        console.log(response);
       })
       .catch((error) => {
         console.log(error.response);
-        posted = false
+        posted = false;
       });
     if (posted == true) {
-      console.log("Inside posted true")
-      localStorage.setItem("phone_number", data.phone_number)
-      navigate('/passport')
+      console.log("Inside posted true");
+      localStorage.setItem("phone_number", data.phone_number);
+
+      navigate("/passport");
     }
   };
 
@@ -124,21 +131,23 @@ export default function Details() {
           <FormFill
             text="Phone Number"
             type="number"
-            onFill = {register("phone_number", {})}
-            />
+            onFill={register("phone_number", {})}
+          />
 
           <FormFill
             type="email"
             text="Email Address (Optional)"
-            onFill = {register("email", {})} 
-            />
+            onFill={register("email", {})}
+          />
 
           <button
-            className={`mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
-            type="submit">
+            className={
+              "absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12"
+            }
+            type="submit"
+          >
             Next
           </button>
-
         </form>
       </div>
     </div>

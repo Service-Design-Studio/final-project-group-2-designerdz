@@ -11,7 +11,6 @@ export async function getUserData(API_URL, phoneNumber) {
 }
 
 export function postUserData(API_URL, data) {
-
   // // remove Passport key from dictionary
   // delete data.Passport;
   // data["dob"] = data["dob"].toString()
@@ -23,13 +22,15 @@ export function postUserData(API_URL, data) {
   // data["phone_number"] = 1234567890
 
   console.log("POSTING DATA");
-  console.log(API_URL)
-  console.log(data)
+  console.log(API_URL);
+  console.log(data);
   return axios.post(API_URL, data);
 }
 
 export function patchUserData(API_URL, data, phoneNumber) {
-  API_URL = API_URL.concat(phoneNumber)
+  API_URL = API_URL.concat(phoneNumber);
+  console.log("PATCHING DATA the URL");
+  console.log(API_URL);
   return axios.patch(API_URL, data);
 }
 
