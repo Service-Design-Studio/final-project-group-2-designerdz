@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
-import { postUserData } from "../services/axiosUsers";
+import { getUserData, postUserData } from "../services/axiosUsers";
 import { API_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
-  const [passportDate,setPassportDate] = useState(new Date());
-  const [birthDate,setBirthDate] = useState(new Date());
-  const [curGender, setCurGender] = useState("MALE");
+  const [details, setDetails] = useState({"display_name": "dafsda", "phone_no": "2133", "email": "sadfas"});
+  const [passportDate,setPassportDate] = useState((details.passportDate != null) ? details.passportDate: new Date());
+  const [birthDate,setBirthDate] = useState((details.passportDate != null) ? details.birthDate: new Date());
+  const [curGender, setCurGender] = useState((details.gender != null) ? details.gender: "MALE");
   const {register,handleSubmit,formState: { errors }} = useForm();
   const onSubmit = (data) => {
     console.log("START")
@@ -38,6 +39,22 @@ export default function Passport() {
   };
   console.log("Errors")
   console.log(errors);
+
+    //on first render do GET request
+  useEffect(() => {
+    let phone_no =localStorage.getItem("phone_no")
+    if (phone_no != null) { //if phone_no is in localStorage, do GET request
+    getUserData(phone_no, API_URL)
+      .then((items) => {
+          {
+          setDetails(items);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  }, []);
 
   const toggleGenderToMale = () => {
     if (curGender == "FEMALE") {
@@ -79,12 +96,16 @@ export default function Passport() {
           <FormFill
             text="Full Name"
             type="text"
-            onFill = {register("Full Name", { required: true })} />
+            onFill = {register("Full Name", { required: true })} 
+            defaultValue = {details.full_name}
+            />
 
           <FormFill
             text="Passport Number"
             type="text"
-            onFill = {register("Passport Number", { required: true })} />
+            onFill = {register("Passport Number", { required: true })} 
+            defaultValue = {details.passport_no}
+            />
   
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
@@ -96,7 +117,9 @@ export default function Passport() {
           <FormFill
             text="Nationality"
             type="text"
-            onFill = {register("Nationality", { required: true })} />
+            onFill = {register("Nationality", { required: true })} 
+            defaultValue = {details.nationality}
+            />
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>

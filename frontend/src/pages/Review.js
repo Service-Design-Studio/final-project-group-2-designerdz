@@ -16,6 +16,7 @@ export default function Review() {
       .then((items) => {
         if (mounted) {
           console.log(items);
+          //data in json format
           // setCustomers(items);
         }
       })
