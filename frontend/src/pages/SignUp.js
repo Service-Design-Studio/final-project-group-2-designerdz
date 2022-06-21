@@ -35,7 +35,8 @@ export default function Landing() {
       <div className="flex flex-end">
         <BackButton onClick={() => navigate("/")} />
         <ProgressBar percent="0%" />
-        </div>
+      </div>
+      
       <TextDesc
         headerText="Setting up multiple accounts?"
         bodyText="Let us make it easier for your family"

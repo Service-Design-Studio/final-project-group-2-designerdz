@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
+import FormFill from "../components/FormFill";
 
 export default function Details() {
   const navigate = useNavigate();
@@ -18,7 +19,8 @@ export default function Details() {
   //also need to save phone number to cookies upon clicking submit button
   //need to implement axiosUser.js to handle post/get request to handle rails api
   const onSubmit = (data) => {
-    console.log("submitted");
+    console.log(data);
+    navigate("/passport")
   };
 
   console.log(errors);
@@ -70,40 +72,25 @@ export default function Details() {
             </h3>
           </div>
 
-          <div className="mb-6">
-            <label className="block font-medium">Phone Number</label>
-            <input
-              type="number"
-              className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Phone Number"
-              {...register("Phone Number", { required: true })}
-            />
+          <FormFill
+            text="Phone Number"
+            type="number"
+            onFill = {register("Phone Number", { required: true })} />
+
+          <FormFill
+            type="email"
+            text="Email Address (Optional)"
+            onFill = {register("Email Address (Optional)", {required: true})} />
+          
+          <div className="absolute w-screen bottom-0 mb-10 space-y-4 items-center">
+            <button
+              className={`next bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+              type="submit">
+              Next
+            </button>
           </div>
 
-          <div className="mb-15">
-            <label className="block font-medium">
-              Email Address (Optional)
-            </label>
-            <input
-              type="email"
-              className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Email Address (Optional)"
-              {...register("Email Address (Optional)", {})}
-            />
-          </div>
         </form>
-      </div>
-
-      <div className="flex flex-col absolute w-screen bottom-0 mb-10 space-y-4 items-center">
-        <Button
-          text="Next"
-          bgcolor="bg-red-500"
-          hovercolor="hover:bg-red-700"
-          onClick={() => {
-            navigate("/passport");
-            onSubmit();
-          }}
-        />
       </div>
     </div>
   );
