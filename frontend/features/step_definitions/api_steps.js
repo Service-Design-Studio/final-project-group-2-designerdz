@@ -10,7 +10,11 @@ Given('I make a GET request to {string}', function (url) {
   spec.get(url);
 });
 
-When('I receive a response', async function () {
+Then ("I will make a request to {string}", async function(url) {
+  spec.get(url);
+});
+
+When('I receive a response within 0.5 seconds', async function () {
   await spec.toss();
 });
 

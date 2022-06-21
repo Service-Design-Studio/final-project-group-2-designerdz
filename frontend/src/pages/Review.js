@@ -81,7 +81,7 @@ export default function Review() {
           max-w-[55%] text-ellipsis overflow-hidden whitespace-nowrap"
         >
           <p className="overflow-scroll"></p>
-          <p>{details.full_name}</p>
+          <p className="review_fn">{details.full_name}</p>
           <p>{details.passport_no}</p>
           <p>{details.passport_expiry}</p>
           <p>{details.nationality}</p>
@@ -90,9 +90,9 @@ export default function Review() {
         </div>
       </div>
       <div className="flex flex-col absolute w-screen bottom-0 mb-10 items-center">
+        
         <Button
-          id="next"
-          className="absolute w-screen bottom-0"
+          className="next absolute w-screen bottom-0"
           text="Submit"
           bgcolor="bg-red-500"
           hovercolor="hover:bg-red-700"

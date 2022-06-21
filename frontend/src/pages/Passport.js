@@ -143,6 +143,7 @@ export default function Passport() {
           </div>
 
           <FormFill
+            id="full_name"
             text="Full Name"
             type="text"
             onFill={register("full_name", {})}
@@ -212,11 +213,12 @@ export default function Passport() {
           </div>
 
           <button
-            className={`absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+            className={`next absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
             type="submit"
           >
             Next
           </button>
+          
         </form>
       </div>
     </div>
