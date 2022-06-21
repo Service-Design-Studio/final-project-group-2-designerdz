@@ -25,6 +25,9 @@ Controller actions/methods by convention is done on **users_controller.rb**
 > Upon clicking next in web-app, users#create controller action is invoked, specifically api/v1/users#create;
 > Adds a new record by calling User.new() in the **create** action
 
+**GET request with phone number**
+> localhost:3000/api/v1/profile/:phone_number ; returns the entire record based on the provide :phone number params
+
 
 # TODO:
 1. Standardize the keys in the passport.js such that the keys can be readily passed to a JSON object e.g. "passport_no" : "1234556A"
