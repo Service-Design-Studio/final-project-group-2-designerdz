@@ -6,57 +6,62 @@ import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
-import { getUserData, postUserData } from "../services/axiosUsers";
-import { API_URL } from "../utilities/constants";
+import { getUserData, postUserData, patchUserData } from "../services/axiosUsers";
+import { API_URL, PATCH_API_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
-  const [passportDate,setPassportDate] = useState((details.passport_expiry != null) ? details.passport_expiry: new Date());
-  const [birthDate,setBirthDate] = useState((details.dob != null) ? details.dob: new Date());
-  const [curGender, setCurGender] = useState((details.gender != null) ? details.gender: "MALE");
+  const [passportDate,setPassportDate] = useState(new Date());
+  const [birthDate,setBirthDate] = useState(new Date());
+  const [curGender, setCurGender] = useState("MALE");
   const {reset, register,handleSubmit,formState: { errors }} = useForm();
   
-  const onSubmit = (data) => {
-    console.log("START")
-    data['passportDate'] = passportDate
-    data['birthDate'] = birthDate
-    data['curGender'] = curGender
-    console.log(data)
-    // let jsonData = JSON.stringify(data)
-    console.log("END")
-    let posted = true
-    postUserData(data, API_URL)
-      .then((response) => {})
+  //on first render do GET request
+  let phone_number;
+  let test_data;
+  useEffect(() => {
+    phone_number = localStorage.getItem("phone_no")
+    phone_number = 98765432 //test phone_number
+  if (phone_number != null) { //if phone_no is in localStorage, do GET request
+    getUserData(API_URL, phone_number)
+      .then((response) => {
+          for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].phone_number == phone_number) {
+            console.log("SUCCESSFULLY SET TEST_DATA")
+            test_data = response.data[i];
+            console.log(test_data)
+          }
+        }
+        console.log(test_data) //to check test_data
+          setDetails(test_data);
+        
+      })
       .catch((error) => {
         console.log(error);
+      })
+    }
+
+  reset({"full_name": details["full_name"], "passport_no": details["passport_no"], "nationality": details["nationality"]})
+}, []);
+
+  const onSubmit = (data) => {
+    data['passport_expiry'] = passportDate
+    data['dob'] = birthDate
+    data['gender'] = curGender
+    let posted = true
+    patchUserData(PATCH_API_URL,data,phone_number)
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error.response);
         posted = false
       });
     if (posted == true) {
       navigate('/review')
     }
 
-  };
-  console.log("Errors")
   console.log(errors);
 
-    //on first render do GET request
-  useEffect(() => {
-    let phone_no =localStorage.getItem("phone_no")
-    if (phone_no != null) { //if phone_no is in localStorage, do GET request
-      getUserData(API_URL, phone_no)
-        .then((items) => {
-            {
-            setDetails(items);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-      }
-
-    reset({"full_name": details.full_name, "passport_no": details.passport_no, "nationality": details.nationality})
-  }, []);
 
   const toggleGenderToMale = () => {
     if (curGender == "FEMALE") {
@@ -68,6 +73,17 @@ export default function Passport() {
       setCurGender("FEMALE");
     }
   };
+
+  if (details["passport_expiry"] != null) {
+    setPassportDate(details["passport_expiry"])
+  } 
+  if (details["dob"] != null) {
+    setBirthDate(details["dob"])
+  }
+  if (details["gender"] != null) {
+    setCurGender(details["gender"])
+  }
+
 
   return (
     <div>
@@ -164,4 +180,4 @@ export default function Passport() {
       </div>
 
   );
-}
+}}

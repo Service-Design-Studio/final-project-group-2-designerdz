@@ -6,18 +6,35 @@ import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import { getUserData } from "../services/axiosUsers.js";
 
+let test_data;
 export default function Review() {
   const navigate = useNavigate();
-  const [details, setDetails] = useState({"display_name":"Mah", "phone_no":"98765321", "email":"mahyi@ser.com","full_name":"mah yid a", "passport_no":"E17934A", "nationality":"Singaporen", "gender":"Male", "dob":"16 January 2058"});
+  const [details, setDetails] = useState({});
   useEffect(() => {
-    getUserData(API_URL)
-      .then((items) => {
-        setDetails(items);
+    let phone_number =localStorage.getItem("phone_number")
+    phone_number = 91234567
+    getUserData(API_URL, phone_number)
+      .then((response) => {
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].phone_number == phone_number) {
+            console.log("SUCCESSFULLY SET TEST_DATA")
+            test_data = response.data[i];
+            console.log(test_data)
+          }
+        }
+        setDetails(test_data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  const submitData = () => {
+    console.log("Success!")
+
+
+    navigate("/success")
+  }
 
   return (
     <div>
@@ -41,7 +58,7 @@ export default function Review() {
           text-ellipsis overflow-hidden whitespace-nowrap"
         >
           <p>{details.display_name}</p>
-          <p>{details.phone_no}</p>
+          <p>{details.phone_number}</p>
           <p>{details.email}</p>
         </div>
         {/* <div className="flex flex-col "> */}
@@ -64,9 +81,10 @@ export default function Review() {
           className="flex flex-col float-right space-y-2 text-right mt-5 
           max-w-[55%] text-ellipsis overflow-hidden whitespace-nowrap"
         >
-          <p className="overflow-scroll">some full name i am typing</p>
+          <p className="overflow-scroll"></p>
           <p>{details.full_name}</p>
           <p>{details.passport_no}</p>
+          <p>{details.passport_expiry}</p>
           <p>{details.nationality}</p>
           <p>{details.gender}</p>
           <p>{details.dob}</p>
@@ -79,7 +97,7 @@ export default function Review() {
           text="Submit"
           bgcolor="bg-red-500"
           hovercolor="hover:bg-red-700"
-          onClick={() => {navigate("/success")}}
+          onClick={submitData}
         />
       </div>
     </div>

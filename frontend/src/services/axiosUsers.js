@@ -11,7 +11,26 @@ export async function getUserData(API_URL, phoneNumber) {
 }
 
 export function postUserData(API_URL, data) {
-  return axios.post(API_URL,  data);
+
+  // // remove Passport key from dictionary
+  // delete data.Passport;
+  // data["dob"] = data["dob"].toString()
+  // data["passport_expiry"] = data["passport_expiry"].toString()
+  // data["id"] = 999
+  // data["display_name"] = "test"
+  // data["title"] = "test"
+  // data["email"] = "jolow@email.com"
+  // data["phone_number"] = 1234567890
+
+  console.log("POSTING DATA");
+  console.log(API_URL)
+  console.log(data)
+  return axios.post(API_URL, data);
 }
 
-export default { getUserData, postUserData };
+export function patchUserData(API_URL, data, phoneNumber) {
+  API_URL = API_URL.concat(phoneNumber)
+  return axios.patch(API_URL, data);
+}
+
+export default { getUserData, postUserData, patchUserData };

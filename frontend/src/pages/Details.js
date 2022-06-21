@@ -19,11 +19,11 @@ export default function Details() {
     formState: { errors },
   } = useForm();
 
-  var response;
   var test_data;
-  let phone_number =localStorage.getItem("phone_number")
+  let phone_number; 
   //on first render do GET request
   useEffect(() => {
+    phone_number = localStorage.getItem("phone_number")
     console.log("THE PHONE NUMBER IS...")
     console.log(phone_number)
     getUserData(API_URL, phone_number).then(
@@ -94,7 +94,6 @@ export default function Details() {
                 className="inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-900 dark:border-gray-600"
                 {...register("title", {})}
               >
-                <option value={details.title} selected hidden disabled>{details.title}</option>
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
                 <option value="Ms">Ms</option>
