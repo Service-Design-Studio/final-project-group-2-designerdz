@@ -20,7 +20,7 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-base_url = "http://localhost:3001/";
+base_url = "http://localhost:3000/";
 
 setDefaultTimeout(60 * 1000);
 
