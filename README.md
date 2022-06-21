@@ -5,19 +5,25 @@ Setup using instructions in https://tailwindcss.com/docs/guides/create-react-app
 
 Controller actions/methods by convention is done on **users_controller.rb**
 
+## A few definitions to state
+- Database Model name is called **User**, every CRUD action is performed on it e.g. User.new(params), User.all etc
+- set_user() method defines an instance **@user** that defines a specific activerecord row according to params[:id]
+- user_params() method is used to define the accepted keys/symbol from the JSON acquired from form data
+
 
 **Endpoint API for GET request**
 > localhost:3000/api/v1/users
 > returns **all** existing records in ActiveRecord by calling User.all and renders the json request
 
 **GET route with params[:id]**
-> localhost:3000/api/v1/users/:id
-> :id is an integer, returns the specific record as specified by the id
+> localhost:3000/api/v1/users/:id;
+> :id is an integer, returns the specific record as specified by the id;
 > same concept can be used to get phone number e.g params[:phone_number]
 
 **POST request**
-> Need to explicity declare the route for POST in **routes.rb**, resources :users does not automatically declare this for you not sure why
-> Upon clicking next in web-app, users#create controller action is invoked, specifically api/v1/users#create. Adds a new record
+> Need to explicity declare the route for POST in **routes.rb**, resources :users does not automatically declare this for you not sure why.
+> Upon clicking next in web-app, users#create controller action is invoked, specifically api/v1/users#create;
+> Adds a new record by calling User.new() in the **create** action
 
 
 # TODO:
