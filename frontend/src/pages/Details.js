@@ -5,19 +5,51 @@ import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
+import { postUserData, getUserData } from "../services/axiosUsers.js";
+import { useEffect, useState } from "react";
+
 
 export default function Details() {
   const navigate = useNavigate();
+  const [details, setDetails] = useState({"display_name": "dafsda", "phone_no": "2133", "email": "sadfas"});
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  //on first render do GET request
+  useEffect(() => {
+    let phone_no =localStorage.getItem("phone_no")
+    if (phone_no != null) { //if phone_no is in localStorage, do GET request
+    getUserData(phone_no, API_URL)
+      .then((items) => {
+         {
+          setDetails(items);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  }, []);
+
+
   //post request to database backend
   const onSubmit = (data) => {
     console.log(data);
-    navigate("/passport")
+    let jsonData = JSON.stringify(data)
+    let posted = true
+    postUserData(jsonData, API_URL)
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+        posted = false
+      });
+    if (posted == true) {
+      localStorage.setItem("phone_no", data.phone_no)
+      navigate('/passport')
+    }
   };
 
   return (
@@ -52,6 +84,7 @@ export default function Details() {
                 type="text"
                 className="rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
+                defaultValue={details.display_name}
                 {...register("display_name", { required: true })}
               />
             </div>
@@ -71,15 +104,19 @@ export default function Details() {
           <FormFill
             text="Phone Number"
             type="number"
-            onFill = {register("Phone Number", { required: true })} />
+            onFill = {register("Phone Number", { required: true })}
+            defaultValue={parseInt(details.phone_no)}
+            />
 
           <FormFill
             type="email"
             text="Email Address (Optional)"
-            onFill = {register("Email Address (Optional)", {})} />
+            onFill = {register("Email Address (Optional)", {})} 
+            defaultValue={details.email} 
+            />
 
           <button
-            className={`absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+            className={`mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
             type="submit">
             Next
           </button>
