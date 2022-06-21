@@ -8,10 +8,8 @@
 
 
 more_movies = [
-  {:display_name => 'Aladdin', :title => 'Mr', :email => 'test@gmail.com', :phone_number => '12345678'},
-  {:display_name => 'Aladdin1', :title => 'Ms', :email => 'test1@gmail.com', :phone_number => '22345678'},
-  {:display_name => 'Aladdin2', :title => 'Dr', :email => 'test2@gmail.com', :phone_number => '32345678'},
-  {:display_name => 'Aladdin3', :title => 'Mrs', :email => 'test3@gmail.com', :phone_number => '42345678'},
+  {:display_name => 'Mah', :title => 'Mr', :email => 'mahyida@gmail.com', :phone_number => '91234567', 
+  :full_name => 'Mahyida', :passport_no => '1234567A', :passport_expiry => '22/10/2025', :nationality => 'Malaysian', :gender => 'Male', :dob => '03/03/1933'}
 ]
 
 more_movies.each do |t|
