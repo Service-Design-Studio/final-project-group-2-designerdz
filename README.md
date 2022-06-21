@@ -28,6 +28,10 @@ Controller actions/methods by convention is done on **users_controller.rb**
 **GET request with phone number**
 > localhost:3000/api/v1/profile/:phone_number ; returns the entire record based on the provide :phone number params
 
+## How to access activerecord on terminal
+- bundle exec rails console
+- User.all  // returns all records
+
 
 # TODO:
 1. Standardize the keys in the passport.js such that the keys can be readily passed to a JSON object e.g. "passport_no" : "1234556A"
