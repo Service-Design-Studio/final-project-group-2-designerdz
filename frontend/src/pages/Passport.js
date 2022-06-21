@@ -11,15 +11,13 @@ import { API_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
-  let isValid = false; //turns to true when information are filled and valid
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  const [passportDate,setPassportDate] = useState(new Date());
+  const [birthDate,setBirthDate] = useState(new Date());
+  const [curGender, setCurGender] = useState("MALE");
+  const {register,handleSubmit,formState: { errors }} = useForm();
   const onSubmit = (data) => {
-    let posted = true;
+    console.log(date)
+    console.log(curGender)
     postUserData(data, API_URL)
       .then((response) => {})
       .catch((error) => {
@@ -29,7 +27,7 @@ export default function Passport() {
   };
   console.log(errors);
 
-  const [curGender, setCurGender] = useState("MALE");
+
 
   const toggleGenderToMale = () => {
     console.log(curGender);
@@ -89,7 +87,7 @@ export default function Passport() {
             {/* TODO: Make this button correctly to work with proper dates */}
 
             <div>
-              <Calendar startyear={2020} endyear={2050} />
+              <Calendar curDate={passportDate} setDate={setPassportDate} startYear={2020} endYear={2050} />
             </div>
           </div>
 
@@ -120,17 +118,12 @@ export default function Passport() {
               </button>
             </div>
           </div>
+          
           <div className="mb-3">
             <label className="block font-medium">
               Date of Birth (DD/MM/YYYY)
             </label>
-
-            <Calendar 
-                startyear={1900}
-                endyear={2022}
-
-              
-              />
+            <Calendar curDate={birthDate} setDate={setBirthDate} startYear={1900} endYear={2022} />
           </div>
 
           <button
@@ -139,7 +132,19 @@ export default function Passport() {
             Next
           </button>
         </form>
+
+        <div className="flex flex-col w-screen bottom-0 mb-10 space-y-4 items-center">
+          <Button
+            text="Next"
+            bgcolor="bg-red-500"
+            hovercolor="hover:bg-red-700"
+            onClick={() => {
+              navigate("/review");
+              onSubmit();
+            }}
+          />
         </div>
+      </div>
       </div>
 
   );
