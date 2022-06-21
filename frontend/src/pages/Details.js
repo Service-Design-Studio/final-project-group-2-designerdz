@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { API_URL } from "../utilities/constants.js";
+import { API_URL} from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
@@ -11,43 +11,64 @@ import { useEffect, useState } from "react";
 
 export default function Details() {
   const navigate = useNavigate();
-  const [details, setDetails] = useState({"display_name": "dafsda", "phone_no": "2133", "email": "sadfas"});
+  const [details, setDetails] = useState({});
   const {
+    reset,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  var response;
+  var test_data;
+  let phone_number =localStorage.getItem("phone_number")
   //on first render do GET request
   useEffect(() => {
-    let phone_no =localStorage.getItem("phone_no")
-    if (phone_no != null) { //if phone_no is in localStorage, do GET request
-    getUserData(phone_no, API_URL)
-      .then((items) => {
-         {
-          setDetails(items);
+    console.log("THE PHONE NUMBER IS...")
+    console.log(phone_number)
+    getUserData(API_URL, phone_number).then(
+      (response) => {
+        // iterate through response.data and find where the phone_number == phone_number
+        console.log("RESPONSE DATA LENGTH")
+        console.log(response.data.length)
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].phone_number == phone_number) {
+            console.log("SUCCESSFULLY SET TEST_DATA")
+            test_data = response.data[i];
+            console.log(test_data)
+          }
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
+        console.log("test_data");
+        console.log(test_data)
+        setDetails({'display_name': test_data.display_name, 'title': test_data.title, 'phone_number': test_data.phone_number, 'email': test_data.email} )
+        reset({'display_name': test_data.display_name, 'title': test_data.title, 'phone_number': test_data.phone_number, 'email': test_data.email})
+      }).catch((error)=>{console.log(error);})
+      
+
   }, []);
+  console.log(details)
+  console.log("title")
+  console.log(details.title)
+  console.log(typeof details.title)
 
 
   //post request to database backend
   const onSubmit = (data) => {
+    console.log("inside onSubmit")
     console.log(data);
-    let jsonData = JSON.stringify(data)
     let posted = true
-    postUserData(jsonData, API_URL)
-      .then((response) => {})
+    postUserData(API_URL, data)
+      .then((response) => {
+        console.log("post response below")
+        console.log(response)
+      })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
         posted = false
       });
     if (posted == true) {
-      localStorage.setItem("phone_no", data.phone_no)
+      console.log("Inside posted true")
+      localStorage.setItem("phone_number", data.phone_number)
       navigate('/passport')
     }
   };
@@ -70,9 +91,10 @@ export default function Details() {
 
             <div className="flex">
               <select
-                className="inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-400 dark:border-gray-600"
-                {...register("title", { required: true })}
+                className="inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-900 dark:border-gray-600"
+                {...register("title", {})}
               >
+                <option value={details.title} selected hidden disabled>{details.title}</option>
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
                 <option value="Ms">Ms</option>
@@ -84,8 +106,7 @@ export default function Details() {
                 type="text"
                 className="rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
-                defaultValue={details.display_name}
-                {...register("display_name", { required: true })}
+                {...register("display_name", {})}
               />
             </div>
 
@@ -104,15 +125,13 @@ export default function Details() {
           <FormFill
             text="Phone Number"
             type="number"
-            onFill = {register("Phone Number", { required: true })}
-            defaultValue={parseInt(details.phone_no)}
+            onFill = {register("phone_number", {})}
             />
 
           <FormFill
             type="email"
             text="Email Address (Optional)"
-            onFill = {register("Email Address (Optional)", {})} 
-            defaultValue={details.email} 
+            onFill = {register("email", {})} 
             />
 
           <button

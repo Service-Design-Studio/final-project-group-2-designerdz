@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { API_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton } from "../components/Buttons.js";
@@ -8,31 +8,18 @@ import { getUserData } from "../services/axiosUsers.js";
 
 export default function Review() {
   const navigate = useNavigate();
-
-  //TODO: get data from the past few pages
+  const [details, setDetails] = useState({"display_name":"Mah", "phone_no":"98765321", "email":"mahyi@ser.com","full_name":"mah yid a", "passport_no":"E17934A", "nationality":"Singaporen", "gender":"Male", "dob":"16 January 2058"});
   useEffect(() => {
-    let mounted = true;
     getUserData(API_URL)
       .then((items) => {
-        if (mounted) {
-          console.log(items);
-          //data in json format
-          // setCustomers(items);
-        }
+        setDetails(items);
       })
       .catch((error) => {
         console.log(error);
       });
-    return () => (mounted = false);
   }, []);
 
-  //TODO: do on click handler to do sth???
-  const onClick = () => {
-    navigate("/");
-  };
-
   return (
-    // TODO: Get data from the past few pages and finish here
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
       <div className="fixed flex flex-row top-0 left-0 right-0 z-50">
@@ -53,9 +40,9 @@ export default function Review() {
           className="flex flex-col float-right space-y-2 text-right max-w-[55%] 
           text-ellipsis overflow-hidden whitespace-nowrap"
         >
-          <p>some dp name</p>
-          <p>some phone no</p>
-          <p>some email</p>
+          <p>{details.display_name}</p>
+          <p>{details.phone_no}</p>
+          <p>{details.email}</p>
         </div>
         {/* <div className="flex flex-col "> */}
         <div className="flex flex-row float-left mt-5 w-full justify-between">
@@ -78,11 +65,11 @@ export default function Review() {
           max-w-[55%] text-ellipsis overflow-hidden whitespace-nowrap"
         >
           <p className="overflow-scroll">some full name i am typing</p>
-          <p>some passport number</p>
-          <p>some passport expiry</p>
-          <p>some nationality</p>
-          <p>some gender</p>
-          <p>some date of birth</p>
+          <p>{details.full_name}</p>
+          <p>{details.passport_no}</p>
+          <p>{details.nationality}</p>
+          <p>{details.gender}</p>
+          <p>{details.dob}</p>
         </div>
       </div>
       <div className="flex flex-col absolute w-screen bottom-0 mb-10 items-center">
@@ -92,9 +79,7 @@ export default function Review() {
           text="Submit"
           bgcolor="bg-red-500"
           hovercolor="hover:bg-red-700"
-          onClick={() => {
-            onClick();
-          }}
+          onClick={navigate("/success")}
         />
       </div>
     </div>

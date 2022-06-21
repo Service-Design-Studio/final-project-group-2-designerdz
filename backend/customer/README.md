@@ -59,10 +59,21 @@ To populate database with initial data:
 rails db:seed
 ```
 
-## Deployment URL
+## Deployment to Google Cloud
+
+"Permission denied :bin/rails" error: <br/>
+`chmod u+x bin/rails` to make it executable
+
+"env: ruby\r: No such file or directory" error
+
+For MACOS users:<br/>
+Step 1: `HOMEBREW_NO_AUTO_UPDATE=1 brew install dos2unix` <br/>
+Step 2: `git config --global core.autocrlf input`<br/>
+Step 3:` find ./ -type f -exec dos2unix {} \;` (in the repo you were trying to run your task on)
 
 gcloud url:  
 https://dbs-service-qz6esvmepq-as.a.run.app/
+
 
 **Important**
 
