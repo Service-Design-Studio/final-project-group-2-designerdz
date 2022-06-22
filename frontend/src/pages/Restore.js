@@ -9,8 +9,6 @@ export default function Restore() {
 	} = useForm();
 	const navigate = useNavigate();
 	const onSubmit = (data) => {
-		console.log("Submitted");
-		console.log(data);
 		navigate("/signup");
 	};
 	console.log(errors);
@@ -26,7 +24,7 @@ export default function Restore() {
 				{...register("Mobile Number", { required: true, maxLength: 8 })}
 			/>
 			<input
-				className="continue bg-red-700 text-white rounded w-max px-8 py-2 mx-auto my-4"
+				className="continue_btn bg-red-700 text-white rounded w-max px-8 py-2 mx-auto my-4"
 				type="submit"
 			/>
 		</form>

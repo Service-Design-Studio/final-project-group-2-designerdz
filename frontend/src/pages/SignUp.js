@@ -25,8 +25,6 @@ export default function Landing() {
     return () => (mounted = false);
   }, []);
 
-  console.log(customers);
-
   return (
     <div>
       <div className="flex flex-end">
@@ -40,7 +38,7 @@ export default function Landing() {
 
       <div className="flex flex-col absolute w-screen items-center top-0 bottom-0 m-auto place-content-center space-y-4 -z-50">
         <button
-          className="next bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
+          className="next bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
           onClick={() => navigate("/details")}
         >
           No, just for myself only
@@ -48,16 +46,18 @@ export default function Landing() {
 
         {/* TODO: Add feature into another page here once multi-user is out */}
         <button
-          className="bg-slate-500 text-xl font-semibold h-40 rounded w-10/12"
+          className="bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
           onClick={() => navigate("/details")}
         >
           Yes, for me and my children...
         </button>
+
+        <p className="absolute bottom-24 mb-10 mx-8 w-10/12 ">
+        Only have a little time? <br/>Don't worry, as your <b>data will be saved at every step!</b>
+        </p>
+
       </div>
-      <p className="absolute bottom-0 mb-10 mx-8 w-10/12 ">
-        Only have a bit of time bla bla Only have a bit of time bla bla Only
-        have a bit of time bla bla Only have a bit of time bla bla
-      </p>
+      
     </div>
   );
 }
