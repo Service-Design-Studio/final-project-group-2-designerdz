@@ -1,5 +1,19 @@
-const { Given, When, Then, Before, AfterAll, After } = require('@cucumber/cucumber');
-const { Builder, By, Capabilities, Key, Button, ChromiumWebDriver } = require('selenium-webdriver');
+const {
+  Given,
+  When,
+  Then,
+  Before,
+  AfterAll,
+  After,
+} = require("@cucumber/cucumber");
+const {
+  Builder,
+  By,
+  Capabilities,
+  Key,
+  Button,
+  ChromiumWebDriver,
+} = require("selenium-webdriver");
 const { initDriver } = require("../support/driverUtil");
 const { expect, assert } = require("chai");
 const { setDefaultTimeout } = require("@cucumber/cucumber");
@@ -7,7 +21,7 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-base_url = "http://localhost:3001/";
+base_url = "https://react-frontend-353408.as.r.appspot.com/";
 
 setDefaultTimeout(60 * 1000);
 
@@ -53,44 +67,43 @@ Then("I should go back to the {string} page", async function (previous) {
   expect(actual_url).to.equal(expected_url);
 });
 
-Given("I am on the passport page", function() {
+Given("I am on the passport page", function () {
   driver.get(base_url + "passport");
 });
 
-Given("I have filled in my {string}", function(full_name) {
+Given("I have filled in my {string}", function (full_name) {
   driver.findElement(By.className("full_name")).sendKeys(full_name);
 });
 
-Then("I should move forward to the review page", function(){
+Then("I should move forward to the review page", function () {
   driver.get(base_url + "review");
 });
 
-Then("my {string} should be shown", async function(full_name) {
-  const fn = await driver.findElement(By.className("review_fn")).getText()
+Then("my {string} should be shown", async function (full_name) {
+  const fn = await driver.findElement(By.className("review_fn")).getText();
   expect(fn, full_name);
   await driver.sleep(1000);
 });
 
-When("I restart the app", function(){
+When("I restart the app", function () {
   driver.close();
   driver = initDriver();
 });
 
-Then("I should be redirected back to {string} where I left off", async function(page) {
-  await driver.get(base_url + page);
-  await driver.sleep(1000);
-});
+Then(
+  "I should be redirected back to {string} where I left off",
+  async function (page) {
+    expect(driver.getCurrentUrl, base_url + page);
+  }
+);
 
-Given("I am on the restore page", function() {
+Given("I am on the restore page", function () {
   driver.get(base_url + "restore");
   driver.sleep(1000);
 });
 
-When("I submit my {string} and OTP", async function(number) {
+When("I submit my {string} and OTP", async function (number) {
   driver.findElement(By.className("mobile_no")).sendKeys(number);
   const continue_button = await driver.findElement(By.className("continue"));
   await continue_button.click();
 });
-
-
-

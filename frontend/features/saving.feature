@@ -24,15 +24,15 @@ Feature: Saving of progress
 
 
     # FIXME:
-    # Scenario:
-    #     Given I am on the restore page
-    #     When I submit my <number> and OTP
-    #     Then I should be redirected back to <page> where I left off
+    Scenario:
+        Given I am on the restore page
+        When I submit my <number> and OTP
+        Then I should be redirected back to <page> where I left off
 
-    # Examples:
-    #     | number      | page        |
-    #     | "98512101"  | "signup"    |
-    #     | "87678121"  | "signup"    |
-    #     | "87545311"  | "signup"    |
-    #     | "98857412"  | "signup"    |
+    Examples:
+        | number      | page        |
+        | "98512101"  | "signup"    |
+        | "87678121"  | "signup"    |
+        | "87545311"  | "signup"    |
+        | "98857412"  | "signup"    |
 
