@@ -102,8 +102,8 @@ Given("I am on the restore page", function () {
   driver.sleep(1000);
 });
 
-When("I submit my {string} and OTP", async function (number) {
+When("I submit my {string} and OTP", function (number) {
   driver.findElement(By.className("mobile_no")).sendKeys(number);
-  const continue_button = await driver.findElement(By.className("continue"));
-  await continue_button.click();
+  const continue_button = driver.findElement(By.className("continue_btn"));
+  continue_button.click();
 });

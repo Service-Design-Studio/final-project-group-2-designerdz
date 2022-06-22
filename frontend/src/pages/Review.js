@@ -17,9 +17,7 @@ export default function Review() {
       .then((response) => {
         for (let i = 0; i < response.data.length; i++) {
           if (response.data[i].phone_number == phone_number) {
-            // console.log("SUCCESSFULLY SET TEST_DATA");
             test_data = response.data[i];
-            console.log(test_data);
           }
         }
         setDetails(test_data);
@@ -30,7 +28,6 @@ export default function Review() {
   }, []);
 
   const submitData = () => {
-    console.log("Success!");
 
     navigate("/success");
   };

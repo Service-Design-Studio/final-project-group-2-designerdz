@@ -80,14 +80,9 @@ export default function Passport() {
     data["dob"] = birthDate;
     data["gender"] = curGender;
     let posted = true;
-    console.log(data["passport_expiry"]);
-    console.log("THE PHONE NUMBER IS...");
-    console.log(phone_number);
 
     patchUserData(PATCH_API_URL, data, phone_number)
       .then((response) => {
-        console.log("response is");
-        console.log(response);
       })
       .catch((error) => {
         console.log(error.response);
@@ -208,7 +203,7 @@ export default function Passport() {
           </div>
 
           <button
-            className={`next absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12`}
+            className={`next w-10/12 absolute b-2 my-10 mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded `}
             type="submit"
           >
             Next

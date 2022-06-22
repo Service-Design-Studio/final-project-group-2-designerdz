@@ -31,7 +31,7 @@ export default function Landing() {
             <button className="button">
               <a>
                 Left registration midway?{" "}
-                <span className="underline">Continue where you left off</span>
+                <span className="underline">Continue where you left.</span>
               </a>{" "}
             </button>
           }

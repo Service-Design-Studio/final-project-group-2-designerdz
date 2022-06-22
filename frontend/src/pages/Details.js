@@ -26,16 +26,11 @@ export default function Details() {
     getUserData(API_URL, phone_number)
       .then((response) => {
         // iterate through response.data and find where the phone_number == phone_number
-        console.log("RESPONSE DATA LENGTH");
-        console.log(response.data.length);
         for (let i = 0; i < response.data.length; i++) {
           if (response.data[i].phone_number == phone_number) {
             test_data = response.data[i];
-            console.log(test_data);
           }
         }
-        console.log("test_data");
-        console.log(test_data);
         setDetails({
           display_name: test_data.display_name,
           title: test_data.title,
@@ -53,27 +48,18 @@ export default function Details() {
         console.log(error);
       });
   }, []);
-  console.log(details);
-  console.log("title");
-  console.log(details.title);
-  console.log(typeof details.title);
 
   //post request to database backend
   const onSubmit = (data) => {
-    console.log("inside onSubmit");
-    console.log(data);
     let posted = true;
     postUserData(API_URL, data)
       .then((response) => {
-        console.log("post response below");
-        console.log(response);
       })
       .catch((error) => {
         console.log(error.response);
         posted = false;
       });
     if (posted == true) {
-      console.log("Inside posted true");
       localStorage.setItem("phone_number", data.phone_number);
 
       navigate("/passport");
@@ -139,15 +125,17 @@ export default function Details() {
             text="Email Address (Optional)"
             onFill={register("email", {})}
           />
+          {/* <div className="flex flex-col absolute w-10/12 bottom-0 mb-10 items-center"> */}
 
           <button
             className={
-              "next absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12"
+              "next absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-4"
             }
             type="submit"
           >
             Next
           </button>
+          {/* </div> */}
         </form>
       </div>
     </div>
