@@ -30,8 +30,6 @@ export default function Passport() {
   let phone_number;
   let test_data;
   phone_number = localStorage.getItem("phone_number");
-  console.log("PHONE NUMBER IN PASSPORT.JS");
-  console.log("phone_number: " + phone_number);
 
   useEffect(() => {
     getUserData(API_URL, phone_number)
