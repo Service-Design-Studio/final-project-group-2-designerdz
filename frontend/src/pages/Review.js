@@ -28,7 +28,6 @@ export default function Review() {
   }, []);
 
   const submitData = () => {
-
     navigate("/success");
   };
 
@@ -83,11 +82,10 @@ export default function Review() {
           <p>{details.passport_expiry}</p>
           <p>{details.nationality}</p>
           <p>{details.gender}</p>
-          <p>{details.dob}</p>
+          <p>{new Date(details.dob).toString()}</p>
         </div>
       </div>
       <div className="flex flex-col absolute w-screen bottom-0 mb-10 items-center">
-        
         <Button
           className="next absolute w-screen bottom-0"
           text="Submit"
