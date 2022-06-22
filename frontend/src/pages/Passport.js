@@ -30,6 +30,8 @@ export default function Passport() {
   let phone_number;
   let test_data;
   phone_number = localStorage.getItem("phone_number");
+  console.log("PHONE NUMBER IN PASSPORT.JS");
+  console.log("phone_number: " + phone_number);
 
   useEffect(() => {
     getUserData(API_URL, phone_number)
@@ -40,28 +42,26 @@ export default function Passport() {
             test_data = response.data[i];
           }
         }
-        // console.log(details);
 
         setDetails({
           full_name: test_data.full_name,
           passport_no: test_data.passport_no,
           nationality: test_data.nationality,
         });
-        console.log(details["passport_expiry"]);
-        console.log(details["dob"]);
-        console.log(details["gender"]);
 
-        if (details["passport_expiry"] == undefined) {
+        console.log(test_data.passport_number);
+
+        if (details["passport_expiry"] !== undefined) {
           setPassportDate(new Date());
         } else {
-          setPassportDate(test_data.passport_expiry);
+          setPassportDate(new Date(test_data.passport_expiry));
         }
-        if (details["dob"] == undefined) {
+        if (details["dob"] !== undefined) {
           setBirthDate(new Date());
         } else {
-          setBirthDate(test_data.dob);
+          setBirthDate(new Date(test_data.dob));
         }
-        if (details["gender"] != undefined) {
+        if (details["gender"] !== undefined) {
           setCurGender("MALE");
         } else {
           setCurGender(test_data.gender);
@@ -78,15 +78,12 @@ export default function Passport() {
       });
   }, []);
 
-  console.log(details);
-  console.log("TEST DATAT HERE");
-  console.log(test_data);
-
   const onSubmit = (data) => {
     data["passport_expiry"] = passportDate;
     data["dob"] = birthDate;
     data["gender"] = curGender;
     let posted = true;
+    console.log(data["passport_expiry"]);
     console.log("THE PHONE NUMBER IS...");
     console.log(phone_number);
 
@@ -218,7 +215,6 @@ export default function Passport() {
           >
             Next
           </button>
-          
         </form>
       </div>
     </div>
