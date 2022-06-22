@@ -49,8 +49,6 @@ export default function Passport() {
           nationality: test_data.nationality,
         });
 
-        console.log(test_data.passport_number);
-
         if (details["passport_expiry"] !== undefined) {
           setPassportDate(new Date());
         } else {
@@ -61,7 +59,7 @@ export default function Passport() {
         } else {
           setBirthDate(new Date(test_data.dob));
         }
-        if (details["gender"] !== undefined) {
+        if (details["gender"] == undefined) {
           setCurGender("MALE");
         } else {
           setCurGender(test_data.gender);
@@ -69,6 +67,7 @@ export default function Passport() {
 
         reset({
           full_name: test_data.full_name,
+          passport_no: test_data.passport_no,
           title: test_data.title,
           nationality: test_data.nationality,
         });
@@ -148,6 +147,7 @@ export default function Passport() {
           />
 
           <FormFill
+            id="passport_no"
             text="Passport Number"
             type="text"
             onFill={register("passport_no", {})}
