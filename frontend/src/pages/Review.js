@@ -5,6 +5,7 @@ import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import { getUserData } from "../services/axiosUsers.js";
+import { getMonthYear, getDateMonthYear } from "../utilities/dateHelper.js";
 
 export default function Review() {
   const navigate = useNavigate();
@@ -79,10 +80,10 @@ export default function Review() {
           <p className="overflow-scroll"></p>
           <p className="review_fn">{details.full_name}</p>
           <p>{details.passport_no}</p>
-          <p>{details.passport_expiry}</p>
+          <p>{getMonthYear(details.passport_expiry)}</p>
           <p>{details.nationality}</p>
           <p>{details.gender}</p>
-          <p>{new Date(details.dob).toString()}</p>
+          <p>{getDateMonthYear(details.dob)}</p>
         </div>
       </div>
       <div className="flex flex-col absolute w-screen bottom-0 mb-10 items-center">
