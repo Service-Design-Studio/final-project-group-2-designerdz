@@ -50,6 +50,7 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = (data) => {
+    console.log("submit invoked");
     let posted = true;
     postUserData(USER_URL, data)
       .then((response) => {})
@@ -123,14 +124,12 @@ export default function Details() {
             text="Email Address (Optional)"
             onFill={register("email", {})}
           />
-          <button
-            className={
-              "next absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12 max-w-screen-sm"
-            }
-            type="submit"
-          >
-            Next
-          </button>
+          <Button
+            name="next"
+            text="Next"
+            bgColor="bg-red-500"
+            hoverColor="hover:bg-red-700"
+          />
         </form>
       </div>
     </div>

@@ -13,17 +13,17 @@ export default function Landing() {
         src="https://1000logos.net/wp-content/uploads/2020/04/DBS-logo.jpg"
         alt="DBS Logo"
       />
-      <div className="flex flex-col absolute w-screen bottom-0 mb-10 space-y-4 items-center">
+      <div className="flex flex-col absolute bottom-0 mb-10 mx-8 space-y-4 items-center">
         <Button
           text="NOT A CUSTOMER YET?"
-          bgcolor="bg-red-500"
-          hovercolor="hover:bg-red-700"
+          bgColor="bg-red-500"
+          hoverColor="hover:bg-red-700"
           onClick={() => navigate("/signup")}
         />
         <Button
           text="LOG IN"
-          bgcolor="bg-slate-600"
-          hovercolor="hover:bg-slate-800"
+          bgColor="bg-slate-600"
+          hoverColor="hover:bg-slate-800"
           onClick={() => alert("Sorry we are not DBS!")}
         />
         <Popup
