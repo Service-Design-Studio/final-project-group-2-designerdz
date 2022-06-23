@@ -1,7 +1,6 @@
 # README
 
 This is Rails for **_API only_**, communication is done through json objects between Rails backend and React frontend
-te
 
 ## Ruby version
 
