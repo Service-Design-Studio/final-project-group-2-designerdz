@@ -42,6 +42,15 @@ export default function Review() {
       <TextDesc headerText="Review your details" />
 
       <div className="absolute top-36 w-full px-8">
+        <div className="grid grid-cols-2 mt-6">
+          <b className="text-xl">Basic Information</b>
+          <b className="text-xl text-right">
+            <EditButton
+              onClick={() => navigate("/details", { state: { onEdit: true } })}
+            />
+          </b>
+        </div>
+
         <div className="grid grid-cols-2 gap-4">
           <p>Display Name:</p>
           <p className="text-right">
@@ -60,7 +69,9 @@ export default function Review() {
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
-            <EditButton onClick={() => navigate("/passport")} />
+            <EditButton
+              onClick={() => navigate("/passport", { state: { onEdit: true } })}
+            />
           </b>
         </div>
 
