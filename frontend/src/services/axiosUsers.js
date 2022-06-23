@@ -9,7 +9,7 @@ export function postUserData(API_URL, data) {
 }
 
 export function patchUserData(API_URL, data, phoneNumber) {
-  API_URL = API_URL.concat(phoneNumber);
+  API_URL = API_URL.concat("/" + phoneNumber);
   return axios.patch(API_URL, data);
 }
 

@@ -1,16 +1,22 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
-import { postUserData, getUserData } from "../services/axiosUsers.js";
+import {
+  postUserData,
+  getUserData,
+  patchUserData,
+} from "../services/axiosUsers.js";
 import { useEffect, useState } from "react";
 
 export default function Details() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [details, setDetails] = useState({});
+  const [onEdit, setOnEdit] = useState(false);
   const {
     reset,
     register,
@@ -22,6 +28,12 @@ export default function Details() {
 
   //on first render do GET request
   useEffect(() => {
+    try {
+      setOnEdit(location.state.onEdit);
+    } catch (error) {
+      console.error(error);
+    }
+
     getUserData(USER_URL, phoneNumber)
       .then((response) => {
         // iterate through response.data and find where the phone_number == phoneNumber
@@ -50,19 +62,22 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = (data) => {
-    console.log("submit invoked");
-    let posted = true;
-    postUserData(USER_URL, data)
-      .then((response) => {})
+    postUserData(USER_URL, data) //TODO: backend has to setup middleware to intercept HTTP request, either rack or expressjs
+      .then((response) => {
+        console.log(response.status);
+        console.log(response.data);
+        localStorage.setItem("phoneNumber", data.phone_number);
+        if (onEdit === true) {
+          navigate("/review");
+          setOnEdit(false);
+        } else {
+          navigate("/passport");
+        }
+      })
       .catch((error) => {
-        console.log(error.response);
-        posted = false;
+        alert(error);
+        console.log(error);
       });
-    if (posted == true) {
-      localStorage.setItem("phoneNumber", data.phone_number);
-
-      navigate("/passport");
-    }
   };
 
   return (
@@ -126,7 +141,7 @@ export default function Details() {
           />
           <Button
             name="next"
-            text="Next"
+            text={onEdit === true ? "Save" : "Next"}
             bgColor="bg-red-500"
             hoverColor="hover:bg-red-700"
           />
