@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { API_URL } from "../utilities/constants.js";
+import { USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
@@ -17,31 +17,30 @@ export default function Details() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  let userData;
+  let phoneNumber = localStorage.getItem("phoneNumber");
 
-  var test_data;
-  let phone_number;
-  phone_number = localStorage.getItem("phone_number");
   //on first render do GET request
   useEffect(() => {
-    getUserData(API_URL, phone_number)
+    getUserData(USER_URL, phoneNumber)
       .then((response) => {
-        // iterate through response.data and find where the phone_number == phone_number
+        // iterate through response.data and find where the phone_number == phoneNumber
         for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phone_number) {
-            test_data = response.data[i];
+          if (response.data[i].phone_number == phoneNumber) {
+            userData = response.data[i];
           }
         }
         setDetails({
-          display_name: test_data.display_name,
-          title: test_data.title,
-          phone_number: test_data.phone_number,
-          email: test_data.email,
+          display_name: userData.display_name,
+          title: userData.title,
+          phone_number: userData.phone_number,
+          email: userData.email,
         });
         reset({
-          display_name: test_data.display_name,
-          title: test_data.title,
-          phone_number: test_data.phone_number,
-          email: test_data.email,
+          display_name: userData.display_name,
+          title: userData.title,
+          phone_number: userData.phone_number,
+          email: userData.email,
         });
       })
       .catch((error) => {
@@ -52,14 +51,14 @@ export default function Details() {
   //post request to database backend
   const onSubmit = (data) => {
     let posted = true;
-    postUserData(API_URL, data)
+    postUserData(USER_URL, data)
       .then((response) => {})
       .catch((error) => {
         console.log(error.response);
         posted = false;
       });
     if (posted == true) {
-      localStorage.setItem("phone_number", data.phone_number);
+      localStorage.setItem("phoneNumber", data.phone_number);
 
       navigate("/passport");
     }
@@ -124,7 +123,6 @@ export default function Details() {
             text="Email Address (Optional)"
             onFill={register("email", {})}
           />
-          {/* <div className=" absolute left-0 right-0 w-screen bottom-0 mb-10 items-center"> */}
           <button
             className={
               "next absolute mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded w-10/12 max-w-screen-sm"
@@ -133,7 +131,6 @@ export default function Details() {
           >
             Next
           </button>
-          {/* </div> */}
         </form>
       </div>
     </div>

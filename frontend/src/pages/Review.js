@@ -1,26 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { API_URL } from "../utilities/constants.js";
+import { USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import { getUserData } from "../services/axiosUsers.js";
 
-let test_data;
 export default function Review() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
-  useEffect(() => {
-    let phone_number = localStorage.getItem("phone_number");
+  let userData;
+  let phoneNumber = localStorage.getItem("phoneNumber");
 
-    getUserData(API_URL, phone_number)
+  useEffect(() => {
+    getUserData(USER_URL, phoneNumber)
       .then((response) => {
         for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phone_number) {
-            test_data = response.data[i];
+          if (response.data[i].phone_number == phoneNumber) {
+            userData = response.data[i];
           }
         }
-        setDetails(test_data);
+        setDetails(userData);
       })
       .catch((error) => {
         console.log(error);
