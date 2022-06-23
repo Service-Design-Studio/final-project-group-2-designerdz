@@ -1,6 +1,7 @@
 # README
 
 This is Rails for **_API only_**, communication is done through json objects between Rails backend and React frontend
+te
 
 ## Ruby version
 
@@ -73,7 +74,6 @@ Step 3: `find ./ -type f -exec dos2unix {} \;` (in the repo you were trying to r
 
 gcloud url:  
 https://dbs-service-qz6esvmepq-as.a.run.app/
-
 
 **Important**
 
