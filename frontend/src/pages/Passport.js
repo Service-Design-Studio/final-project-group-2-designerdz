@@ -11,7 +11,7 @@ import {
   postUserData,
   patchUserData,
 } from "../services/axiosUsers";
-import { API_URL, PATCH_API_URL } from "../utilities/constants";
+import { USER_URL, PATCH_USER_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -25,49 +25,42 @@ export default function Passport() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  let userData;
+  let phoneNumber = localStorage.getItem("phoneNumber");
 
   //on first render do GET request
-  let phone_number;
-  let test_data;
-  phone_number = localStorage.getItem("phone_number");
-
   useEffect(() => {
-    getUserData(API_URL, phone_number)
+    getUserData(USER_URL, phoneNumber)
       .then((response) => {
-        // iterate through response.data and find where the phone_number == phone_number
+        // iterate through response.data and find where the phone_number == phoneNumber
         for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phone_number) {
-            test_data = response.data[i];
+          if (response.data[i].phone_number == phoneNumber) {
+            userData = response.data[i];
           }
         }
-
         setDetails({
-          full_name: test_data.full_name,
-          passport_no: test_data.passport_no,
-          nationality: test_data.nationality,
+          full_name: userData.full_name,
+          passport_no: userData.passport_no,
+          nationality: userData.nationality,
         });
 
-        if (details["passport_expiry"] !== undefined) {
-          setPassportDate(new Date());
-        } else {
-          setPassportDate(new Date(test_data.passport_expiry));
-        }
-        if (details["dob"] !== undefined) {
-          setBirthDate(new Date());
-        } else {
-          setBirthDate(new Date(test_data.dob));
-        }
-        if (details["gender"] == undefined) {
-          setCurGender("MALE");
-        } else {
-          setCurGender(test_data.gender);
-        }
+        details["passport_expiry"] !== undefined
+          ? setPassportDate(new Date())
+          : setPassportDate(new Date(userData.passport_expiry));
+
+        details["dob"] !== undefined
+          ? setBirthDate(new Date())
+          : setBirthDate(new Date(userData.dob));
+
+        details["gender"] === undefined
+          ? setCurGender("MALE")
+          : setCurGender(userData.gender);
 
         reset({
-          full_name: test_data.full_name,
-          passport_no: test_data.passport_no,
-          title: test_data.title,
-          nationality: test_data.nationality,
+          full_name: userData.full_name,
+          passport_no: userData.passport_no,
+          title: userData.title,
+          nationality: userData.nationality,
         });
       })
       .catch((error) => {
@@ -81,9 +74,8 @@ export default function Passport() {
     data["gender"] = curGender;
     let posted = true;
 
-    patchUserData(PATCH_API_URL, data, phone_number)
-      .then((response) => {
-      })
+    patchUserData(PATCH_USER_URL, data, phoneNumber)
+      .then((response) => {})
       .catch((error) => {
         console.log(error.response);
         posted = false;
@@ -136,7 +128,6 @@ export default function Passport() {
             text="Full Name"
             type="text"
             onFill={register("full_name", {})}
-            // defaultValue = {details.full_name}
           />
 
           <FormFill
@@ -144,7 +135,6 @@ export default function Passport() {
             text="Passport Number"
             type="text"
             onFill={register("passport_no", {})}
-            // defaultValue = {details.passport_no}
           />
 
           <div className="mb-3">
@@ -163,7 +153,6 @@ export default function Passport() {
             text="Nationality"
             type="text"
             onFill={register("nationality", {})}
-            // defaultValue = {details.nationality}
           />
 
           <div className="mb-3">
@@ -190,7 +179,7 @@ export default function Passport() {
             </div>
           </div>
 
-          <div className="mb-3">
+          <div>
             <label className="block font-medium">
               Date of Birth (DD/MM/YYYY)
             </label>
@@ -201,13 +190,12 @@ export default function Passport() {
               endYear={2022}
             />
           </div>
-
-          <button
-            className={`next w-10/12 absolute b-2 my-10 mt-10 bg-red-500 hover:bg-red-700 text-white text-xl font-extrabold py-4 px-4 rounded `}
-            type="submit"
-          >
-            Next
-          </button>
+          <Button
+            name="next"
+            text="Next"
+            bgColor="bg-red-500"
+            hoverColor="hover:bg-red-700"
+          />
         </form>
       </div>
     </div>

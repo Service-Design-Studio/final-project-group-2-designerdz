@@ -74,7 +74,6 @@ Step 3: `find ./ -type f -exec dos2unix {} \;` (in the repo you were trying to r
 gcloud url:  
 https://dbs-service-qz6esvmepq-as.a.run.app/
 
-
 **Important**
 
 1. Remember to <mark>disable billing</mark> to account when not using deployment site, SQL database in gcloud is expensive

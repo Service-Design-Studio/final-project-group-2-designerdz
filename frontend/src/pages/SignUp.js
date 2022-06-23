@@ -2,21 +2,20 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { BackButton } from "../components/Buttons.js";
-import { API_URL } from "../utilities/constants.js";
+import { USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import TextDesc from "../components/TextDesc.js";
 import { getUserData } from "../services/axiosUsers.js";
 
 export default function Landing() {
   const navigate = useNavigate();
-  const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
     let mounted = true;
-    getUserData(API_URL)
+    getUserData(USER_URL)
       .then((items) => {
         if (mounted) {
-          setCustomers(items);
+          // setCustomers(items);
         }
       })
       .catch((error) => {
@@ -53,11 +52,10 @@ export default function Landing() {
         </button>
 
         <p className="absolute bottom-24 mb-10 mx-8 w-10/12 ">
-        Only have a little time? <br/>Don't worry, as your <b>data will be saved at every step!</b>
+          Only have a little time? <br />
+          Don't worry, as your <b>data will be saved at every step!</b>
         </p>
-
       </div>
-      
     </div>
   );
 }
