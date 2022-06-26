@@ -24,6 +24,11 @@ export default function Landing() {
     return () => (mounted = false);
   }, []);
 
+  function onClick() {
+    localStorage.setItem("isFamily", true);
+    navigate("/details");
+  }
+
   return (
     <div>
       <div className="flex flex-end">
@@ -46,7 +51,7 @@ export default function Landing() {
         {/* TODO: Add feature into another page here once multi-user is out */}
         <button
           className="bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
-          onClick={() => navigate("/details")}
+          onClick={onClick}
         >
           Yes, for me and my children...
         </button>

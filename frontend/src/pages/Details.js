@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { USER_URL } from "../utilities/constants.js";
@@ -10,7 +11,6 @@ import {
   getUserData,
   patchUserData,
 } from "../services/axiosUsers.js";
-import { useEffect, useState } from "react";
 
 export default function Details() {
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ export default function Details() {
   } = useForm();
   let userData;
   let phoneNumber = localStorage.getItem("phoneNumber");
+  let isFamily = localStorage.getItem("isFamily") === "true"; //will have to get this info from db de
+  console.log("is family is this: ", isFamily);
 
   //on first render do GET request
   useEffect(() => {
@@ -62,16 +64,19 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = (data) => {
-    postUserData(USER_URL, data) //TODO: backend has to setup middleware to intercept HTTP request, either rack or expressjs
+    postUserData(USER_URL, data, phoneNumber) //TODO: backend has to setup to intercept HTTP request, to check if user exist or not
       .then((response) => {
-        console.log(response.status);
-        console.log(response.data);
+        //TODO: find a way to update the other pages detail too if phone number changes
         localStorage.setItem("phoneNumber", data.phone_number);
         if (onEdit === true) {
           navigate("/review");
           setOnEdit(false);
         } else {
-          navigate("/passport");
+          if (isFamily === true) {
+            navigate("/family");
+          } else {
+            navigate("/passport");
+          }
         }
       })
       .catch((error) => {
