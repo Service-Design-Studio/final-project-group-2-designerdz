@@ -46,7 +46,7 @@ export default function Review() {
           <b className="text-xl">Basic Information</b>
           <b className="text-xl text-right">
             <EditButton
-              onClick={() => navigate("/details", { state: { onEdit: true } })}
+              onClick={() => navigate("/details", { state: { onEdit: true } })} //pass onEdit param to page
             />
           </b>
         </div>
@@ -70,7 +70,7 @@ export default function Review() {
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
             <EditButton
-              onClick={() => navigate("/passport", { state: { onEdit: true } })}
+              onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
             />
           </b>
         </div>
