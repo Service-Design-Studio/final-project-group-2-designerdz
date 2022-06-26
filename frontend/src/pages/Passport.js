@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { Button, BackButton } from "../components/Buttons.js";
@@ -15,10 +15,12 @@ import { USER_URL, PATCH_USER_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [details, setDetails] = useState({});
   const [passportDate, setPassportDate] = useState(new Date());
   const [birthDate, setBirthDate] = useState(new Date());
   const [curGender, setCurGender] = useState("MALE");
+  const [onEdit, setOnEdit] = useState(false);
   const {
     reset,
     register,
@@ -30,6 +32,12 @@ export default function Passport() {
 
   //on first render do GET request
   useEffect(() => {
+    try {
+      setOnEdit(location.state.onEdit);
+    } catch (error) {
+      console.error(error);
+    }
+
     getUserData(USER_URL, phoneNumber)
       .then((response) => {
         // iterate through response.data and find where the phone_number == phoneNumber
@@ -72,17 +80,19 @@ export default function Passport() {
     data["passport_expiry"] = passportDate;
     data["dob"] = birthDate;
     data["gender"] = curGender;
-    let posted = true;
 
     patchUserData(PATCH_USER_URL, data, phoneNumber)
-      .then((response) => {})
+      .then((response) => {
+        if (onEdit === true) {
+          navigate("/review");
+          setOnEdit(false);
+        } else {
+          navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+        }
+      })
       .catch((error) => {
         console.log(error.response);
-        posted = false;
       });
-    if (posted == true) {
-      navigate("/review");
-    }
 
     console.log(errors);
   };
@@ -192,9 +202,10 @@ export default function Passport() {
           </div>
           <Button
             name="next"
-            text="Next"
+            text={onEdit === true ? "Save" : "Next"}
             bgColor="bg-red-500"
             hoverColor="hover:bg-red-700"
+            onClick={onSubmit}
           />
         </form>
       </div>

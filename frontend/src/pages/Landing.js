@@ -7,13 +7,13 @@ export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="grid h-screen place-content-center mx-8">
       <img
-        className="px-8 space-y-3 bottom my-20"
+        className="mx-auto w-5/6 max-w-md"
         src="https://1000logos.net/wp-content/uploads/2020/04/DBS-logo.jpg"
         alt="DBS Logo"
       />
-      <div className="flex flex-col absolute bottom-0 mb-10 mx-8 space-y-4 items-center">
+      <div className="relative mt-[80%]">
         <Button
           text="NOT A CUSTOMER YET?"
           bgColor="bg-red-500"
@@ -26,23 +26,23 @@ export default function Landing() {
           hoverColor="hover:bg-slate-800"
           onClick={() => alert("Sorry we are not DBS!")}
         />
-        <Popup
-          trigger={
-            <button className="button">
-              <a>
-                Left registration midway?{" "}
-                <span className="underline">Continue where you left.</span>
-              </a>{" "}
-            </button>
-          }
-        >
-          <div className="fixed top-2/4 left-0 right-0">
-            <div className="w-8/12 m-auto">
-              <Restore />
-            </div>
-          </div>
-        </Popup>
       </div>
+      <Popup
+        trigger={
+          <button className="button">
+            <a>
+              Left registration midway?{" "}
+              <span className="underline">Continue where you left.</span>
+            </a>{" "}
+          </button>
+        }
+      >
+        <div className="fixed top-2/4 left-0 right-0">
+          <div className="w-8/12 m-auto">
+            <Restore />
+          </div>
+        </div>
+      </Popup>
     </div>
   );
 }
