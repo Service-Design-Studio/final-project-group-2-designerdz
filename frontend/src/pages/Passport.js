@@ -6,6 +6,7 @@ import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
+import Carousel from "../components/Carousel";
 import {
   getUserData,
   postUserData,
@@ -21,6 +22,7 @@ export default function Passport() {
   const [birthDate, setBirthDate] = useState(new Date());
   const [curGender, setCurGender] = useState("MALE");
   const [onEdit, setOnEdit] = useState(false);
+  const [indexSelected, setIndexSelected] = useState(0); //handle selected index of carousel
   const {
     reset,
     register,
@@ -108,6 +110,11 @@ export default function Passport() {
     }
   };
 
+  const onClickSelected = (index) => {
+    console.log("onClickSelected invoked");
+    setIndexSelected(index);
+  };
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -122,6 +129,7 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
+        <Carousel onClick={onClickSelected} />
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
           <div>
             <label className="block font-medium">Upload Passport</label>
