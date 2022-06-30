@@ -2,7 +2,7 @@ Feature: Multi User
     Scenario: Adding children accounts
         Given I am on family
         When I click on the add children button
-        Then I should a child should be added
+        Then a child should be added
 
     Scenario: Adding children details
         Given I am on family page and a child has been added
@@ -25,3 +25,6 @@ Feature: Multi User
         Given I am on upload passport page and I have at least one child
         When I click on another child account in the Carousel
         Then I should be navigated to the details page for that child
+
+
+
