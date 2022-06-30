@@ -1,7 +1,7 @@
-function UserCardSelected({ name, onClick }) {
+function UserCardSelected({ name, onClick, index }) {
   return (
     <button
-      onClick={onClick}
+      onClick={() => onClick(index)}
       className="grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2"
     >
       <svg
@@ -22,9 +22,12 @@ function UserCardSelected({ name, onClick }) {
     </button>
   );
 }
-function UserCardNotSelected({ name }) {
+function UserCardNotSelected({ name, onClick, index }) {
   return (
-    <button className="grid grid-cols-1 justify-items-center h-24 w-24 p-2">
+    <button
+      onClick={() => onClick(index)}
+      className="grid grid-cols-1 justify-items-center h-24 w-24 p-2"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-12 w-12"

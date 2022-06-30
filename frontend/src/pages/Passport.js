@@ -22,7 +22,7 @@ export default function Passport() {
   const [birthDate, setBirthDate] = useState(new Date());
   const [curGender, setCurGender] = useState("MALE");
   const [onEdit, setOnEdit] = useState(false);
-  const [indexSelected, setIndexSelected] = useState(0); //handle selected index of carousel
+  const [selectedIndex, setSelectedIndex] = useState(0); //handle selected index of carousel
   const {
     reset,
     register,
@@ -111,9 +111,13 @@ export default function Passport() {
   };
 
   const onClickSelected = (index) => {
-    console.log("onClickSelected invoked");
-    setIndexSelected(index);
+    console.log("onClickSelected invoked: ", index);
+    setSelectedIndex(index);
+    console.log("selectedIndex is this: ", selectedIndex);
   };
+
+  //TODO: delete mock data after testings
+  let nameArray = [{ name: "test1" }, { name: "test2" }, { name: "test3" }];
 
   return (
     <div>
@@ -129,7 +133,11 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        <Carousel onClick={onClickSelected} />
+        <Carousel
+          nameArr={nameArray}
+          onClickSelected={onClickSelected}
+          selectedIndex={selectedIndex}
+        />
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
           <div>
             <label className="block font-medium">Upload Passport</label>

@@ -26,7 +26,6 @@ export default function Details() {
   let userData;
   let phoneNumber = localStorage.getItem("phoneNumber");
   let isFamily = localStorage.getItem("isFamily") === "true"; //will have to get this info from db de
-  console.log("is family is this: ", isFamily);
 
   //on first render do GET request
   useEffect(() => {
