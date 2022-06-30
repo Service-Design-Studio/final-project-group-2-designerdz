@@ -17,6 +17,7 @@ class Api::V1::UsersController < ApplicationController
   # POST /users ## when users click on next after submitting phone number
   def create
     if User.exists?(phone_number: params[:phone_number])
+      # have to let user handle edits
       nil
     else
       @user = User.new(user_params)
