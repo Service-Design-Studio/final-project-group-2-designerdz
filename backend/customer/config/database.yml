@@ -22,9 +22,4 @@ test:
 
 production:
   <<: *default
-  adapter: postgresql
-  encoding: unicode
-  database: dbs-database
-  username: dbs_user1
-  password: <%= Rails.application.credentials.gcp[:db_password] %>
-  host:  "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
+  database: db/test.sqlite3

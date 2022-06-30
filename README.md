@@ -27,6 +27,10 @@ Controller actions/methods by convention is done on **users_controller.rb**
 **PATCH request with phone number**
 > **localhost:3000/api/v1/profile/:phone_number** ; calls the action users#update and updates the activerecord row based on phone number
 
+**DELETE request with phone number**
+> **localhost:3000/api/v1/profile/:phone_number** ; locates record by phone_number,  calls the action users#delete and removes record
+> e.g. curl -X DELETE http://127.0.0.1:3000/api/v1/profile/91234567 using terminal
+
 ## How to access activerecord on terminal
 - bundle exec rails console
 - User.all  --> returns all records
@@ -44,14 +48,9 @@ The headers are exactly what is used when passing the JSON data from frontend to
 **| id | display_name | title | email | phone_number | full_name | passport_no | passport_expiry | nationality | gender | dob |**
 
 # TODO:
-1. Standardize the keys in the passport.js such that the keys can be readily passed to a JSON object e.g. "passport_no" : "1234556A"
 
-2. Since details.js already updates activerecord, I do not want to create a new record when the **SAME** user enter their details in the passport page
-I want to somehow extract the id of that particular user and continue to populate the remaining fields of the activerecord e.g. passport_no, dob, full_name etc
 
-3. Return the user's data to frontend once phone_number is passed to the backend to repopulate the form
-
-4. **Next Sprint**: Multi-user registration, nested database is expected, how to populate and retrieve data from activerecord
+1. **Next Sprint**: Multi-user registration, nested database is expected, how to populate and retrieve data from activerecord
 
 
 
