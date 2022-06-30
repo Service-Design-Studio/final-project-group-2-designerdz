@@ -17,7 +17,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_17_162805) do
     t.string "email"
     t.integer "phone_number"
     t.string "full_name"
-    t.string "passport_no"
+    t.string "passport_number"
     t.string "passport_expiry"
     t.string "nationality"
     t.string "gender"

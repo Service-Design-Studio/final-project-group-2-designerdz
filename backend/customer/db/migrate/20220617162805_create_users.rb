@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :email
       t.integer :phone_number
       t.string :full_name
-      t.string :passport_no
+      t.string :passport_number
       t.string :passport_expiry
       t.string :nationality
       t.string :gender
