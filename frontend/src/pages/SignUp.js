@@ -48,7 +48,6 @@ export default function Landing() {
           No, just for myself only
         </button>
 
-        {/* TODO: Add feature into another page here once multi-user is out */}
         <button
           className="bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
           onClick={onClick}
