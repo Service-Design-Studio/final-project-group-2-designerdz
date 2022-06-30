@@ -17,12 +17,13 @@ import { USER_URL, PATCH_USER_URL } from "../utilities/constants";
 export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState({}); //can be used to store all family members detail
   const [passportDate, setPassportDate] = useState(new Date());
   const [birthDate, setBirthDate] = useState(new Date());
   const [curGender, setCurGender] = useState("MALE");
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0); //handle selected index of carousel
+  const [familyArray, setFamilyArray] = useState([]); //to store family data for state change of carousel
   const {
     reset,
     register,
@@ -31,9 +32,11 @@ export default function Passport() {
   } = useForm();
   let userData;
   let phoneNumber = localStorage.getItem("phoneNumber");
+  let isFamily = localStorage.getItem("isFamily") === "true";
 
   //on first render do GET request
   useEffect(() => {
+    console.log("useEffect invoked");
     try {
       setOnEdit(location.state.onEdit);
     } catch (error) {
@@ -110,14 +113,25 @@ export default function Passport() {
     }
   };
 
+  //TODO: finish up logic for carousel view
+  //need to post data between different selection of carousel view
   const onClickSelected = (index) => {
     console.log("onClickSelected invoked: ", index);
     setSelectedIndex(index);
-    console.log("selectedIndex is this: ", selectedIndex);
+    //1. post request to update database
+    //2. update details state?
   };
+  console.log("selectedIndex is this: ", selectedIndex);
+  console.log("isFamily is this: ", isFamily);
+  console.log("isFamily is this: ", typeof isFamily);
+  console.log("isFamily true? ", isFamily === true);
 
   //TODO: delete mock data after testings
-  let nameArray = [{ name: "test1" }, { name: "test2" }, { name: "test3" }];
+  let nameArray = [
+    { name: "test1", passport_no: "123" },
+    { name: "test2", passport_no: "456" },
+    { name: "test3", passport_no: "789" },
+  ];
 
   return (
     <div>
@@ -133,11 +147,14 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        <Carousel
-          nameArr={nameArray}
-          onClickSelected={onClickSelected}
-          selectedIndex={selectedIndex}
-        />
+        {isFamily === true ? (
+          <Carousel
+            nameArr={nameArray}
+            onClickSelected={onClickSelected}
+            selectedIndex={selectedIndex}
+          />
+        ) : null}
+
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
           <div>
             <label className="block font-medium">Upload Passport</label>
