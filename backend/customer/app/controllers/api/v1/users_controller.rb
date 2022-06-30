@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
 
+
   # GET /users
   def index
     @users = User.all
@@ -17,8 +18,11 @@ class Api::V1::UsersController < ApplicationController
   # POST /users ## when users click on next after submitting phone number
   def create
     if User.exists?(phone_number: params[:phone_number])
+      # if user edits phone number, it creates a new record instead, find a way to allow them to edit
       # have to let user handle edits
-      nil
+      @user = User.where(phone_number: params['phone_number'])
+      @user.update(user_params)
+  
     else
       @user = User.new(user_params)
       if @user.save
@@ -31,7 +35,7 @@ class Api::V1::UsersController < ApplicationController
     
   end
 
-  # PATCH/PUT /users/1 ## when users click on next buttons
+  # PATCH/PUT /api/v1/profie/:phone_number ## when users click on next buttons
   def update
     if @user.update(user_params)
       render json: @user
@@ -40,9 +44,9 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
+  # DELETE /api/v1/profie/:phone_number
   def destroy
-    @user.destroy
+    @user.where(phone_number: params['phone_number']).destroy_all
   end
 
   private
