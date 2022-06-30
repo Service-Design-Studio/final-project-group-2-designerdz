@@ -27,7 +27,7 @@ Controller actions/methods by convention is done on **users_controller.rb**
 **PATCH request with phone number**
 > **localhost:3000/api/v1/profile/:phone_number** ; calls the action users#update and updates the activerecord row based on phone number
 
-**DELETE request with phone number **
+**DELETE request with phone number**
 > **localhost:3000/api/v1/profile/:phone_number** ; locates record by phone_number,  calls the action users#delete and removes record
 > e.g. curl -X DELETE http://127.0.0.1:3000/api/v1/profile/91234567 using terminal
 
