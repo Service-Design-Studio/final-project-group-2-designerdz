@@ -65,8 +65,7 @@ export default function Details() {
   const onSubmit = (data) => {
     postUserData(USER_URL, data, phoneNumber) //TODO: backend has to setup to intercept HTTP request, to check if user exist or not
       .then((response) => {
-        //TODO: find a way to update the other pages detail too if phone number changes
-        localStorage.setItem("phoneNumber", data.phone_number);
+        localStorage.setItem("phoneNumber", data.phone_number); //this updates with latest phone number form form
         if (onEdit === true) {
           navigate("/review");
           setOnEdit(false);
