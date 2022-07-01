@@ -19,8 +19,12 @@ class Api::V1::UsersController < ApplicationController
   def create
     if User.exists?(phone_number: params[:phone_number])
       # if user edits phone number, it creates a new record instead, find a way to allow them to edit
-      # have to let user handle edits
+      # use ID and phone number as checking conditions?
+      # extract primary key after finding phone_number
       @user = User.where(phone_number: params['phone_number'])
+      # @id = @user['id']
+      puts('---------------------------------------------------------')
+      puts(@user)
       @user.update(user_params)
   
     else
