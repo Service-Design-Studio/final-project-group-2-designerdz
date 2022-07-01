@@ -63,7 +63,7 @@ The headers are exactly what is used when passing the JSON data from frontend to
 
 > These are used to install the dependencies before installing PostgreSQL
 
-sudo apt install wget ca-certificates
+sudo apt install wget ca-certificates <br />
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - <br />
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' <br />
 
