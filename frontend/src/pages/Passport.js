@@ -23,7 +23,7 @@ export default function Passport() {
   const [curGender, setCurGender] = useState("MALE");
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0); //handle selected index of carousel
-  const [familyData, setFamilyData] = useState([]);
+  const [familyData, setFamilyData] = useState([]); //TODO: need check if need this not, to store family data for state change of carousel
   const {
     reset,
     register,
@@ -62,6 +62,7 @@ export default function Passport() {
     },
   ];
 
+  //on first render do GET request
   useEffect(() => {
     try {
       setOnEdit(location.state.onEdit);
