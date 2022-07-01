@@ -56,7 +56,7 @@ The headers are exactly what is used when passing the JSON data from frontend to
 
 # Installing PostgreSQL
 
-## In order to deploy database using production, we have to use PostgreSQL locally and it's the default for GCP
+### In order to deploy database using production, we have to use PostgreSQL locally and it's the default for GCP
 
 
 **Run the following command in sequence**
@@ -64,24 +64,24 @@ The headers are exactly what is used when passing the JSON data from frontend to
 > These are used to install the dependencies before installing PostgreSQL
 
 sudo apt install wget ca-certificates
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - <br />
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' <br />
 
 > Installing PostgreSQL, the command installs the latest version of it
 
 sudo apt install postgresql postgresql-contrib
 
-Upon installing, the server does not automatically gets started up we can use **service postgresql status** to check.
-If it's down, run **sudo service postgresql start** to start the service.
+Upon installing, the server does not automatically gets started up we can use **service postgresql status** to check. <br />
+If it's down, run **sudo service postgresql start** to start the service. <br />
 Now you can check that port 5432 (postgreSQL server port) is online.
 
 ## Creating a new user role for DB
 > A super user role used to create database, manage permissions and authorization. Run the following commands
 
-sudo -u postgres createuser -s *your linux username* -P
+sudo -u postgres createuser -s *your_linux_username* -P
 
-Now a user is created, we can create a new DB using postgreSQL command line. Run: *sudo -u postgres psql* to activate it.
-The *postgres=#* line indicates that you are a running postgrSQL console.
+Now a user is created, we can create a new DB using postgreSQL command line. Run: *sudo -u postgres psql* to activate it. <br />
+The *postgres=#* line indicates that you are a running postgreSQL console.
 
 
 
