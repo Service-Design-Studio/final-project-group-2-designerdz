@@ -12,7 +12,7 @@ import {
   postUserData,
   patchUserData,
 } from "../services/axiosUsers";
-import { USER_URL, PATCH_USER_URL } from "../utilities/constants";
+import { GET_USER_URL, PATCH_USER_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -36,21 +36,16 @@ export default function Passport() {
 
   //on first render do GET request
   useEffect(() => {
-    console.log("useEffect invoked");
     try {
       setOnEdit(location.state.onEdit);
     } catch (error) {
       console.error(error);
     }
 
-    getUserData(USER_URL, phoneNumber)
+    getUserData(GET_USER_URL, phoneNumber)
       .then((response) => {
-        // iterate through response.data and find where the phone_number == phoneNumber
-        for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phoneNumber) {
-            userData = response.data[i];
-          }
-        }
+        userData = response.data[0];
+        console.log(userData);
         setDetails({
           full_name: userData.full_name,
           passport_no: userData.passport_no,

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { USER_URL } from "../utilities/constants.js";
+import { GET_USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton, EditButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
@@ -14,13 +14,9 @@ export default function Review() {
   let phoneNumber = localStorage.getItem("phoneNumber");
 
   useEffect(() => {
-    getUserData(USER_URL, phoneNumber)
+    getUserData(GET_USER_URL, phoneNumber)
       .then((response) => {
-        for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phoneNumber) {
-            userData = response.data[i];
-          }
-        }
+        userData = response.data[0];
         setDetails(userData);
       })
       .catch((error) => {

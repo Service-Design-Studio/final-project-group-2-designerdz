@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp.js";
 import Success from "./pages/Success.js";
 import Family from "./pages/Family.js";
 import ChildDetails from "./pages/ChildDetails";
+import Admin from "./pages/admin/Admin.js";
 
 export default function App() {
   const loggedIn = false;
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="success" element={<Success />} />
         <Route path="family" element={<Family />} />
         <Route path="child" element={<ChildDetails />} />
+        <Route path="admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );
