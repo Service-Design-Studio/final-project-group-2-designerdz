@@ -23,16 +23,43 @@ export default function Passport() {
   const [curGender, setCurGender] = useState("MALE");
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0); //handle selected index of carousel
-  const [familyArray, setFamilyArray] = useState([]); //TODO: need check if need this not, to store family data for state change of carousel
+  const [familyData, setFamilyData] = useState([]); //TODO: need check if need this not, to store family data for state change of carousel
   const {
     reset,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  let userData;
   let phoneNumber = localStorage.getItem("phoneNumber");
   let isFamily = localStorage.getItem("isFamily") === "true";
+
+  //TODO: delete mock data after testings, to simulate how response.data would look like
+  let testFamilyArray = [
+    {
+      full_name: "test1",
+      passport_no: "123",
+      passport_expiry: "22/10/2025",
+      nationality: "nation",
+      gender: "FEMALE",
+      dob: "22/10/2025",
+    },
+    {
+      full_name: "test2",
+      passport_no: "456",
+      passport_expiry: "22/10/2025",
+      nationality: "nation2",
+      gender: "FEMALE",
+      dob: "22/10/2025",
+    },
+    {
+      full_name: "test3",
+      passport_no: "789",
+      passport_expiry: "22/10/2025",
+      nationality: "nation3",
+      gender: "MALE",
+      dob: "22/10/2025",
+    },
+  ];
 
   //on first render do GET request
   useEffect(() => {
@@ -42,41 +69,51 @@ export default function Passport() {
       console.error(error);
     }
 
-    getUserData(GET_USER_URL, phoneNumber)
-      .then((response) => {
-        userData = response.data[0];
-        console.log(userData);
-        setDetails({
-          full_name: userData.full_name,
-          passport_no: userData.passport_no,
-          nationality: userData.nationality,
+    if (familyData.length === 0) {
+      getUserData(GET_USER_URL, phoneNumber)
+        .then((response) => {
+          // familyData = response.data;
+          console.log("response data is ", response.data);
+          setFamilyData(response.data); //TODO: replace testFamilyArray with response.data
+        })
+        .catch((error) => {
+          console.log(error);
         });
+    }
+    console.log("selected index is ", selectedIndex);
+    console.log(familyData[selectedIndex]);
 
-        details["passport_expiry"] !== undefined
-          ? setPassportDate(new Date())
-          : setPassportDate(new Date(userData.passport_expiry));
-
-        details["dob"] !== undefined
-          ? setBirthDate(new Date())
-          : setBirthDate(new Date(userData.dob));
-
-        details["gender"] === undefined
-          ? setCurGender("MALE")
-          : setCurGender(userData.gender);
-
-        reset({
-          full_name: userData.full_name,
-          passport_no: userData.passport_no,
-          title: userData.title,
-          nationality: userData.nationality,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    if (familyData[selectedIndex] !== undefined) {
+      setDetails({
+        full_name: familyData[selectedIndex].full_name,
+        passport_no: familyData[selectedIndex].passport_no,
+        nationality: familyData[selectedIndex].nationality,
       });
-  }, []);
+
+      //TODO: need to uncomment the dates part after database done with schema
+      // details["passport_expiry"] !== undefined
+      //   ? setPassportDate(new Date())
+      //   : setPassportDate(
+      //       new Date(familyData[selectedIndex].passport_expiry)
+      //     );
+
+      // details["dob"] !== undefined
+      //   ? setBirthDate(new Date())
+      //   : setBirthDate(new Date(familyData[selectedIndex].dob));
+      details["gender"] === undefined
+        ? setCurGender(familyData[selectedIndex].gender)
+        : setCurGender("MALE");
+
+      reset({
+        full_name: familyData[selectedIndex].full_name,
+        passport_no: familyData[selectedIndex].passport_no,
+        nationality: familyData[selectedIndex].nationality,
+      });
+    }
+  }, [selectedIndex, familyData]);
 
   const onSubmit = (data) => {
+    // console.log("data is ", data);
     data["passport_expiry"] = passportDate;
     data["dob"] = birthDate;
     data["gender"] = curGender;
@@ -111,22 +148,14 @@ export default function Passport() {
   //TODO: finish up logic for carousel view
   //need to post data between different selection of carousel view
   const onClickSelected = (index) => {
+    console.log("currentSelected index is ", selectedIndex);
     console.log("onClickSelected invoked: ", index);
     setSelectedIndex(index);
-    //1. post request to update database
-    //2. update details state?
-  };
-  console.log("selectedIndex is this: ", selectedIndex);
-  console.log("isFamily is this: ", isFamily);
-  console.log("isFamily is this: ", typeof isFamily);
-  console.log("isFamily true? ", isFamily === true);
+    //1. post request to update database, sending phone number to verify
 
-  //TODO: delete mock data after testings
-  let nameArray = [
-    { name: "test1", passport_no: "123" },
-    { name: "test2", passport_no: "456" },
-    { name: "test3", passport_no: "789" },
-  ];
+    //2. update details state?
+    //3. get current details from familyArray based on index and form will populate based on that
+  };
 
   return (
     <div>
@@ -142,15 +171,14 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        {isFamily === true ? (
-          <Carousel
-            nameArr={nameArray}
-            onClickSelected={onClickSelected}
-            selectedIndex={selectedIndex}
-          />
-        ) : null}
-
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
+          {isFamily === true ? (
+            <Carousel
+              nameArr={testFamilyArray}
+              onClickSelected={onClickSelected}
+              selectedIndex={selectedIndex}
+            />
+          ) : null}
           <div>
             <label className="block font-medium">Upload Passport</label>
             <input
