@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { GET_USER_URL } from "../utilities/constants.js";
+import { GET_USER_URL, POST_USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
@@ -45,7 +45,7 @@ export default function ChildDetails() {
 
     const onSubmit = (data) => {
         // TODO: Manipulate data object to only be for child, then point to child api?
-        postUserData(USER_URL, data, phoneNumber)
+        postUserData(POST_USER_URL, data, phoneNumber)
       .then((response) => {
         if (onEdit === true) {
             navigate("/review");
