@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { USER_URL } from "../utilities/constants.js";
+import { GET_USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
@@ -26,14 +26,9 @@ export default function ChildDetails() {
             console.error(error);
         }
 
-        getUserData(USER_URL, phoneNumber)
+        getUserData(GET_USER_URL, phoneNumber)
         .then((response) => {
-            for (let i = 0; i < response.data.length; i++) {
-                if (response.data[i].phone_number == phoneNumber) {
-                    userData = response.data[i];
-                    console.log(userData)
-                }
-            }
+            userData = response.data[0];
             setDetails(userData);
             reset({
                 display_name: userData.display_name,

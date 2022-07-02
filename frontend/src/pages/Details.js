@@ -37,14 +37,8 @@ export default function Details() {
 
     getUserData(GET_USER_URL, phoneNumber)
       .then((response) => {
-        // iterate through response.data and find where the phone_number == phoneNumber
         userData = response.data[0];
-        setDetails({
-          display_name: userData.display_name,
-          title: userData.title,
-          phone_number: userData.phone_number,
-          email: userData.email,
-        });
+        setDetails(userData);
         reset({
           display_name: userData.display_name,
           title: userData.title,

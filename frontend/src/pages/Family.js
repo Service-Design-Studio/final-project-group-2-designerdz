@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  BackButton,
-  AddChildrenButton,
-} from "../components/Buttons.js";
+import {Button,BackButton,AddChildrenButto} from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 
@@ -25,7 +21,7 @@ export default function Family() {
 
   function onAddClick() {
     console.log("onAddClick clicked lo");
-    navigate("/childDetails");
+    navigate("/child");
     setCounter(counter + 1);
     setFamilyMembers([...familyMembers, { name: `Family Member ${counter}` }]);
     console.log(familyMembers);
@@ -39,6 +35,7 @@ export default function Family() {
       </div>
 
       <TextDesc headerText="Family Details" bodyText="ssth sth about family" />
+      
       <div className="absolute top-[25%] w-full px-8 ">
         <b className="text-l">All Family Members</b>
 
