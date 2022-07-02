@@ -25,6 +25,7 @@ export default function Family() {
 
   function onAddClick() {
     console.log("onAddClick clicked lo");
+    navigate("/childDetails");
     setCounter(counter + 1);
     setFamilyMembers([...familyMembers, { name: `Family Member ${counter}` }]);
     console.log(familyMembers);
@@ -46,7 +47,7 @@ export default function Family() {
             <div className="grid grid-cols-2 px-4">
               <p>Mrs Sally Abbott</p>
               <b className="text-right">
-                <button onClick={onEditClick}>Edit</button>
+                <button onClick={() => navigate("/details")}>Edit</button>
               </b>
             </div>
           </div>

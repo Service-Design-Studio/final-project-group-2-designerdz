@@ -37,31 +37,31 @@ const {
   });
 
 
-Given("I am on the family page", function () {
+Given("I am on the family page", async function () {
     await driver.get(base_url + "family");
 })
 
-When("I click on the add children button"), function () {
-    const add_children_button = driver.findElement(By.className("add-children"));
+When("I click on the add children button", async function () {
+    const add_children_button = await driver.findElement(By.className("add-children"));
     add_children_button.click();
-}
+})
 
-Then("a child should be added"), function() {
-    const children_list = driver.findElement(By.className("children-list"));
-    const children_list_items = children_list.findElements(By.className("child-item"));
+Then("a child should be added", async function() {
+    const children_list = await driver.findElement(By.className("children-list"));
+    const children_list_items = await children_list.findElements(By.className("child-item"));
     expect(children_list_items.length).to.equal(1);
-}
+})
 
-Given("I am on the family page and a child has been added"), function (){
+Given("I am on the family page and a child has been added", async function (){
     await driver.get(base_url + "family");
     const add_children_button = driver.findElement(By.className("add-children"));
     add_children_button.click();
-}
+});
 
-When("I click on the edit button"), function () {
+When("I click on the edit button", function () {
     const edit_button = driver.findElement(By.className("edit"));
     edit_button.click();
-}
+})
 
 Then("I should be navigated to the details page for that child", function() {
     var expected_url = "child-details";
