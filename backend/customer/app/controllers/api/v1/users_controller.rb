@@ -18,13 +18,14 @@ class Api::V1::UsersController < ApplicationController
   # POST /users ## when users click on next after submitting phone number
   def create
     if User.exists?(phone_number: params[:phone_number])
+      # frontend pass primary key as a param e.g. params[:id], then i will check if the id or phone number exists in db,
+      # if exists, allow user to update phone number.
+       
       # if user edits phone number, it creates a new record instead, find a way to allow them to edit
       # use ID and phone number as checking conditions?
       # extract primary key after finding phone_number
       @user = User.where(phone_number: params['phone_number'])
       # @id = @user['id']
-      puts('---------------------------------------------------------')
-      puts(@user)
       @user.update(user_params)
   
     else
