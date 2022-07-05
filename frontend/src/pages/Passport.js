@@ -12,7 +12,7 @@ import {
   postUserData,
   patchUserData,
 } from "../services/axiosUsers";
-import { USER_URL, PATCH_USER_URL } from "../utilities/constants";
+import { GET_USER_URL, PATCH_USER_URL } from "../utilities/constants";
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -22,15 +22,45 @@ export default function Passport() {
   const [birthDate, setBirthDate] = useState(new Date());
   const [curGender, setCurGender] = useState("MALE");
   const [onEdit, setOnEdit] = useState(false);
-  const [indexSelected, setIndexSelected] = useState(0); //handle selected index of carousel
+  const [selectedIndex, setSelectedIndex] = useState(0); //handle selected index of carousel
+  const [familyData, setFamilyData] = useState([]); //TODO: need check if need this not, to store family data for state change of carousel
   const {
     reset,
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm();
-  let userData;
   let phoneNumber = localStorage.getItem("phoneNumber");
+  let isFamily = localStorage.getItem("isFamily") === "true";
+
+  //TODO: delete mock data after testings, to simulate how response.data would look like
+  let testFamilyArray = [
+    {
+      full_name: "test1",
+      passport_no: "123",
+      passport_expiry: "22/10/2025",
+      nationality: "nation",
+      gender: "FEMALE",
+      dob: "22/10/2025",
+    },
+    {
+      full_name: "test2",
+      passport_no: "456",
+      passport_expiry: "22/10/2025",
+      nationality: "nation2",
+      gender: "FEMALE",
+      dob: "22/10/2025",
+    },
+    {
+      full_name: "test3",
+      passport_no: "789",
+      passport_expiry: "22/10/2025",
+      nationality: "nation3",
+      gender: "MALE",
+      dob: "22/10/2025",
+    },
+  ];
 
   //on first render do GET request
   useEffect(() => {
@@ -40,50 +70,56 @@ export default function Passport() {
       console.error(error);
     }
 
-    getUserData(USER_URL, phoneNumber)
-      .then((response) => {
-        // iterate through response.data and find where the phone_number == phoneNumber
-        for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phoneNumber) {
-            userData = response.data[i];
-          }
-        }
-        setDetails({
-          full_name: userData.full_name,
-          passport_no: userData.passport_no,
-          nationality: userData.nationality,
+    if (familyData.length === 0) {
+      getUserData(GET_USER_URL, phoneNumber)
+        .then((response) => {
+          // setFamilyData(testFamilyArray); //TODO: replace testFamilyArray with response.data
+        })
+        .catch((error) => {
+          setFamilyData(testFamilyArray); //TODO: remove this
+          console.log(error);
         });
+    }
 
-        details["passport_expiry"] !== undefined
-          ? setPassportDate(new Date())
-          : setPassportDate(new Date(userData.passport_expiry));
-
-        details["dob"] !== undefined
-          ? setBirthDate(new Date())
-          : setBirthDate(new Date(userData.dob));
-
-        details["gender"] === undefined
-          ? setCurGender("MALE")
-          : setCurGender(userData.gender);
-
-        reset({
-          full_name: userData.full_name,
-          passport_no: userData.passport_no,
-          title: userData.title,
-          nationality: userData.nationality,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    if (familyData[selectedIndex] !== undefined) {
+      console.log(familyData[selectedIndex]);
+      setDetails({
+        full_name: familyData[selectedIndex].full_name,
+        passport_no: familyData[selectedIndex].passport_no,
+        nationality: familyData[selectedIndex].nationality,
       });
-  }, []);
 
+      //TODO: need to uncomment the dates part after database done with schema
+      // details["passport_expiry"] !== undefined
+      //   ? setPassportDate(new Date())
+      //   : setPassportDate(
+      //       new Date(familyData[selectedIndex].passport_expiry)
+      //     );
+
+      // details["dob"] !== undefined
+      //   ? setBirthDate(new Date())
+      //   : setBirthDate(new Date(familyData[selectedIndex].dob));
+      details["gender"] === undefined
+        ? setCurGender(familyData[selectedIndex].gender)
+        : setCurGender("MALE");
+
+      reset({
+        full_name: familyData[selectedIndex].full_name,
+        passport_no: familyData[selectedIndex].passport_no,
+        nationality: familyData[selectedIndex].nationality,
+      });
+    }
+  }, [selectedIndex, familyData]);
+
+  //to post the data
   const onSubmit = (data) => {
+    console.log("data is ", data);
+    console.log("selectedIndex in onSubmit is:", selectedIndex);
     data["passport_expiry"] = passportDate;
     data["dob"] = birthDate;
     data["gender"] = curGender;
 
-    patchUserData(PATCH_USER_URL, data, phoneNumber)
+    patchUserData(PATCH_USER_URL, data, phoneNumber, selectedIndex)
       .then((response) => {
         if (onEdit === true) {
           navigate("/review");
@@ -93,10 +129,39 @@ export default function Passport() {
         }
       })
       .catch((error) => {
+        // navigate("/review");
         console.log(error.response);
       });
-
     console.log(errors);
+  };
+
+  //TODO: finish up logic for carousel view
+  //need to post data between different selection of carousel view
+  const onClickSelected = (index) => {
+    let data = getValues();
+    data["passport_expiry"] = passportDate;
+    data["dob"] = birthDate;
+    data["gender"] = curGender;
+
+    //TODO: do patch request header
+    patchUserData(PATCH_USER_URL, data, phoneNumber, selectedIndex) //index for updating child?
+      .then((response) => {
+        const copyFamilyData = familyData.slice();
+        copyFamilyData[selectedIndex] = data;
+        setFamilyData(newDataState);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // console.log("data is ", data);
+    //rmb to remove this when actual data and BE settled
+    const newDataState = familyData.slice();
+    newDataState[selectedIndex] = data;
+    console.log("copy newDataState is ", newDataState);
+    setFamilyData(newDataState);
+
+    setSelectedIndex(index);
   };
 
   const toggleGenderToMale = () => {
@@ -108,11 +173,6 @@ export default function Passport() {
     if (curGender === "MALE") {
       setCurGender("FEMALE");
     }
-  };
-
-  const onClickSelected = (index) => {
-    console.log("onClickSelected invoked");
-    setIndexSelected(index);
   };
 
   return (
@@ -129,8 +189,14 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        <Carousel onClick={onClickSelected} />
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
+          {isFamily === true ? (
+            <Carousel
+              nameArr={testFamilyArray}
+              onClickSelected={onClickSelected}
+              selectedIndex={selectedIndex}
+            />
+          ) : null}
           <div>
             <label className="block font-medium">Upload Passport</label>
             <input

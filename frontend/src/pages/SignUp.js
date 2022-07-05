@@ -10,22 +10,13 @@ import { getUserData } from "../services/axiosUsers.js";
 export default function Landing() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    let mounted = true;
-    getUserData(USER_URL)
-      .then((items) => {
-        if (mounted) {
-          // setCustomers(items);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    return () => (mounted = false);
-  }, []);
+  function onClickSingle() {
+    localStorage.setItem("isFamily", false);
+    navigate("/details");
+  }
 
-  function onClick() {
-    localStorage.setItem("isFamily", true);
+  function onClickFamily() {
+    localStorage.setItem("isFamily", true); //to know whether is multi-user registration throughout the process
     navigate("/details");
   }
 
@@ -43,14 +34,14 @@ export default function Landing() {
       <div className="flex flex-col absolute w-screen items-center top-0 bottom-0 m-auto place-content-center space-y-4 -z-50">
         <button
           className="next bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
-          onClick={() => navigate("/details")}
+          onClick={onClickSingle}
         >
           No, just for myself only
         </button>
 
         <button
           className="bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
-          onClick={onClick}
+          onClick={onClickFamily}
         >
           Yes, for me and my children...
         </button>

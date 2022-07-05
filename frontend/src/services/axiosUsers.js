@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export async function getUserData(API_URL, phoneNumber) {
+  API_URL = API_URL.concat("/" + phoneNumber);
   return await axios.get(API_URL, phoneNumber);
 }
 

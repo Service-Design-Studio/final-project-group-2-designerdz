@@ -1,26 +1,54 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { USER_URL } from "../utilities/constants.js";
+import { GET_USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton, EditButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import { getUserData } from "../services/axiosUsers.js";
 import { getMonthYear, getDateMonthYear } from "../utilities/dateHelper.js";
+import Carousel from "../components/Carousel";
 
 export default function Review() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [familyData, setFamilyData] = useState([]);
   let userData;
   let phoneNumber = localStorage.getItem("phoneNumber");
+  let isFamily = localStorage.getItem("isFamily") === "true";
+
+  //TODO: delete mock data after testings, to simulate how response.data would look like
+  let testFamilyArray = [
+    {
+      full_name: "test1",
+      passport_no: "123",
+      passport_expiry: "22/10/2025",
+      nationality: "nation",
+      gender: "FEMALE",
+      dob: "22/10/2025",
+    },
+    {
+      full_name: "test2",
+      passport_no: "456",
+      passport_expiry: "22/10/2025",
+      nationality: "nation2",
+      gender: "FEMALE",
+      dob: "22/10/2025",
+    },
+    {
+      full_name: "test3",
+      passport_no: "789",
+      passport_expiry: "22/10/2025",
+      nationality: "nation3",
+      gender: "MALE",
+      dob: "22/10/2025",
+    },
+  ];
 
   useEffect(() => {
-    getUserData(USER_URL, phoneNumber)
+    getUserData(GET_USER_URL, phoneNumber)
       .then((response) => {
-        for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phoneNumber) {
-            userData = response.data[i];
-          }
-        }
+        userData = response.data[0];
         setDetails(userData);
       })
       .catch((error) => {
@@ -30,6 +58,10 @@ export default function Review() {
 
   const submitData = () => {
     navigate("/success");
+  };
+
+  const onClickSelected = (index) => {
+    setSelectedIndex(index);
   };
 
   return (
@@ -42,6 +74,13 @@ export default function Review() {
       <TextDesc headerText="Review your details" />
 
       <div className="absolute top-36 w-full px-8">
+        {isFamily === true ? (
+          <Carousel
+            nameArr={testFamilyArray}
+            onClickSelected={onClickSelected}
+            selectedIndex={selectedIndex}
+          />
+        ) : null}
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Basic Information</b>
           <b className="text-xl text-right">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { USER_URL } from "../utilities/constants.js";
+import { GET_USER_URL, POST_USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
@@ -26,7 +26,6 @@ export default function Details() {
   let userData;
   let phoneNumber = localStorage.getItem("phoneNumber");
   let isFamily = localStorage.getItem("isFamily") === "true"; //will have to get this info from db de
-  console.log("is family is this: ", isFamily);
 
   //on first render do GET request
   useEffect(() => {
@@ -36,20 +35,10 @@ export default function Details() {
       console.error(error);
     }
 
-    getUserData(USER_URL, phoneNumber)
+    getUserData(GET_USER_URL, phoneNumber)
       .then((response) => {
-        // iterate through response.data and find where the phone_number == phoneNumber
-        for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].phone_number == phoneNumber) {
-            userData = response.data[i];
-          }
-        }
-        setDetails({
-          display_name: userData.display_name,
-          title: userData.title,
-          phone_number: userData.phone_number,
-          email: userData.email,
-        });
+        userData = response.data[0];
+        setDetails(userData);
         reset({
           display_name: userData.display_name,
           title: userData.title,
@@ -64,10 +53,9 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = (data) => {
-    postUserData(USER_URL, data, phoneNumber) //TODO: backend has to setup to intercept HTTP request, to check if user exist or not
+    postUserData(POST_USER_URL, data, phoneNumber) //TODO: backend has to setup to intercept HTTP request, to check if user exist or not
       .then((response) => {
-        //TODO: find a way to update the other pages detail too if phone number changes
-        localStorage.setItem("phoneNumber", data.phone_number);
+        localStorage.setItem("phoneNumber", data.phone_number); //this updates with latest phone number form form
         if (onEdit === true) {
           navigate("/review");
           setOnEdit(false);

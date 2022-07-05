@@ -1,34 +1,50 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  BackButton,
-  AddChildrenButton,
-} from "../components/Buttons.js";
+import {Button,BackButton,AddChildrenButton} from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
+import { getUserData } from "../services/axiosUsers.js";
+import { GET_USER_URL, POST_USER_URL } from "../utilities/constants.js";
+
+
+// TODO: DELETE request to API with childName
+// TODO: Finalise schema of children, figure out whether familyMembers should be a state
 
 export default function Family() {
   const navigate = useNavigate();
-  const [counter, setCounter] = useState(2);
-  const [familyMembers, setFamilyMembers] = useState([]);
+  const [details, setDetails] = useState({});
+  const [familyMembers, setFamilyMembers] = useState([{"name": "child1"}, {"name": "child2"}, {"name": "child3"}]);
 
-  function onEditClick() {
-    console.log("onEditClick clicked lo");
-    navigate("/details");
+  let userData;
+  let phoneNumber = localStorage.getItem("phoneNumber");
+
+  function onEditClick(childName) {
+    navigate("/child", {state: {childName: childName}});
   }
 
-  function onRemoveClick() {
-    console.log("onRemoveClick clicked lo");
-    //remove the element from the list ba
+  function onRemoveClick(childName) {
+    console.log(familyMembers)
+    // iterate through familyMembers array and remove the child with the given name
+    for (let i = 0; i < familyMembers.length; i++) {
+      if (familyMembers[i].name === childName) {
+        setFamilyMembers(familyMembers.slice(0, i).concat(familyMembers.slice(i+1)));
+      }
+    }
+    console.log(familyMembers)
+   
   }
 
   function onAddClick() {
-    console.log("onAddClick clicked lo");
-    setCounter(counter + 1);
-    setFamilyMembers([...familyMembers, { name: `Family Member ${counter}` }]);
-    console.log(familyMembers);
+    navigate("/child");
   }
+  
+  useEffect(() => {
+    getUserData(GET_USER_URL, phoneNumber)
+    .then((response) => {
+      userData = response.data[0];
+      setDetails(userData);
+    })
+  })
 
   return (
     <div>
@@ -38,6 +54,7 @@ export default function Family() {
       </div>
 
       <TextDesc headerText="Family Details" bodyText="ssth sth about family" />
+      
       <div className="absolute top-[25%] w-full px-8 ">
         <b className="text-l">All Family Members</b>
 
@@ -46,21 +63,21 @@ export default function Family() {
             <div className="grid grid-cols-2 px-4">
               <p>Mrs Sally Abbott</p>
               <b className="text-right">
-                <button onClick={onEditClick}>Edit</button>
+                <button onClick={() => navigate("/details")}>Edit</button>
               </b>
             </div>
           </div>
-          {familyMembers.map((member) => {
+          {familyMembers.map((child) => {
             return (
               <div
                 className="rounded outline outline-1 outline-gray-300 py-6"
-                key={member.name}
+                key={child.name}
               >
                 <div className="grid grid-cols-2 px-4">
-                  <p>{member.name}</p>
+                  <p>{child.name}</p>
                   <b className="text-right">
-                    <button onClick={onEditClick}>Edit</button>
-                    <button className="text-gray-300" onClick={onRemoveClick}>
+                    <button onClick={() => onEditClick(child.name)}>Edit</button>
+                    <button className="text-gray-300" onClick={() => onRemoveClick(child.name)}>
                       &nbsp;/ Remove
                     </button>
                   </b>
