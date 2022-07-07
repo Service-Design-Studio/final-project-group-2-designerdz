@@ -11,10 +11,11 @@ import {Button,BackButton} from "../components/Buttons.js";
 export default function ChildDetails() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [validForm, setValidForm] = useState(false);
     const [details, setDetails] = useState({});
     const [onEdit, setOnEdit] = useState(false);
     const [autofill, setAutoFill] = useState(true);
-    const {reset, setValue, register,handleSubmit,formState: { errors },} = useForm();
+    const {reset, getValues, setValue, register,handleSubmit,formState: { errors },} = useForm();
 
     let userData;
     let phoneNumber = localStorage.getItem("phoneNumber");
@@ -45,6 +46,7 @@ export default function ChildDetails() {
 
     const onSubmit = (data) => {
         // TODO: Manipulate data object to only be for child, then point to child api?
+        // TODO: Check if validForm is true, if not, don't post to backend and do not navigate away
         postUserData(POST_USER_URL, data, phoneNumber)
       .then((response) => {
         if (onEdit === true) {
@@ -74,6 +76,16 @@ export default function ChildDetails() {
         }
     }
 
+    const validateInputs = () => {
+      console.log("changing");
+      console.log(getValues())
+      if (getValues().phone_number === "" || getValues().email === "" || getValues().display_name === "") {
+        setValidForm(false);
+      } else {
+        setValidForm(true);
+      }
+    }
+
     return (
         <div>
             <div className="flex flex-end">
@@ -85,7 +97,7 @@ export default function ChildDetails() {
                 bodyText=""
             />
             <div className="grid h-screen place-content-center mx-8">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} onChange={validateInputs}>
           <div>
             <label className="block font-medium">Given Name</label>
 
