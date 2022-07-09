@@ -6,7 +6,6 @@ export async function getUserData(API_URL, phoneNumber) {
 }
 
 export function postUserData(API_URL, data, oldPhoneNumber) {
-  //fill up oldPhoneNumber for details page if phone number changes
   return axios.post(API_URL, data, oldPhoneNumber);
 }
 
