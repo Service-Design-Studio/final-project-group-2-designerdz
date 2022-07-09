@@ -82,7 +82,6 @@ export default function Passport() {
     }
 
     if (familyData[selectedIndex] !== undefined) {
-      console.log(familyData[selectedIndex]);
       setDetails({
         full_name: familyData[selectedIndex].full_name,
         passport_no: familyData[selectedIndex].passport_no,
@@ -135,6 +134,14 @@ export default function Passport() {
     console.log(errors);
   };
 
+  const onBackBtnSelected = () => {
+    if (isFamily) {
+      navigate("/family");
+    } else {
+      navigate("/details");
+    }
+  };
+
   //TODO: finish up logic for carousel view
   //need to post data between different selection of carousel view
   const onClickSelected = (index) => {
@@ -179,7 +186,7 @@ export default function Passport() {
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
       <div className="fixed flex flex-row top-0 left-0 right-0 z-50">
-        <BackButton onClick={() => navigate("/details")} />
+        <BackButton onClick={onBackBtnSelected} />
         <ProgressBar percent="66%" />
       </div>
 

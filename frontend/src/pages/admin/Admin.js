@@ -3,7 +3,7 @@ import axios from "axios";
 export default function Admin() {
   const onClickDelete = () => {
     axios
-      .post() //need replace with deletion url
+      .delete() //need replace with deletion url
       .then((response) => {})
       .catch((error) => {
         console.error(error);
