@@ -20,5 +20,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  # get 'api/v1/profile/:phone_number(.:format)/children/:id(.:format)', to: 'api/v1/children#show'
+  ### routes for Child model
+  get 'parent/:user_id(.:format)', to: 'children#indexChild'
 end
