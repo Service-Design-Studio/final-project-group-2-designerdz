@@ -26,14 +26,18 @@ export default function Family() {
   console.log("userId is " + userId);
 
   useEffect(() => {
-    try {
-      const response = getUserDataId(userId); //TODO: change this to api that gets parent + child details
-      userData = response.data[0];
-      console.log("family userData is: " + userData);
-      setDetails(userData);
-    } catch (error) {
-      console.log(error.reponse);
+    async function fetchData() {
+      try {
+        const response = await getUserDataId(userId); //TODO: change this to api that gets parent + child details
+        userData = response.data[0];
+        console.log("family userData is: " + userData);
+        setDetails(userData);
+      } catch (error) {
+        console.log(error.reponse);
+      }
     }
+
+    fetchData();
 
     // getUserData(GET_USER_URL, phoneNumber).then((response) => {
     //   userData = response.data[0];

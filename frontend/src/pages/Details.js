@@ -35,12 +35,10 @@ export default function Details() {
     }
 
     async function fetchData() {
-      console.log("invoked");
-      console.log("userId is: " + userId);
       try {
         const response = await getUserDataId(userId);
-        console.log("response is this in detail.js" + response.data);
         userData = response.data[0];
+        console.log(userData);
         setDetails(userData);
         reset({
           display_name: userData.display_name,

@@ -45,13 +45,17 @@ export default function Review() {
   ];
 
   useEffect(() => {
-    try {
-      const response = getAllChildrenData(userId);
-      userData = response.data[0];
-      setDetails(userData);
-    } catch (error) {
-      console.log(error.response);
+    async function fetchData() {
+      try {
+        const response = await getAllChildrenData(userId);
+        userData = response.data[0];
+        setDetails(userData);
+      } catch (error) {
+        console.log(error.response);
+      }
     }
+
+    fetchData();
 
     // getUserData(GET_USER_URL, phoneNumber)
     //   .then((response) => {

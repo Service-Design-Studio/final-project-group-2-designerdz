@@ -37,20 +37,24 @@ export default function ChildDetails() {
       console.error(error);
     }
 
-    try {
-      const response = getChildData(childId);
-      childData = response.data[0];
-      setDetails(childData);
-      reset({
-        display_name: childData.display_name,
-        title: childData.title,
-        phone_number: childData.phone_number,
-        email: childData.email,
-        autofill: true,
-      });
-    } catch (error) {
-      console.error(error.response);
+    async function fetchData() {
+      try {
+        const response = await getChildData(childId);
+        childData = response.data[0];
+        setDetails(childData);
+        reset({
+          display_name: childData.display_name,
+          title: childData.title,
+          phone_number: childData.phone_number,
+          email: childData.email,
+          autofill: true,
+        });
+      } catch (error) {
+        console.error(error.response);
+      }
     }
+
+    fetchData();
 
     // getChildData(GET_USER_URL, phoneNumber)
     //   .then((response) => {

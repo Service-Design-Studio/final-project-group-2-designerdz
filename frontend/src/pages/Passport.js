@@ -63,22 +63,25 @@ export default function Passport() {
 
   //on first render do GET request
   useEffect(() => {
+    console.log("useEffect invoked");
     try {
       setOnEdit(location.state.onEdit);
     } catch (error) {
       console.error(error);
     }
 
-    if (familyData.length === 0) {
+    async function fetchData() {
       try {
-        const response = getAllChildrenData(userId); //TODO: replace this with call to get parent + child data
-        console.log("passport useEffect: " + response.data);
+        const response = await getAllChildrenData(userId); //TODO: replace this with call to get parent + child data
         setFamilyData(response.data);
       } catch (error) {
         // setFamilyData(testFamilyArray); //TODO: remove this
         console.log(error.response);
       }
+    }
 
+    if (familyData.length === 0) {
+      fetchData();
       // getUserData(GET_USER_URL, phoneNumber)
       //   .then((response) => {
       //     // setFamilyData(testFamilyArray); //TODO: replace testFamilyArray with response.data
@@ -97,13 +100,13 @@ export default function Passport() {
       });
 
       // TODO: need to uncomment the dates part after database done with schema
-      details["passport_expiry"] !== undefined
-        ? setPassportDate(new Date())
-        : setPassportDate(new Date(familyData[selectedIndex].passport_expiry));
+      // details["passport_expiry"] !== undefined
+      //   ? setPassportDate(new Date())
+      //   : setPassportDate(new Date(familyData[selectedIndex].passport_expiry));
 
-      details["dob"] !== undefined
-        ? setBirthDate(new Date())
-        : setBirthDate(new Date(familyData[selectedIndex].dob));
+      // details["dob"] !== undefined
+      //   ? setBirthDate(new Date())
+      //   : setBirthDate(new Date(familyData[selectedIndex].dob));
 
       details["gender"] === undefined
         ? setCurGender(familyData[selectedIndex].gender)
@@ -115,7 +118,7 @@ export default function Passport() {
         nationality: familyData[selectedIndex].nationality,
       });
     }
-  }, [selectedIndex, familyData]);
+  }, [selectedIndex]);
 
   //to post the data
   const onSubmit = (data) => {
