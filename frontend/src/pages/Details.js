@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { GET_USER_URL, POST_USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
 import {
   postUserData,
-  getUserData,
   patchUserData,
+  getUserDataId,
 } from "../services/axiosUsers.js";
 
 export default function Details() {
@@ -24,8 +23,8 @@ export default function Details() {
     formState: { errors },
   } = useForm();
   let userData;
-  let phoneNumber = localStorage.getItem("phoneNumber");
-  let isFamily = localStorage.getItem("isFamily") === "true"; //will have to get this info from db de
+  let userId = localStorage.getItem("user_id");
+  let isFamily = localStorage.getItem("is_family") === "true"; //will have to get this info from db de
 
   //on first render do GET request
   useEffect(() => {
@@ -35,8 +34,12 @@ export default function Details() {
       console.error(error);
     }
 
-    getUserData(GET_USER_URL, phoneNumber)
-      .then((response) => {
+    async function fetchData() {
+      console.log("invoked");
+      console.log("userId is: " + userId);
+      try {
+        const response = await getUserDataId(userId);
+        console.log("response is this in detail.js" + response.data);
         userData = response.data[0];
         setDetails(userData);
         reset({
@@ -45,32 +48,76 @@ export default function Details() {
           phone_number: userData.phone_number,
           email: userData.email,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
+
+    fetchData();
+
+    // getUserData(GET_USER_URL, userId)
+    //   .then((response) => {
+    //     userData = response.data[0];
+    //     setDetails(userData);
+    //     reset({
+    //       display_name: userData.display_name,
+    //       title: userData.title,
+    //       phone_number: userData.phone_number,
+    //       email: userData.email,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }, []);
 
   //post request to database backend
-  const onSubmit = (data) => {
-    postUserData(POST_USER_URL, data, phoneNumber) //TODO: backend has to setup to intercept HTTP request, to check if user exist or not
-      .then((response) => {
-        localStorage.setItem("phoneNumber", data.phone_number); //this updates with latest phone number form form
-        if (onEdit === true) {
-          navigate("/review");
-          setOnEdit(false);
-        } else {
-          if (isFamily === true) {
-            navigate("/family");
-          } else {
-            navigate("/passport");
-          }
-        }
-      })
-      .catch((error) => {
-        alert(error);
-        console.log(error);
-      });
+  const onSubmit = async (data) => {
+    console.log(userId == null);
+    if (userId == null) {
+      try {
+        const response = await postUserData(data);
+        localStorage.setItem("user_id", response.data.id);
+      } catch (error) {
+        console.log(error.response);
+      }
+    } else {
+      try {
+        patchUserData(data, userId);
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
+
+    if (onEdit === true) {
+      navigate("/review");
+      setOnEdit(false);
+    } else {
+      if (isFamily === true) {
+        navigate("/family");
+      } else {
+        navigate("/passport");
+      }
+    }
+
+    // postUserData(POST_USER_URL, data, userId) //TODO: backend has to setup to intercept HTTP request, to check if user exist or not
+    //   .then((response) => {
+    //     localStorage.setItem("userId", data.phone_number); //this updates with latest phone number form form
+    //     if (onEdit === true) {
+    //       navigate("/review");
+    //       setOnEdit(false);
+    //     } else {
+    //       if (isFamily === true) {
+    //         navigate("/family");
+    //       } else {
+    //         navigate("/passport");
+    //       }
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     alert(error);
+    //     console.log(error);
+    //   });
   };
 
   return (

@@ -1,13 +1,13 @@
-import axios from "axios";
+import { deleteAllData } from "../../services/axiosUsers";
 
 export default function Admin() {
   const onClickDelete = () => {
-    axios
-      .delete() //need replace with deletion url
-      .then((response) => {})
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      deleteAllData();
+      alert("You have successfully deleted all data in database!!");
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   return (

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {Button,BackButton,AddChildrenButton} from "../components/Buttons.js";
+import {
+  Button,
+  BackButton,
+  AddChildrenButton,
+} from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
-import { getUserData } from "../services/axiosUsers.js";
-import { GET_USER_URL, POST_USER_URL } from "../utilities/constants.js";
-
+import { getUserDataId } from "../services/axiosUsers.js";
 
 // TODO: DELETE request to API with childName
 // TODO: Finalise schema of children, figure out whether familyMembers should be a state
@@ -13,48 +15,66 @@ import { GET_USER_URL, POST_USER_URL } from "../utilities/constants.js";
 export default function Family() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
-  const [familyMembers, setFamilyMembers] = useState([{"name": "child1"}, {"name": "child2"}, {"name": "child3"}]);
+  const [familyMembers, setFamilyMembers] = useState([
+    { name: "child1" },
+    { name: "child2" },
+    { name: "child3" },
+  ]);
 
   let userData;
-  let phoneNumber = localStorage.getItem("phoneNumber");
+  let userId = localStorage.getItem("user_id");
+  console.log("userId is " + userId);
 
-  function onEditClick(childName) {
-    navigate("/child", {state: {childName: childName}});
+  useEffect(() => {
+    try {
+      const response = getUserDataId(userId); //TODO: change this to api that gets parent + child details
+      userData = response.data[0];
+      console.log("family userData is: " + userData);
+      setDetails(userData);
+    } catch (error) {
+      console.log(error.reponse);
+    }
+
+    // getUserData(GET_USER_URL, phoneNumber).then((response) => {
+    //   userData = response.data[0];
+    //   setDetails(userData);
+    // });
+  });
+
+  //TODO: need to pass childId to "/child"
+  function onEditClick(childId) {
+    navigate("/child", {
+      state: { phoneNumber: details[0].id, childId: childId },
+    });
   }
 
   function onRemoveClick(childName) {
-    console.log(familyMembers)
+    console.log(familyMembers);
     // iterate through familyMembers array and remove the child with the given name
     for (let i = 0; i < familyMembers.length; i++) {
       if (familyMembers[i].name === childName) {
-        setFamilyMembers(familyMembers.slice(0, i).concat(familyMembers.slice(i+1)));
+        setFamilyMembers(
+          familyMembers.slice(0, i).concat(familyMembers.slice(i + 1))
+        );
       }
     }
-    console.log(familyMembers)
-   
+    //TODO: rmb to do api call to delete child data
+    console.log(familyMembers);
   }
 
   function onAddClick() {
-    navigate("/child");
+    navigate("/child", { state: { phoneNumber: details[0].id } });
   }
-  
-  useEffect(() => {
-    getUserData(GET_USER_URL, phoneNumber)
-    .then((response) => {
-      userData = response.data[0];
-      setDetails(userData);
-    })
-  })
 
   return (
     <div>
       <div className="flex flex-end">
-        <BackButton onClick={() => navigate("/signup")} />
+        <BackButton onClick={() => navigate("/details")} />
         <ProgressBar percent="33%" />
       </div>
 
       <TextDesc headerText="Family Details" bodyText="ssth sth about family" />
-      
+
       <div className="absolute top-[25%] w-full px-8 ">
         <b className="text-l">All Family Members</b>
 
@@ -76,8 +96,11 @@ export default function Family() {
                 <div className="grid grid-cols-2 px-4">
                   <p>{child.name}</p>
                   <b className="text-right">
-                    <button onClick={() => onEditClick(child.name)}>Edit</button>
-                    <button className="text-gray-300" onClick={() => onRemoveClick(child.name)}>
+                    <button onClick={() => onEditClick(child.id)}>Edit</button>
+                    <button
+                      className="text-gray-300"
+                      onClick={() => onRemoveClick(child.name)}
+                    >
                       &nbsp;/ Remove
                     </button>
                   </b>

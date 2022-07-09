@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { GET_USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton, EditButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
-import { getUserData } from "../services/axiosUsers.js";
+import { getAllChildrenData } from "../services/axiosUsers.js";
 import { getMonthYear, getDateMonthYear } from "../utilities/dateHelper.js";
 import Carousel from "../components/Carousel";
 
@@ -14,8 +13,8 @@ export default function Review() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
   let userData;
-  let phoneNumber = localStorage.getItem("phoneNumber");
-  let isFamily = localStorage.getItem("isFamily") === "true";
+  let userId = localStorage.getItem("user_id");
+  let isFamily = localStorage.getItem("is_family") === "true";
 
   //TODO: delete mock data after testings, to simulate how response.data would look like
   let testFamilyArray = [
@@ -46,14 +45,22 @@ export default function Review() {
   ];
 
   useEffect(() => {
-    getUserData(GET_USER_URL, phoneNumber)
-      .then((response) => {
-        userData = response.data[0];
-        setDetails(userData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const response = getAllChildrenData(userId);
+      userData = response.data[0];
+      setDetails(userData);
+    } catch (error) {
+      console.log(error.response);
+    }
+
+    // getUserData(GET_USER_URL, phoneNumber)
+    //   .then((response) => {
+    //     userData = response.data[0];
+    //     setDetails(userData);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }, []);
 
   const submitData = () => {
