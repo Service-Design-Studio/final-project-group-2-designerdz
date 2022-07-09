@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-  resources :children
   namespace :api do #domain/api/
     namespace :v1 do #domain/api/v1
       # resource routing, declare common routes e.g. get,post,put,delete
       resources :users #domain/api/v1/users 
-
+    
     end 
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -19,6 +18,4 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
-
-  # get 'api/v1/profile/:phone_number(.:format)/children/:id(.:format)', to: 'api/v1/children#show'
 end

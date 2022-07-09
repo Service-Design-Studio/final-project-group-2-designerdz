@@ -3,6 +3,5 @@ class User < ApplicationRecord
 # another method to define an accepted array of inputs to return for passport.js
 # make sure phone number is unique when doing a post request
 # use phone number as primary key instead
-    has_many :children
 
 end
