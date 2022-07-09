@@ -18,3 +18,15 @@ more_movies = [
 more_movies.each do |t|
     User.create(t)
 end
+
+
+add_children = [
+  {:user_id => '1', :display_name => 'Child1', :title => 'Mr', :email => 'child1@gmail.com', :phone_number => '91234567'},
+  {:user_id => '1', :display_name => 'Child2', :title => 'Mr', :email => 'child1@gmail.com', :phone_number => '91234567'},
+  {:user_id => '2', :display_name => 'testchild', :title => 'Mr', :email => 'testchild1@gmail.com', :phone_number => '89877855'},
+  {:user_id => '3', :display_name => 'testchild2', :title => 'Mr', :email => 'testchild2@gmail.com', :phone_number => '39877855'} # does not work if user[id] 3 does not exist
+]
+
+add_children.each do |t|
+    Child.create(t)
+end
