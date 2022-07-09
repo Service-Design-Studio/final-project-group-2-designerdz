@@ -3,12 +3,19 @@ Setup using instructions in https://tailwindcss.com/docs/guides/create-react-app
 
 ## For backend routes
 
-Controller actions/methods by convention is done on **users_controller.rb**
+### Controller actions/methods for parent is done on **users_controller.rb**
+### Controller actions/methods for child is done on **children_controller.rb**
+
+
 
 ## A few definitions to state
-- Database Model name is called **User**, every CRUD action is performed on it e.g. User.new(params), User.all etc
-### in users_controller.rb
-- set_user() method defines an attribute **@user** that defines a specific activerecord row according to params[:id]
+
+### in models/child.rb or user.rb
+- Database Model for parent is **User**, child is **Child**. Every CRUD action is performed on it e.g. User.new(params), User.all etc. <br />
+- Every controller has access to each other's model because of association (belongs_to :user, has_many :children) declared in the respective files
+
+### in users_controller.rb/children_controller.rb
+- set_user() method defines an attribute **@user** that defines a specific activerecord row according to params[:id]  <br />
 - user_params() method is used to define the accepted keys/symbol from the JSON acquired from form data
 
 
@@ -28,8 +35,9 @@ Controller actions/methods by convention is done on **users_controller.rb**
 > **localhost:3000/api/v1/profile/:phone_number** ; calls the action users#update and updates the activerecord row based on phone number
 
 **DELETE request with phone number**
-> **localhost:3000/api/v1/profile/:phone_number** ; locates record by phone_number,  calls the action users#delete and removes record
-> e.g. curl -X DELETE http://127.0.0.1:3000/api/v1/profile/91234567 using terminal
+> **localhost:3000/api/v1/profile/detele** ; **WARNING** deletes ALL record in the database,  calls the action users#delete and removes record <br />
+> It firsts deletes the Child's data followed by the parents <br />
+> e.g. curl -X DELETE http://127.0.0.1:3000/api/v1/profile/delete using terminal
 
 ## How to access activerecord on terminal
 - bundle exec rails console
@@ -46,11 +54,6 @@ This command performs a PATCH request to the specified URL with data field "full
 The headers are exactly what is used when passing the JSON data from frontend to rails endpoint API.
 
 **| id | display_name | title | email | phone_number | full_name | passport_no | passport_expiry | nationality | gender | dob |**
-
-# TODO:
-
-
-1. **Next Sprint**: Multi-user registration, nested database is expected, how to populate and retrieve data from activerecord
 
 
 
