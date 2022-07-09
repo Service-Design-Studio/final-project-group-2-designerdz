@@ -51,7 +51,10 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /api/v1/profie/:phone_number
   def destroy
-    @user.where(phone_number: params['phone_number']).destroy_all
+    @delete_child = Child.delete_all
+    @users = User.delete_all
+
+    render json: @users
   end
 
   private
