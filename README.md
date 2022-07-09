@@ -37,7 +37,7 @@ in users_controller.rb/children_controller.rb
 **DELETE request with phone number**
 > **localhost:3000/api/v1/profile/detele** ; **WARNING** deletes ALL record in the database,  calls the action users#delete and removes record <br />
 > It firsts deletes the Child's data followed by the parents <br />
-> e.g. curl -X DELETE http://127.0.0.1:3000/api/v1/profile/delete using terminal
+> e.g. `curl -X DELETE http://127.0.0.1:3000/api/v1/profile/delete` using terminal
 
 ### API endpoints for child
 
@@ -54,12 +54,12 @@ in users_controller.rb/children_controller.rb
 > Customized method created to return all of parent's children specified by :user_id
 
 ## How to access activerecord on terminal
-- bundle exec rails console
-- User.all  --> returns all records
+- `bundle exec rails console`
+- `User.all`  --> returns all records
 
 ## How to get/post/update/delete rails API using cURL without the need of a frontend form
 Type this command in the terminal:
-- curl -d"user[full_name]=dyima" -X PATCH http://127.0.0.1:3000/api/v1/profile/98765432
+- `curl -d"user[full_name]=dyima" -X PATCH http://127.0.0.1:3000/api/v1/profile/98765432`
 This command performs a PATCH request to the specified URL with data field "full_name": dyima
 -d flag is to write to the URL
 - Awesome curl tutorial: https://gist.github.com/subfuzion/08c5d85437d5d4f00e58
@@ -80,9 +80,9 @@ The headers are exactly what is used when passing the JSON data from frontend to
 
 > These are used to install the dependencies before installing PostgreSQL
 
-sudo apt install wget ca-certificates <br />
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - <br />
-sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' <br />
+`sudo apt install wget ca-certificates` <br />
+`wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -`<br />
+`sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'` <br />
 
 > Installing PostgreSQL, the command installs the latest version of it
 
