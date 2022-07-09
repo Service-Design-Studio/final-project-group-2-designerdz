@@ -30,8 +30,7 @@ class Api::V1::UsersController < ApplicationController
         render json: @user, status: :created, location: @user
       else
         render json: @user.errors, status: :unprocessable_entity
-      end
-    end 
+      end 
 
     
   end 
