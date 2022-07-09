@@ -3,6 +3,7 @@ class ChildrenController < ApplicationController
 
   # GET /children
   def index
+    # hardcoded value to associate child with parent id of '1', can be replaced with params[:id] once a POST is made
     @parent_phone_number = User.where(id: '1')
     #@children = Child.all
     # refine this
