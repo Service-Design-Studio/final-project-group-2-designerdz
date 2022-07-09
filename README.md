@@ -18,11 +18,12 @@ Setup using instructions in https://tailwindcss.com/docs/guides/create-react-app
 - set_user() method defines an attribute **@user** that defines a specific activerecord row according to params[:id]  <br />
 - user_params() method is used to define the accepted keys/symbol from the JSON acquired from form data
 
+### API endpoints for parent
 
 **Endpoint API for GET request**
 > **localhost:3000/api/v1/users**
 > returns **all** existing records in ActiveRecord by calling User.all and renders the json request
-> 
+
 **POST request**
 > Need to explicity declare the route for POST in **routes.rb**, resources :users does not automatically declare this for you not sure why.
 > Upon clicking next in web-app, users#create controller action is invoked, specifically api/v1/users#create;
@@ -38,6 +39,12 @@ Setup using instructions in https://tailwindcss.com/docs/guides/create-react-app
 > **localhost:3000/api/v1/profile/detele** ; **WARNING** deletes ALL record in the database,  calls the action users#delete and removes record <br />
 > It firsts deletes the Child's data followed by the parents <br />
 > e.g. curl -X DELETE http://127.0.0.1:3000/api/v1/profile/delete using terminal
+
+### API endpoints for child
+
+**GET request for #indexChild**
+> **localhost:3000/parent/:user_id** <br />
+> Customized method created to return all of parent's children specified by :user_id
 
 ## How to access activerecord on terminal
 - bundle exec rails console
