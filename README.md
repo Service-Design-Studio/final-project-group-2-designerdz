@@ -3,18 +3,17 @@ Setup using instructions in https://tailwindcss.com/docs/guides/create-react-app
 
 ## For backend routes
 
-### Controller actions/methods for parent is done on **users_controller.rb**
-### Controller actions/methods for child is done on **children_controller.rb**
-
+Controller actions/methods for parent is done on **users_controller.rb**
+Controller actions/methods for child is done on **children_controller.rb**
 
 
 ## A few definitions to state
 
-### in models/child.rb or user.rb
+in models/child.rb or user.rb
 - Database Model for parent is **User**, child is **Child**. Every CRUD action is performed on it e.g. User.new(params), User.all etc. <br />
 - Every controller has access to each other's model because of association (belongs_to :user, has_many :children) declared in the respective files
 
-### in users_controller.rb/children_controller.rb
+in users_controller.rb/children_controller.rb
 - set_user() method defines an attribute **@user** that defines a specific activerecord row according to params[:id]  <br />
 - user_params() method is used to define the accepted keys/symbol from the JSON acquired from form data
 
@@ -41,6 +40,14 @@ Setup using instructions in https://tailwindcss.com/docs/guides/create-react-app
 > e.g. curl -X DELETE http://127.0.0.1:3000/api/v1/profile/delete using terminal
 
 ### API endpoints for child
+
+**GET request for #index**
+> **localhost:3000/children
+> Returns all records of children in one table, no filter
+
+**GET request for #show**
+> **localhost:3000/children/:id
+> Return 1 record of child by specifying the id
 
 **GET request for #indexChild**
 > **localhost:3000/parent/:user_id** <br />
