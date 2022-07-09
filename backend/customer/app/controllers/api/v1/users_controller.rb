@@ -19,19 +19,19 @@ class Api::V1::UsersController < ApplicationController
   def create
     # checks if user exists when client press 'Next', since frontend can't differentiate whether it's a POST or PATCH
     # the params[:id] is to handle case when user edits their phone number
-    if (User.exists?(phone_number: params[:phone_number]) || User.exists?(id: params[:id]))
-      @user = User.where(id: params['id'])
-      @user.update(user_params)
+    # if (User.exists?(phone_number: params[:phone_number]) || User.exists?(id: params[:id]))
+    #   @user = User.where(id: params['id'])
+    #   @user.update(user_params)
   
     # creates a new record if it dosen't exist  
-    else
+    # else
       @user = User.new(user_params)
       if @user.save
         render json: @user, status: :created, location: @user
       else
         render json: @user.errors, status: :unprocessable_entity
       end
-    end
+    end 
 
     
   end 
