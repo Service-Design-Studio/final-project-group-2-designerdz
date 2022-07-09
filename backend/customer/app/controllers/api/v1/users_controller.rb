@@ -9,7 +9,7 @@ class Api::V1::UsersController < ApplicationController
     render json: @users
   end
 
-  # GET /profile/:phone_number
+  # GET /profile/:id
   def show
     render json: @user
   end
@@ -17,17 +17,13 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /users ## when users click on next after submitting phone number
   def create
-    if User.exists?(phone_number: params[:phone_number])
-      # frontend pass primary key as a param e.g. params[:id], then i will check if the id or phone number exists in db,
-      # if exists, allow user to update phone number.
-       
-      # if user edits phone number, it creates a new record instead, find a way to allow them to edit
-      # use ID and phone number as checking conditions?
-      # extract primary key after finding phone_number
-      @user = User.where(phone_number: params['phone_number'])
-      # @id = @user['id']
+    # checks if user exists when client press 'Next', since frontend can't differentiate whether it's a POST or PATCH
+    # the params[:id] is to handle case when user edits their phone number
+    if (User.exists?(phone_number: params[:phone_number]) || User.exists?(id: params[:id]))
+      @user = User.where(id: params['id'])
       @user.update(user_params)
   
+    # creates a new record if it dosen't exist  
     else
       @user = User.new(user_params)
       if @user.save
@@ -38,7 +34,7 @@ class Api::V1::UsersController < ApplicationController
     end
 
     
-  end
+  end 
 
   # PATCH/PUT /api/v1/profie/:phone_number ## when users click on next buttons
   def update
@@ -60,7 +56,7 @@ class Api::V1::UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.where(phone_number: params['phone_number'])
+      @user = User.where(id: params['id'])
     end
 
     # Assigns a list of allowable attributes through.
