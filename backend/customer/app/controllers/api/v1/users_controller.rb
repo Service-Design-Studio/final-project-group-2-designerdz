@@ -49,7 +49,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # DELETE /api/v1/profie/:phone_number
+  # DELETE /api/v1/profie/delete
   def destroy
     @delete_child = Child.delete_all
     @users = User.delete_all

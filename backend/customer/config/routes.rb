@@ -21,5 +21,6 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   ### routes for Child model
+  # catergorizes based on user_id field and returns all record of that parent's children
   get 'parent/:user_id(.:format)', to: 'children#indexChild'
 end
