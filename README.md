@@ -29,12 +29,12 @@ in users_controller.rb/children_controller.rb
 > Adds a new record by calling User.new() in the **create** action
 
 **GET request with phone number**
-> **localhost:3000/api/v1/profile/:phone_number** ; returns the entire record based on the provide :phone number params
+> **localhost:3000/api/v1/users** 
 
-**PATCH request with phone number**
-> **localhost:3000/api/v1/profile/:phone_number** ; calls the action users#update and updates the activerecord row based on phone number
+**PATCH requestr**
+> **localhost:3000/api/v1/users/:id** ; calls the action users#update and updates the activerecord row based on id
 
-**DELETE request with phone number**
+**DELETE request**
 > **localhost:3000/api/v1/profile/detele** ; **WARNING** deletes ALL record in the database,  calls the action users#delete and removes record <br />
 > It firsts deletes the Child's data followed by the parents <br />
 > e.g. `curl -X DELETE http://127.0.0.1:3000/api/v1/profile/delete` using terminal
@@ -42,16 +42,23 @@ in users_controller.rb/children_controller.rb
 ### API endpoints for child
 
 **GET request for #index**
-> **localhost:3000/children
+> **localhost:3000/children**
 > Returns all records of children in one table, no filter
 
 **GET request for #show**
-> **localhost:3000/children/:id
+> **localhost:3000/children/:id**
 > Return 1 record of child by specifying the id
 
 **GET request for #indexChild**
 > **localhost:3000/parent/:user_id** <br />
 > Customized method created to return all of parent's children specified by :user_id
+
+**POST request for #create**
+> **localhost:3000/children** <br />
+> POST requires requires that you specify the parent's ID. e.g. give the field `user_id:1` to indicate it belongs to parent with id 1 <br />
+> `curl -d"child[user_id]=1&child[full_name]=dyima" -X POST http://127.0.0.1:3000/children` example using curl
+
+
 
 ## How to access activerecord on terminal
 - `bundle exec rails console`
@@ -59,7 +66,7 @@ in users_controller.rb/children_controller.rb
 
 ## How to get/post/update/delete rails API using cURL without the need of a frontend form
 Type this command in the terminal:
-- `curl -d"user[full_name]=dyima" -X PATCH http://127.0.0.1:3000/api/v1/profile/98765432`
+- `curl -d"user[full_name]=dyima" -X PATCH http://127.0.0.1:3000/api/v1/users/1`
 This command performs a PATCH request to the specified URL with data field "full_name": dyima
 -d flag is to write to the URL
 - Awesome curl tutorial: https://gist.github.com/subfuzion/08c5d85437d5d4f00e58
