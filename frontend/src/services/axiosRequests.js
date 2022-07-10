@@ -27,11 +27,10 @@ export function postUserData(data) {
 //update existing entry using id
 export function patchUserData(data, userId) {
   const API_URL = USER_API.concat("/" + userId);
-  data = JSON.parse(data);
   return axios.patch(API_URL, data);
 }
 
-//get child data using userId and childId
+//get child data using childId
 export function getChildData(childId) {
   const API_URL = CHILD_API.concat("/" + childId);
   return axios.get(API_URL);
@@ -43,7 +42,7 @@ export function getAllChildrenData(userId) {
   return axios.get(API_URL);
 }
 
-//create new child entry
+//create new child entry using parent id
 export function postChildData(data, parentId) {
   data["user_id"] = parentId;
   return axios.post(CHILD_API, data);
@@ -52,7 +51,7 @@ export function postChildData(data, parentId) {
 //update existing child entry using child id
 export function patchChildData(data, childId) {
   const API_URL = CHILD_API.concat("/" + childId);
-  data = JSON.parse(data);
+  // data = JSON.parse(data);
   return axios.patch(API_URL, data);
 }
 

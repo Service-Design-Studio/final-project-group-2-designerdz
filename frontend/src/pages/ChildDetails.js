@@ -29,7 +29,7 @@ export default function ChildDetails() {
   let childData;
   let parentId = location.state.parent_id;
   let childId = location.state.child_id;
-  let phoneNumber = location.state.phoneNumber;
+  let phoneNumber = location.state.phone_number;
   let email = location.state.email;
 
   useEffect(() => {

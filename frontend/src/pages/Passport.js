@@ -34,36 +34,11 @@ export default function Passport() {
   let userId = localStorage.getItem("user_id");
   let isFamily = localStorage.getItem("is_family") === "true";
 
-  //TODO: delete mock data after testings, to simulate how response.data would look like
-  let testFamilyArray = [
-    {
-      full_name: "test1",
-      passport_number: "123",
-      passport_expiry: "22/10/2025",
-      nationality: "nation",
-      gender: "FEMALE",
-      dob: "22/10/2025",
-    },
-    {
-      full_name: "test2",
-      passport_number: "456",
-      passport_expiry: "22/10/2025",
-      nationality: "nation2",
-      gender: "FEMALE",
-      dob: "22/10/2025",
-    },
-    {
-      full_name: "test3",
-      passport_number: "789",
-      passport_expiry: "22/10/2025",
-      nationality: "nation3",
-      gender: "MALE",
-      dob: "22/10/2025",
-    },
-  ];
-
   //on first render do GET request
   useEffect(() => {
+    console.log("useEffect() called");
+    console.log(familyData[1]);
+
     try {
       setOnEdit(location.state.onEdit);
     } catch (error) {
@@ -72,8 +47,7 @@ export default function Passport() {
 
     async function fetchData() {
       try {
-        // const response = await getAllChildrenData(userId); //TODO: replace this with call to get parent + child data
-        const response = await getUserDataId(userId); //TODO: remove this)
+        const response = await getAllChildrenData(userId);
         setFamilyData(response.data);
       } catch (error) {
         console.log(error.response);
@@ -91,7 +65,6 @@ export default function Passport() {
         nationality: familyData[selectedIndex].nationality,
       });
 
-      // TODO: need to uncomment the dates part after database done with schema
       details["passport_expiry"] !== undefined
         ? setPassportDate(new Date())
         : setPassportDate(new Date(familyData[selectedIndex].passport_expiry));
@@ -112,6 +85,8 @@ export default function Passport() {
     }
   }, [selectedIndex, familyData]);
 
+  console.log("familyData is " + familyData);
+
   //to post the data
   const onSubmit = async (data) => {
     console.log("selectedIndex in onSubmit is:", selectedIndex);
@@ -122,10 +97,6 @@ export default function Passport() {
       dob: birthDate,
       gender: curGender,
     });
-    // data["passport_expiry"] = passportDate;
-    // data["dob"] = birthDate;
-    // data["gender"] = curGender;
-    console.log("data is " + data);
     if (selectedIndex === 0) {
       try {
         const response = await patchUserData(data, userId);
@@ -160,35 +131,51 @@ export default function Passport() {
 
   //TODO: finish up logic for carousel view
   //need to post data between different selection of carousel view
-  const onClickSelected = (index) => {
+  const onClickSelected = async (index) => {
     let data = getValues();
     data["passport_expiry"] = passportDate;
     data["dob"] = birthDate;
     data["gender"] = curGender;
+    let copyFamilyData = familyData.slice();
+
+    const updateFamilyData = (memberData, data) => {
+      for (const key in memberData) {
+        if (memberData[key] == undefined) {
+          memberData[key] = data[key];
+        }
+      }
+      return memberData;
+    };
 
     //indicating parent
-    if (index === 0) {
+    if (selectedIndex === 0) {
       try {
-        patchUserData(data, userId);
-        const copyFamilyData = familyData.slice();
-        copyFamilyData[selectedIndex] = data; //update familyData in useState
-        setFamilyData(copyFamilyData);
+        await patchUserData(data, userId);
+        // const copyFamilyData = familyData.slice();
+        copyFamilyData[selectedIndex] = updateFamilyData(
+          copyFamilyData[selectedIndex],
+          data
+        );
+        // setFamilyData(copyFamilyData);
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
       }
     }
     //indicating child
     else {
       try {
-        patchChildData(data, familyData[index].id);
-        const copyFamilyData = familyData.slice();
-        copyFamilyData[selectedIndex] = data; //update familyData in useState
-        setFamilyData(copyFamilyData);
+        await patchChildData(data, familyData[selectedIndex].id);
+        // const copyFamilyData = familyData.slice();
+        copyFamilyData[selectedIndex] = updateFamilyData(
+          copyFamilyData[selectedIndex],
+          data
+        );
+        // setFamilyData(copyFamilyData);
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
       }
     }
-
+    setFamilyData(copyFamilyData);
     setSelectedIndex(index);
   };
 

@@ -61,7 +61,13 @@ export default function Family() {
   }
 
   function onAddClick() {
-    navigate("/child", { state: { parent_id: details.id } });
+    navigate("/child", {
+      state: {
+        parent_id: details.id,
+        phone_number: details.phone_number,
+        email: details.email,
+      },
+    });
   }
 
   return (
