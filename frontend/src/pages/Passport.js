@@ -9,7 +9,6 @@ import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
 import {
   patchUserData,
-  getUserDataId,
   getAllChildrenData,
   patchChildData,
 } from "../services/axiosRequests.js";
@@ -36,9 +35,6 @@ export default function Passport() {
 
   //on first render do GET request
   useEffect(() => {
-    console.log("useEffect() called");
-    console.log(familyData[1]);
-
     try {
       setOnEdit(location.state.onEdit);
     } catch (error) {
@@ -85,29 +81,22 @@ export default function Passport() {
     }
   }, [selectedIndex, familyData]);
 
-  console.log("familyData is " + familyData);
-
   //to post the data
   const onSubmit = async (data) => {
-    console.log("selectedIndex in onSubmit is:", selectedIndex);
-    data = JSON.stringify({
-      full_name: data.full_name,
-      passport_number: data.passport_number,
-      passport_expiry: passportDate,
-      dob: birthDate,
-      gender: curGender,
-    });
+    data = getValues();
+    data["passport_expiry"] = passportDate;
+    data["dob"] = birthDate;
+    data["gender"] = curGender;
     if (selectedIndex === 0) {
       try {
-        const response = await patchUserData(data, userId);
-        console.log("response is " + response);
+        await patchUserData(data, userId);
       } catch (error) {
         alert(error);
         console.log(error.response);
       }
     } else {
       try {
-        patchChildData(data, familyData[selectedIndex].id);
+        await patchChildData(data, familyData[selectedIndex].id);
       } catch (error) {
         console.log(error.response);
       }
@@ -129,8 +118,6 @@ export default function Passport() {
     }
   };
 
-  //TODO: finish up logic for carousel view
-  //need to post data between different selection of carousel view
   const onClickSelected = async (index) => {
     let data = getValues();
     data["passport_expiry"] = passportDate;
@@ -140,7 +127,7 @@ export default function Passport() {
 
     const updateFamilyData = (memberData, data) => {
       for (const key in memberData) {
-        if (memberData[key] == undefined) {
+        if (data[key] != undefined) {
           memberData[key] = data[key];
         }
       }
@@ -151,12 +138,10 @@ export default function Passport() {
     if (selectedIndex === 0) {
       try {
         await patchUserData(data, userId);
-        // const copyFamilyData = familyData.slice();
         copyFamilyData[selectedIndex] = updateFamilyData(
           copyFamilyData[selectedIndex],
           data
         );
-        // setFamilyData(copyFamilyData);
       } catch (error) {
         console.log(error);
       }
@@ -165,12 +150,10 @@ export default function Passport() {
     else {
       try {
         await patchChildData(data, familyData[selectedIndex].id);
-        // const copyFamilyData = familyData.slice();
         copyFamilyData[selectedIndex] = updateFamilyData(
           copyFamilyData[selectedIndex],
           data
         );
-        // setFamilyData(copyFamilyData);
       } catch (error) {
         console.log(error);
       }

@@ -33,20 +33,18 @@ export default function Review() {
           }
         }
       } else {
-        // if (details.length === 0) {
         try {
           const response = await getUserDataId(userId);
           userData = response.data[0];
           setDetails(userData);
         } catch (error) {
-          console.log(error.response);
+          console.log(error);
         }
-        // }
       }
     }
     fetchData();
     setDetails(familyData[selectedIndex]);
-  }, [details, familyData]);
+  }, [familyData]);
 
   const submitData = () => {
     navigate("/success");

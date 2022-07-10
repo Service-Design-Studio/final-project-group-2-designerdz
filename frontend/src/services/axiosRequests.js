@@ -37,8 +37,8 @@ export function getChildData(childId) {
 }
 
 //get all children of a parent using user id
-export function getAllChildrenData(userId) {
-  const API_URL = CHILDREN_API.concat("/" + userId);
+export function getAllChildrenData(parentId) {
+  const API_URL = CHILDREN_API.concat("/" + parentId);
   return axios.get(API_URL);
 }
 
