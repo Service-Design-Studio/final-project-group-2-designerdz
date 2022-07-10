@@ -7,7 +7,7 @@ import {
 } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
-import { getUserDataId } from "../services/axiosRequests.js";
+import { getUserDataId, getAllChildrenData, deleteChildData } from "../services/axiosRequests.js";
 
 // TODO: DELETE request to API with childName
 // TODO: Finalise schema of children, figure out whether familyMembers should be a state
@@ -15,59 +15,59 @@ import { getUserDataId } from "../services/axiosRequests.js";
 export default function Family() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
-  const [familyMembers, setFamilyMembers] = useState([
-    { name: "child1" },
-    { name: "child2" },
-    { name: "child3" },
-  ]);
+  const [familyMembers, setFamilyMembers] = useState([]);
 
   let userData;
+  let childrenData;
   let userId = localStorage.getItem("user_id");
   console.log("userId is " + userId);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getUserDataId(userId); //TODO: change this to api that gets parent + child details
-        userData = response.data[0];
-        console.log("family userData is: " + userData);
+        // Get Parent Data
+        const user_response = await getUserDataId(userId);
+        userData = user_response.data[0];
+        console.log("family userData is: ");
+        console.log(userData)
         setDetails(userData);
+        
+        // Get Children Data
+        const children_response = await getAllChildrenData(userId);
+        childrenData = children_response.data;
+        console.log("childrenData is: ");
+        console.log(childrenData);
+        setFamilyMembers(childrenData);
       } catch (error) {
         console.log(error.reponse);
       }
     }
-
     fetchData();
-
-    // getUserData(GET_USER_URL, phoneNumber).then((response) => {
-    //   userData = response.data[0];
-    //   setDetails(userData);
-    // });
-  });
+  },[]);
 
   //TODO: need to pass childId to "/child"
   function onEditClick(childId) {
     navigate("/child", {
-      state: { phoneNumber: details[0].id, childId: childId },
+      state: { parent_id: details[0].id , child_id: childId },
     });
   }
 
-  function onRemoveClick(childName) {
-    console.log(familyMembers);
+  function onRemoveClick(childId) {
     // iterate through familyMembers array and remove the child with the given name
     for (let i = 0; i < familyMembers.length; i++) {
-      if (familyMembers[i].name === childName) {
+      if (familyMembers[i].id === childId) {
         setFamilyMembers(
           familyMembers.slice(0, i).concat(familyMembers.slice(i + 1))
         );
       }
     }
-    //TODO: rmb to do api call to delete child data
-    console.log(familyMembers);
+
+    //DELETE childId from database
+    deleteChildData(childId);
   }
 
   function onAddClick() {
-    navigate("/child", { state: { phoneNumber: details[0].id } });
+    navigate("/child", { state: { parent_id: details[0].id } });
   }
 
   return (
@@ -85,7 +85,7 @@ export default function Family() {
         <div className="grid grid-cols-1 gap-2 mt-4">
           <div className="rounded outline outline-1 outline-gray-300 py-6">
             <div className="grid grid-cols-2 px-4">
-              <p>Mrs Sally Abbott</p>
+              <p>{details.title + " " + details.display_name}</p>
               <b className="text-right">
                 <button onClick={() => navigate("/details")}>Edit</button>
               </b>
@@ -98,12 +98,12 @@ export default function Family() {
                 key={child.name}
               >
                 <div className="grid grid-cols-2 px-4">
-                  <p>{child.name}</p>
+                  <p>{child.title + " " + child.display_name}</p>
                   <b className="text-right">
                     <button onClick={() => onEditClick(child.id)}>Edit</button>
                     <button
                       className="text-gray-300"
-                      onClick={() => onRemoveClick(child.name)}
+                      onClick={() => onRemoveClick(child.id)}
                     >
                       &nbsp;/ Remove
                     </button>
