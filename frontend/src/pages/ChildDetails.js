@@ -4,11 +4,7 @@ import { useForm } from "react-hook-form";
 import ProgressBar from "../components/ProgressBar";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
-import {
-  postChildData,
-  getChildData,
-  patchChildData,
-} from "../services/axiosRequests.js";
+import {getChildData, postChildData, patchChildData} from "../services/axiosRequests.js";
 import { Button, BackButton } from "../components/Buttons.js";
 
 export default function ChildDetails() {
@@ -27,7 +23,8 @@ export default function ChildDetails() {
     formState: { errors },
   } = useForm();
   let childData;
-  let childId = location.state.childId;
+  let parentId = location.state.parent_id
+  let childId = location.state.child_id
   let phoneNumber = location.state.phoneNumber;
 
   useEffect(() => {
@@ -36,11 +33,12 @@ export default function ChildDetails() {
     } catch (error) {
       console.error(error);
     }
-
-    async function fetchData() {
+          
+    async function fetchData(childId) {
       try {
         const response = await getChildData(childId);
-        childData = response.data[0];
+        childData = response.data;
+        console.log(childData);
         setDetails(childData);
         reset({
           display_name: childData.display_name,
@@ -54,61 +52,36 @@ export default function ChildDetails() {
       }
     }
 
-    fetchData();
-
-    // getChildData(GET_USER_URL, phoneNumber)
-    //   .then((response) => {
-    //     childData = response.data[0];
-    //     setDetails(childData);
-    //     reset({
-    //       display_name: childData.display_name,
-    //       title: childData.title,
-    //       phone_number: childData.phone_number,
-    //       email: childData.email,
-    //       autofill: true,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    // If child_id is not undefined then we are editing an existing child
+    if (childId) {
+      console.log("Fetching Data for existing child id")
+      console.log(childId)
+      fetchData(childId);
+    }
   }, []);
 
   const onSubmit = (data) => {
-    // TODO: Manipulate data object to only be for child, then point to child api?
     // TODO: Check if validForm is true, if not, don't post to backend and do not navigate away
-    if (childId == null) {
-      try {
-        postChildData(data);
-      } catch (error) {
-        console.log(error.response);
-      }
-    } else {
+    if (childId) {
       try {
         patchChildData(data, childId);
       } catch (error) {
         console.log(error.response);
       }
+    } else {
+      try {
+        postChildData(data, parentId);
+      } catch (error) {
+        console.log(error.response);
+      }
     }
+    
     if (onEdit === true) {
       navigate("/review");
       setOnEdit(false);
     } else {
       navigate("/family");
     }
-
-    // postChildData(POST_USER_URL, data, phoneNumber)
-    //   .then((response) => {
-    //     if (onEdit === true) {
-    //       navigate("/review");
-    //       setOnEdit(false);
-    //     } else {
-    //       navigate("/family");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     alert(error);
-    //     console.log(error);
-    //   });
   };
 
   const autofillFamily = () => {
