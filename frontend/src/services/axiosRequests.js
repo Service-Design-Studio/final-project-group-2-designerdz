@@ -43,7 +43,8 @@ export function getAllChildrenData(userId) {
 }
 
 //create new child entry
-export function postChildData(data) {
+export function postChildData(data, parentId) {
+  data["user_id"] = parentId;
   return axios.post(CHILD_API, data);
 }
 
