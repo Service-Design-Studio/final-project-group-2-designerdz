@@ -1,67 +1,82 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {Button,BackButton,AddChildrenButton} from "../components/Buttons.js";
+import {
+  Button,
+  BackButton,
+  AddChildrenButton,
+} from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
-import { getUserData } from "../services/axiosUsers.js";
-import { GET_USER_URL, POST_USER_URL } from "../utilities/constants.js";
-
-
-// TODO: DELETE request to API with childName
-// TODO: Finalise schema of children, figure out whether familyMembers should be a state
+import {getAllChildrenData, deleteChildData } from "../services/axiosRequests.js";
 
 export default function Family() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
-  const [familyMembers, setFamilyMembers] = useState([{"name": "child1"}, {"name": "child2"}, {"name": "child3"}]);
+  const [familyMembers, setFamilyMembers] = useState([]);
 
   let userData;
-  let phoneNumber = localStorage.getItem("phoneNumber");
+  let childrenData;
+  let userId = localStorage.getItem("user_id");
+  console.log("userId is " + userId);
 
-  function onEditClick(childName) {
-    navigate("/child", {state: {childName: childName}});
-  }
-
-  function onRemoveClick(childName) {
-    console.log(familyMembers)
-    // iterate through familyMembers array and remove the child with the given name
-    for (let i = 0; i < familyMembers.length; i++) {
-      if (familyMembers[i].name === childName) {
-        setFamilyMembers(familyMembers.slice(0, i).concat(familyMembers.slice(i+1)));
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getAllChildrenData(userId);
+        userData = response.data[0]
+        childrenData = response.data.slice(1);
+        console.log("family userData is: ");
+        console.log(userData)
+        console.log("childrenData is: ");
+        console.log(childrenData);
+        setDetails(userData);
+        setFamilyMembers(childrenData);
+      } catch (error) {
+        console.log(error.reponse);
       }
     }
-    console.log(familyMembers)
-   
+    fetchData();
+  },[]);
+
+  //TODO: need to pass childId to "/child"
+  function onEditClick(childId) {
+    navigate("/child", {
+      state: { parent_id: details.id , child_id: childId },
+    });
+  }
+
+  function onRemoveClick(childId) {
+    // iterate through familyMembers array and remove the child with the given name
+    for (let i = 0; i < familyMembers.length; i++) {
+      if (familyMembers[i].id === childId) {
+        setFamilyMembers(
+          familyMembers.slice(0, i).concat(familyMembers.slice(i + 1))
+        );
+      }
+    }
+    deleteChildData(childId);
   }
 
   function onAddClick() {
-    navigate("/child");
+    navigate("/child", { state: { parent_id: details.id } });
   }
-  
-  useEffect(() => {
-    getUserData(GET_USER_URL, phoneNumber)
-    .then((response) => {
-      userData = response.data[0];
-      setDetails(userData);
-    })
-  })
 
   return (
     <div>
       <div className="flex flex-end">
-        <BackButton onClick={() => navigate("/signup")} />
+        <BackButton onClick={() => navigate("/details")} />
         <ProgressBar percent="33%" />
       </div>
 
       <TextDesc headerText="Family Details" bodyText="ssth sth about family" />
-      
+
       <div className="absolute top-[25%] w-full px-8 ">
         <b className="text-l">All Family Members</b>
 
         <div className="grid grid-cols-1 gap-2 mt-4">
           <div className="rounded outline outline-1 outline-gray-300 py-6">
             <div className="grid grid-cols-2 px-4">
-              <p>Mrs Sally Abbott</p>
+              <p>{details.title + " " + details.display_name}</p>
               <b className="text-right">
                 <button onClick={() => navigate("/details")}>Edit</button>
               </b>
@@ -74,10 +89,13 @@ export default function Family() {
                 key={child.name}
               >
                 <div className="grid grid-cols-2 px-4">
-                  <p>{child.name}</p>
+                  <p>{child.title + " " + child.display_name}</p>
                   <b className="text-right">
-                    <button onClick={() => onEditClick(child.name)}>Edit</button>
-                    <button className="text-gray-300" onClick={() => onRemoveClick(child.name)}>
+                    <button onClick={() => onEditClick(child.id)}>Edit</button>
+                    <button
+                      className="text-gray-300"
+                      onClick={() => onRemoveClick(child.id)}
+                    >
                       &nbsp;/ Remove
                     </button>
                   </b>

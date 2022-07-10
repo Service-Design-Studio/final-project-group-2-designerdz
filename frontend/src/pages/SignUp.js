@@ -2,21 +2,20 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { BackButton } from "../components/Buttons.js";
-import { USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import TextDesc from "../components/TextDesc.js";
-import { getUserData } from "../services/axiosUsers.js";
+import { getUserData } from "../services/axiosRequests.js";
 
 export default function Landing() {
   const navigate = useNavigate();
 
   function onClickSingle() {
-    localStorage.setItem("isFamily", false);
+    localStorage.setItem("is_family", false);
     navigate("/details");
   }
 
   function onClickFamily() {
-    localStorage.setItem("isFamily", true); //to know whether is multi-user registration throughout the process
+    localStorage.setItem("is_family", true); //to know whether is multi-user registration throughout the process
     navigate("/details");
   }
 
