@@ -7,7 +7,10 @@ import {
 } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
-import {getAllChildrenData, deleteChildData } from "../services/axiosRequests.js";
+import {
+  getAllChildrenData,
+  deleteChildData,
+} from "../services/axiosRequests.js";
 
 export default function Family() {
   const navigate = useNavigate();
@@ -23,10 +26,10 @@ export default function Family() {
     async function fetchData() {
       try {
         const response = await getAllChildrenData(userId);
-        userData = response.data[0]
+        userData = response.data[0];
         childrenData = response.data.slice(1);
         console.log("family userData is: ");
-        console.log(userData)
+        console.log(userData);
         console.log("childrenData is: ");
         console.log(childrenData);
         setDetails(userData);
@@ -36,12 +39,12 @@ export default function Family() {
       }
     }
     fetchData();
-  },[]);
+  }, []);
 
   //TODO: need to pass childId to "/child"
   function onEditClick(childId) {
     navigate("/child", {
-      state: { parent_id: details.id , child_id: childId },
+      state: { parent_id: details.id, child_id: childId },
     });
   }
 

@@ -71,6 +71,7 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = async (data) => {
+    console.log("userId is :" + userId);
     console.log(userId == null);
     if (userId == null) {
       try {

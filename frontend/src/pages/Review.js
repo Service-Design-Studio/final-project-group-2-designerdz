@@ -3,7 +3,10 @@ import { useState, useEffect } from "react";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton, EditButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
-import { getAllChildrenData } from "../services/axiosRequests.js";
+import {
+  getAllChildrenData,
+  getUserDataId,
+} from "../services/axiosRequests.js";
 import { getMonthYear, getDateMonthYear } from "../utilities/dateHelper.js";
 import Carousel from "../components/Carousel";
 
@@ -46,12 +49,23 @@ export default function Review() {
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const response = await getAllChildrenData(userId);
-        userData = response.data[0];
-        setDetails(userData);
-      } catch (error) {
-        console.log(error.response);
+      if (isFamily) {
+        try {
+          const response = await getAllChildrenData(userId); //TODO: use request to get parent + all child
+          userData = response.data[0];
+          setFamilyData(userData);
+          setDetails(userData[selectedIndex]); //details for current selected user
+        } catch (error) {
+          console.log(error.response);
+        }
+      } else {
+        try {
+          const response = await getUserDataId(userId); //TODO: use request to get
+          userData = response.data[0];
+          setDetails(userData);
+        } catch (error) {
+          console.log(error.response);
+        }
       }
     }
 
@@ -87,7 +101,7 @@ export default function Review() {
       <div className="absolute top-36 w-full px-8">
         {isFamily === true ? (
           <Carousel
-            nameArr={testFamilyArray}
+            nameArr={testFamilyArray} //TODO: replace this with familyData
             onClickSelected={onClickSelected}
             selectedIndex={selectedIndex}
           />
