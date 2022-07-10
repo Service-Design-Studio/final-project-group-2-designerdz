@@ -49,18 +49,22 @@ export default function Review() {
 
   useEffect(() => {
     async function fetchData() {
+      console.log("invoked");
       if (isFamily) {
+        // if (familyData.length === 0) {
         try {
-          const response = await getAllChildrenData(userId); //TODO: use request to get parent + all child
-          // const response = await getUserDataId(userId); //TODO: remove this
+          // const response = await getAllChildrenData(userId); //TODO: use request to get parent + all child
+          const response = await getUserDataId(userId); //TODO: remove this
           userData = response.data[0];
-          setFamilyData(userData);
+          // setFamilyData(userData);
           setFamilyData(testFamilyArray); //TODO: remove this once real data comes
-          setDetails(familyData[selectedIndex]); //details for current selected user
+          // setDetails(familyData[selectedIndex]); //details for current selected user
         } catch (error) {
           console.log(error.response);
         }
+        // }
       } else {
+        // if (details.length === 0) {
         try {
           const response = await getUserDataId(userId); //TODO: use request to get
           userData = response.data[0];
@@ -68,20 +72,13 @@ export default function Review() {
         } catch (error) {
           console.log(error.response);
         }
+        // }
       }
     }
-
     fetchData();
-
-    // getUserData(GET_USER_URL, phoneNumber)
-    //   .then((response) => {
-    //     userData = response.data[0];
-    //     setDetails(userData);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  }, [familyData]);
+    console.log("details is " + details);
+    setDetails(familyData[selectedIndex]);
+  }, [details]);
 
   const submitData = () => {
     navigate("/success");
@@ -104,7 +101,7 @@ export default function Review() {
       <div className="absolute top-36 w-full px-8">
         {isFamily === true ? (
           <Carousel
-            nameArr={testFamilyArray} //TODO: replace this with familyData
+            nameArr={familyData} //TODO: replace this with familyData
             onClickSelected={onClickSelected}
             selectedIndex={selectedIndex}
           />
