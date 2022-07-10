@@ -7,7 +7,7 @@ import {
 } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
-import { getUserDataId } from "../services/axiosUsers.js";
+import { getUserDataId } from "../services/axiosRequests.js";
 
 // TODO: DELETE request to API with childName
 // TODO: Finalise schema of children, figure out whether familyMembers should be a state

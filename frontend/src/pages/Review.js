@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton, EditButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
-import { getAllChildrenData } from "../services/axiosUsers.js";
+import { getAllChildrenData } from "../services/axiosRequests.js";
 import { getMonthYear, getDateMonthYear } from "../utilities/dateHelper.js";
 import Carousel from "../components/Carousel";
 

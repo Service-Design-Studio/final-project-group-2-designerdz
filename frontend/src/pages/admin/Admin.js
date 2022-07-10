@@ -1,4 +1,4 @@
-import { deleteAllData } from "../../services/axiosUsers";
+import { deleteAllData } from "../../services/axiosRequests.js";
 
 export default function Admin() {
   const onClickDelete = () => {

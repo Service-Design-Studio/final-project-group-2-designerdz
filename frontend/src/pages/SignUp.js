@@ -2,10 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { BackButton } from "../components/Buttons.js";
-import { USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar.js";
 import TextDesc from "../components/TextDesc.js";
-import { getUserData } from "../services/axiosUsers.js";
+import { getUserData } from "../services/axiosRequests.js";
 
 export default function Landing() {
   const navigate = useNavigate();

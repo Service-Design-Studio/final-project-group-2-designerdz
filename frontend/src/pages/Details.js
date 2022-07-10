@@ -9,7 +9,7 @@ import {
   postUserData,
   patchUserData,
   getUserDataId,
-} from "../services/axiosUsers.js";
+} from "../services/axiosRequests.js";
 
 export default function Details() {
   const navigate = useNavigate();

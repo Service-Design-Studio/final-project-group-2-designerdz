@@ -8,7 +8,7 @@ import {
   postChildData,
   getChildData,
   patchChildData,
-} from "../services/axiosUsers.js";
+} from "../services/axiosRequests.js";
 import { Button, BackButton } from "../components/Buttons.js";
 
 export default function ChildDetails() {

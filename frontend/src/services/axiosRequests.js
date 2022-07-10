@@ -7,6 +7,7 @@ import {
 } from "../utilities/constants.js";
 
 //get data using phoneNumber (for resumption or signup process)
+//TODO: need route for getting data using phoneNumber?
 export function getUserDataPhoneNumber(phoneNumber) {
   const API_URL = USER_API.concat("/" + phoneNumber);
   return axios.get(API_URL);
