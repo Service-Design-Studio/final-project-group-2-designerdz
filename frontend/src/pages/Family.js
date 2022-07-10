@@ -7,10 +7,7 @@ import {
 } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
-import { getUserDataId, getAllChildrenData, deleteChildData } from "../services/axiosRequests.js";
-
-// TODO: DELETE request to API with childName
-// TODO: Finalise schema of children, figure out whether familyMembers should be a state
+import {getAllChildrenData, deleteChildData } from "../services/axiosRequests.js";
 
 export default function Family() {
   const navigate = useNavigate();
@@ -25,18 +22,14 @@ export default function Family() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Get Parent Data
-        const user_response = await getUserDataId(userId);
-        userData = user_response.data[0];
+        const response = await getAllChildrenData(userId);
+        userData = response.data[0]
+        childrenData = response.data.slice(1);
         console.log("family userData is: ");
         console.log(userData)
-        setDetails(userData);
-        
-        // Get Children Data
-        const children_response = await getAllChildrenData(userId);
-        childrenData = children_response.data;
         console.log("childrenData is: ");
         console.log(childrenData);
+        setDetails(userData);
         setFamilyMembers(childrenData);
       } catch (error) {
         console.log(error.reponse);
@@ -48,7 +41,7 @@ export default function Family() {
   //TODO: need to pass childId to "/child"
   function onEditClick(childId) {
     navigate("/child", {
-      state: { parent_id: details[0].id , child_id: childId },
+      state: { parent_id: details.id , child_id: childId },
     });
   }
 
@@ -61,13 +54,11 @@ export default function Family() {
         );
       }
     }
-
-    //DELETE childId from database
     deleteChildData(childId);
   }
 
   function onAddClick() {
-    navigate("/child", { state: { parent_id: details[0].id } });
+    navigate("/child", { state: { parent_id: details.id } });
   }
 
   return (
