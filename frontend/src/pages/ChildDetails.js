@@ -65,13 +65,23 @@ export default function ChildDetails() {
     }
   }, []);
 
+<<<<<<< HEAD
   const onSubmit = (data) => {
+=======
+  const onSubmit = async (data) => {
+    // TODO: Manipulate data object to only be for child, then point to child api?
+>>>>>>> 30e1e73 (left with fixing request calls)
     // TODO: Check if validForm is true, if not, don't post to backend and do not navigate away
     if (childId) {
       try {
+<<<<<<< HEAD
         patchChildData(data, childId);
+=======
+        const response = await postChildData(data);
+        console.log("response is " + response);
+>>>>>>> 30e1e73 (left with fixing request calls)
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
       }
     } else {
       try {

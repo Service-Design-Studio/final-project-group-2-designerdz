@@ -23,7 +23,7 @@ export default function Review() {
   let testFamilyArray = [
     {
       full_name: "test1",
-      passport_no: "123",
+      passport_number: "123",
       passport_expiry: "22/10/2025",
       nationality: "nation",
       gender: "FEMALE",
@@ -31,7 +31,7 @@ export default function Review() {
     },
     {
       full_name: "test2",
-      passport_no: "456",
+      passport_number: "456",
       passport_expiry: "22/10/2025",
       nationality: "nation2",
       gender: "FEMALE",
@@ -39,7 +39,7 @@ export default function Review() {
     },
     {
       full_name: "test3",
-      passport_no: "789",
+      passport_number: "789",
       passport_expiry: "22/10/2025",
       nationality: "nation3",
       gender: "MALE",
@@ -52,9 +52,11 @@ export default function Review() {
       if (isFamily) {
         try {
           const response = await getAllChildrenData(userId); //TODO: use request to get parent + all child
+          // const response = await getUserDataId(userId); //TODO: remove this
           userData = response.data[0];
           setFamilyData(userData);
-          setDetails(userData[selectedIndex]); //details for current selected user
+          setFamilyData(testFamilyArray); //TODO: remove this once real data comes
+          setDetails(familyData[selectedIndex]); //details for current selected user
         } catch (error) {
           console.log(error.response);
         }
@@ -79,7 +81,7 @@ export default function Review() {
     //   .catch((error) => {
     //     console.log(error);
     //   });
-  }, []);
+  }, [familyData]);
 
   const submitData = () => {
     navigate("/success");
@@ -87,6 +89,7 @@ export default function Review() {
 
   const onClickSelected = (index) => {
     setSelectedIndex(index);
+    setDetails(familyData[index]);
   };
 
   return (
@@ -146,7 +149,7 @@ export default function Review() {
           </p>
           <p>Passport Number:</p>
           <p className="text-right">
-            {details === undefined ? "" : details.passport_no}
+            {details === undefined ? "" : details.passport_number}
           </p>
           <p>Passport Expiry:</p>
           <p className="text-right">

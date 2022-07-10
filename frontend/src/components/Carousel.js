@@ -7,14 +7,14 @@ export default function Carousel({ nameArr, onClickSelected, selectedIndex }) {
         return currentIndex == selectedIndex ? (
           <UserCardSelected
             onClick={onClickSelected}
-            name={member.full_name}
+            name={member.display_name}
             index={currentIndex}
             key={currentIndex} //need find better alt for key
           />
         ) : (
           <UserCardNotSelected
             onClick={onClickSelected}
-            name={member.full_name}
+            name={member.display_name}
             index={currentIndex}
             key={currentIndex} //need find better alt for key
           />

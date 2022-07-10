@@ -38,6 +38,7 @@ export default function Details() {
       try {
         const response = await getUserDataId(userId);
         userData = response.data[0];
+        console.log(response);
         console.log(userData);
         setDetails(userData);
         reset({
