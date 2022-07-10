@@ -9,33 +9,33 @@ class Api::V1::UsersController < ApplicationController
     render json: @users
   end
 
-  # GET /profile/:phone_number
+  # GET /profile/:id
   def show
     render json: @user
   end
 
+  def retrieve
+    @user_ph = User.where(phone_number: params[:phone_number])
+    render json: @user_ph
+  end
 
   # POST /users ## when users click on next after submitting phone number
   def create
-    if User.exists?(phone_number: params[:phone_number])
-      # if user edits phone number, it creates a new record instead, find a way to allow them to edit
-      # have to let user handle edits
-      @user = User.where(phone_number: params['phone_number'])
-      @user.update(user_params)
-  
-    else
+    # checks if user exists when client press 'Next', since frontend can't differentiate whether it's a POST or PATCH
+    # the params[:id] is to handle case when user edits their phone number
+    #if (User.exists?(phone_number: params[:phone_number]) || User.exists?(id: params[:id]))
+    #   @user = User.where(id: params['id'])
+    #   @user.update(user_params)
+    # creates a new record if it dosen't exist  
       @user = User.new(user_params)
       if @user.save
         render json: @user, status: :created, location: @user
       else
         render json: @user.errors, status: :unprocessable_entity
-      end
-    end
+      end 
+  end 
 
-    
-  end
-
-  # PATCH/PUT /api/v1/profie/:phone_number ## when users click on next buttons
+  # PATCH/PUT /api/v1/users/:id ## when users click on next buttons
   def update
     if @user.update(user_params)
       render json: @user
@@ -44,15 +44,18 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # DELETE /api/v1/profie/:phone_number
+  # DELETE /api/v1/profie/delete
   def destroy
-    @user.where(phone_number: params['phone_number']).destroy_all
+    @delete_child = Child.delete_all
+    @users = User.delete_all
+
+    render json: @users
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.where(phone_number: params['phone_number'])
+      @user = User.where(id: params['id'])
     end
 
     # Assigns a list of allowable attributes through.

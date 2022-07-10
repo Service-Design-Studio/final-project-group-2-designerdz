@@ -8,11 +8,10 @@ import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
 import {
-  getUserData,
-  postUserData,
   patchUserData,
-} from "../services/axiosUsers";
-import { GET_USER_URL, PATCH_USER_URL } from "../utilities/constants";
+  getAllChildrenData,
+  patchChildData,
+} from "../services/axiosRequests.js";
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -31,8 +30,8 @@ export default function Passport() {
     getValues,
     formState: { errors },
   } = useForm();
-  let phoneNumber = localStorage.getItem("phoneNumber");
-  let isFamily = localStorage.getItem("isFamily") === "true";
+  let userId = localStorage.getItem("user_id");
+  let isFamily = localStorage.getItem("is_family") === "true";
 
   //TODO: delete mock data after testings, to simulate how response.data would look like
   let testFamilyArray = [
@@ -64,41 +63,51 @@ export default function Passport() {
 
   //on first render do GET request
   useEffect(() => {
+    console.log("useEffect invoked");
     try {
       setOnEdit(location.state.onEdit);
     } catch (error) {
       console.error(error);
     }
 
+    async function fetchData() {
+      try {
+        const response = await getAllChildrenData(userId); //TODO: replace this with call to get parent + child data
+        setFamilyData(response.data);
+      } catch (error) {
+        // setFamilyData(testFamilyArray); //TODO: remove this
+        console.log(error.response);
+      }
+    }
+
     if (familyData.length === 0) {
-      getUserData(GET_USER_URL, phoneNumber)
-        .then((response) => {
-          // setFamilyData(testFamilyArray); //TODO: replace testFamilyArray with response.data
-        })
-        .catch((error) => {
-          setFamilyData(testFamilyArray); //TODO: remove this
-          console.log(error);
-        });
+      fetchData();
+      // getUserData(GET_USER_URL, phoneNumber)
+      //   .then((response) => {
+      //     // setFamilyData(testFamilyArray); //TODO: replace testFamilyArray with response.data
+      //   })
+      //   .catch((error) => {
+      //     setFamilyData(testFamilyArray); //TODO: remove this
+      //     console.log(error);
+      //   });
     }
 
     if (familyData[selectedIndex] !== undefined) {
-      console.log(familyData[selectedIndex]);
       setDetails({
         full_name: familyData[selectedIndex].full_name,
         passport_no: familyData[selectedIndex].passport_no,
         nationality: familyData[selectedIndex].nationality,
       });
 
-      //TODO: need to uncomment the dates part after database done with schema
+      // TODO: need to uncomment the dates part after database done with schema
       // details["passport_expiry"] !== undefined
       //   ? setPassportDate(new Date())
-      //   : setPassportDate(
-      //       new Date(familyData[selectedIndex].passport_expiry)
-      //     );
+      //   : setPassportDate(new Date(familyData[selectedIndex].passport_expiry));
 
       // details["dob"] !== undefined
       //   ? setBirthDate(new Date())
       //   : setBirthDate(new Date(familyData[selectedIndex].dob));
+
       details["gender"] === undefined
         ? setCurGender(familyData[selectedIndex].gender)
         : setCurGender("MALE");
@@ -109,7 +118,7 @@ export default function Passport() {
         nationality: familyData[selectedIndex].nationality,
       });
     }
-  }, [selectedIndex, familyData]);
+  }, [selectedIndex]);
 
   //to post the data
   const onSubmit = (data) => {
@@ -119,20 +128,49 @@ export default function Passport() {
     data["dob"] = birthDate;
     data["gender"] = curGender;
 
-    patchUserData(PATCH_USER_URL, data, phoneNumber, selectedIndex)
-      .then((response) => {
-        if (onEdit === true) {
-          navigate("/review");
-          setOnEdit(false);
-        } else {
-          navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
-        }
-      })
-      .catch((error) => {
-        // navigate("/review");
+    if (selectedIndex === 0) {
+      try {
+        patchUserData(data, userId);
+      } catch (error) {
         console.log(error.response);
-      });
-    console.log(errors);
+      }
+    } else {
+      try {
+        patchChildData(data, familyData[selectedIndex].id);
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
+
+    if (onEdit === true) {
+      navigate("/review");
+      setOnEdit(false);
+    } else {
+      navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+    }
+
+    // patchUserData(PATCH_USER_URL, data, phoneNumber, selectedIndex)
+    //   .then((response) => {
+    //     if (onEdit === true) {
+    //       navigate("/review");
+    //       setOnEdit(false);
+    //     } else {
+    //       navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     // navigate("/review");
+    //     console.log(error.response);
+    //   });
+    // console.log(errors);
+  };
+
+  const onBackBtnSelected = () => {
+    if (isFamily) {
+      navigate("/family");
+    } else {
+      navigate("/details");
+    }
   };
 
   //TODO: finish up logic for carousel view
@@ -143,19 +181,40 @@ export default function Passport() {
     data["dob"] = birthDate;
     data["gender"] = curGender;
 
-    //TODO: do patch request header
-    patchUserData(PATCH_USER_URL, data, phoneNumber, selectedIndex) //index for updating child?
-      .then((response) => {
+    //indicating parent
+    if (index === 0) {
+      try {
+        patchUserData(data, userId);
         const copyFamilyData = familyData.slice();
-        copyFamilyData[selectedIndex] = data;
+        copyFamilyData[selectedIndex] = data; //update familyData in useState
         setFamilyData(newDataState);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
+    //indicating child
+    else {
+      try {
+        patchChildData(data, familyData[index].id);
+        const copyFamilyData = familyData.slice();
+        copyFamilyData[selectedIndex] = data; //update familyData in useState
+        setFamilyData(newDataState);
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
 
-    // console.log("data is ", data);
-    //rmb to remove this when actual data and BE settled
+    // patchUserData(PATCH_USER_URL, data, phoneNumber, selectedIndex) //index for updating child?
+    //   .then((response) => {
+    //     const copyFamilyData = familyData.slice();
+    //     copyFamilyData[selectedIndex] = data;
+    //     setFamilyData(newDataState);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+
+    //TODO: rmb to remove this code for testing data when actual data and BE settled
     const newDataState = familyData.slice();
     newDataState[selectedIndex] = data;
     console.log("copy newDataState is ", newDataState);
@@ -179,7 +238,7 @@ export default function Passport() {
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
       <div className="fixed flex flex-row top-0 left-0 right-0 z-50">
-        <BackButton onClick={() => navigate("/details")} />
+        <BackButton onClick={onBackBtnSelected} />
         <ProgressBar percent="66%" />
       </div>
 

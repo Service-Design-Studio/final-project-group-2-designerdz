@@ -1,102 +1,125 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { GET_USER_URL, POST_USER_URL } from "../utilities/constants.js";
 import ProgressBar from "../components/ProgressBar";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
-import {postUserData, getUserData} from "../services/axiosUsers.js";
-import {Button,BackButton} from "../components/Buttons.js";
+import {getChildData, postChildData, patchChildData} from "../services/axiosRequests.js";
+import { Button, BackButton } from "../components/Buttons.js";
 
 export default function ChildDetails() {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [validForm, setValidForm] = useState(false);
-    const [details, setDetails] = useState({});
-    const [onEdit, setOnEdit] = useState(false);
-    const [autofill, setAutoFill] = useState(true);
-    const {reset, getValues, setValue, register,handleSubmit,formState: { errors },} = useForm();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [validForm, setValidForm] = useState(false);
+  const [details, setDetails] = useState({});
+  const [onEdit, setOnEdit] = useState(false);
+  const [autofill, setAutoFill] = useState(true);
+  const {
+    reset,
+    getValues,
+    setValue,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  let childData;
+  let parentId = location.state.parent_id
+  let childId = location.state.child_id
+  let phoneNumber = location.state.phoneNumber;
 
-    let userData;
-    let phoneNumber = localStorage.getItem("phoneNumber");
-
-    useEffect(() => {
-        try {
-            setOnEdit(location.state.onEdit);
-        } catch (error) {
-            console.error(error);
-        }
-
-        getUserData(GET_USER_URL, phoneNumber)
-        .then((response) => {
-            userData = response.data[0];
-            setDetails(userData);
-            reset({
-                display_name: userData.display_name,
-                title: userData.title,
-                phone_number: userData.phone_number,
-                email: userData.email,
-                autofill: true
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }, []);
-
-    const onSubmit = (data) => {
-        // TODO: Manipulate data object to only be for child, then point to child api?
-        // TODO: Check if validForm is true, if not, don't post to backend and do not navigate away
-        postUserData(POST_USER_URL, data, phoneNumber)
-      .then((response) => {
-        if (onEdit === true) {
-            navigate("/review");
-            setOnEdit(false);
-        } else {
-            navigate("/family");
-        }
-      })
-      .catch((error) => {
-        alert(error);
-        console.log(error);
-      });
-    };
-
-    const autofillFamily = () => {
-        if (autofill === false) {
-            setAutoFill(true);
-            setValue("autofill", true)
-            setValue("phone_number", phoneNumber)
-            setValue("email", details.email)
-        } else {
-            setAutoFill(false);
-            setValue("autofill", false)
-            setValue("phone_number",)
-            setValue("email", )
-        }
+  useEffect(() => {
+    try {
+      setOnEdit(location.state.onEdit);
+    } catch (error) {
+      console.error(error);
     }
-
-    const validateInputs = () => {
-      console.log("changing");
-      console.log(getValues())
-      if (getValues().phone_number === "" || getValues().email === "" || getValues().display_name === "") {
-        setValidForm(false);
-      } else {
-        setValidForm(true);
+          
+    async function fetchData(childId) {
+      try {
+        const response = await getChildData(childId);
+        childData = response.data;
+        console.log(childData);
+        setDetails(childData);
+        reset({
+          display_name: childData.display_name,
+          title: childData.title,
+          phone_number: childData.phone_number,
+          email: childData.email,
+          autofill: true,
+        });
+      } catch (error) {
+        console.error(error.response);
       }
     }
 
-    return (
-        <div>
-            <div className="flex flex-end">
-                <BackButton onClick={() => navigate("/family")} />
-                <ProgressBar percent="33%" />
-            </div>
-            <TextDesc
-                headerText="Tell me about your child"
-                bodyText=""
-            />
-            <div className="grid h-screen place-content-center mx-8">
+    // If child_id is not undefined then we are editing an existing child
+    if (childId) {
+      console.log("Fetching Data for existing child id")
+      console.log(childId)
+      fetchData(childId);
+    }
+  }, []);
+
+  const onSubmit = (data) => {
+    // TODO: Check if validForm is true, if not, don't post to backend and do not navigate away
+    if (childId) {
+      try {
+        patchChildData(data, childId);
+      } catch (error) {
+        console.log(error.response);
+      }
+    } else {
+      try {
+        postChildData(data, parentId);
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
+    
+    if (onEdit === true) {
+      navigate("/review");
+      setOnEdit(false);
+    } else {
+      navigate("/family");
+    }
+  };
+
+  const autofillFamily = () => {
+    if (autofill === false) {
+      setAutoFill(true);
+      setValue("autofill", true);
+      setValue("phone_number", phoneNumber);
+      setValue("email", details.email);
+    } else {
+      setAutoFill(false);
+      setValue("autofill", false);
+      setValue("phone_number");
+      setValue("email");
+    }
+  };
+
+  const validateInputs = () => {
+    console.log("changing");
+    console.log(getValues());
+    if (
+      getValues().phone_number === "" ||
+      getValues().email === "" ||
+      getValues().display_name === ""
+    ) {
+      setValidForm(false);
+    } else {
+      setValidForm(true);
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex flex-end">
+        <BackButton onClick={() => navigate("/family")} />
+        <ProgressBar percent="33%" />
+      </div>
+      <TextDesc headerText="Tell me about your child" bodyText="" />
+      <div className="grid h-screen place-content-center mx-8">
         <form onSubmit={handleSubmit(onSubmit)} onChange={validateInputs}>
           <div>
             <label className="block font-medium">Given Name</label>
@@ -133,10 +156,18 @@ export default function ChildDetails() {
             </h3>
           </div>
 
-        <div className = "flex">
-            <input className = "text-xl w-6 h-8 mx-4" type="checkbox" {...register("autofill", {})} onChange={autofillFamily} />
-            <label className="block text-2xl font-thin"> Select if same as parent</label>   
-        </div>
+          <div className="flex">
+            <input
+              className="text-xl w-6 h-8 mx-4"
+              type="checkbox"
+              {...register("autofill", {})}
+              onChange={autofillFamily}
+            />
+            <label className="block text-2xl font-thin">
+              {" "}
+              Select if same as parent
+            </label>
+          </div>
 
           <FormFill
             text="Phone Number"
@@ -157,7 +188,6 @@ export default function ChildDetails() {
           />
         </form>
       </div>
-        </div>
-
-    )
+    </div>
+  );
 }
