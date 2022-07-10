@@ -38,6 +38,7 @@ export default function Details() {
       try {
         const response = await getUserDataId(userId);
         userData = response.data[0];
+        console.log(response);
         console.log(userData);
         setDetails(userData);
         reset({
@@ -71,6 +72,7 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = async (data) => {
+    console.log("userId is :" + userId);
     console.log(userId == null);
     if (userId == null) {
       try {

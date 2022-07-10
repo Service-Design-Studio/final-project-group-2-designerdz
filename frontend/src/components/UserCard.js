@@ -1,6 +1,7 @@
 function UserCardSelected({ name, onClick, index }) {
   return (
     <button
+      type="button"
       onClick={() => onClick(index)}
       className="grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2"
     >
@@ -25,6 +26,7 @@ function UserCardSelected({ name, onClick, index }) {
 function UserCardNotSelected({ name, onClick, index }) {
   return (
     <button
+      type="button"
       onClick={() => onClick(index)}
       className="grid grid-cols-1 justify-items-center h-24 w-24 p-2"
     >

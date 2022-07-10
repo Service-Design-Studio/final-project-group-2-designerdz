@@ -33,37 +33,8 @@ export default function Passport() {
   let userId = localStorage.getItem("user_id");
   let isFamily = localStorage.getItem("is_family") === "true";
 
-  //TODO: delete mock data after testings, to simulate how response.data would look like
-  let testFamilyArray = [
-    {
-      full_name: "test1",
-      passport_no: "123",
-      passport_expiry: "22/10/2025",
-      nationality: "nation",
-      gender: "FEMALE",
-      dob: "22/10/2025",
-    },
-    {
-      full_name: "test2",
-      passport_no: "456",
-      passport_expiry: "22/10/2025",
-      nationality: "nation2",
-      gender: "FEMALE",
-      dob: "22/10/2025",
-    },
-    {
-      full_name: "test3",
-      passport_no: "789",
-      passport_expiry: "22/10/2025",
-      nationality: "nation3",
-      gender: "MALE",
-      dob: "22/10/2025",
-    },
-  ];
-
   //on first render do GET request
   useEffect(() => {
-    console.log("useEffect invoked");
     try {
       setOnEdit(location.state.onEdit);
     } catch (error) {
@@ -72,41 +43,31 @@ export default function Passport() {
 
     async function fetchData() {
       try {
-        const response = await getAllChildrenData(userId); //TODO: replace this with call to get parent + child data
+        const response = await getAllChildrenData(userId);
         setFamilyData(response.data);
       } catch (error) {
-        // setFamilyData(testFamilyArray); //TODO: remove this
         console.log(error.response);
       }
     }
 
     if (familyData.length === 0) {
       fetchData();
-      // getUserData(GET_USER_URL, phoneNumber)
-      //   .then((response) => {
-      //     // setFamilyData(testFamilyArray); //TODO: replace testFamilyArray with response.data
-      //   })
-      //   .catch((error) => {
-      //     setFamilyData(testFamilyArray); //TODO: remove this
-      //     console.log(error);
-      //   });
     }
 
     if (familyData[selectedIndex] !== undefined) {
       setDetails({
         full_name: familyData[selectedIndex].full_name,
-        passport_no: familyData[selectedIndex].passport_no,
+        passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
       });
 
-      // TODO: need to uncomment the dates part after database done with schema
-      // details["passport_expiry"] !== undefined
-      //   ? setPassportDate(new Date())
-      //   : setPassportDate(new Date(familyData[selectedIndex].passport_expiry));
+      details["passport_expiry"] !== undefined
+        ? setPassportDate(new Date())
+        : setPassportDate(new Date(familyData[selectedIndex].passport_expiry));
 
-      // details["dob"] !== undefined
-      //   ? setBirthDate(new Date())
-      //   : setBirthDate(new Date(familyData[selectedIndex].dob));
+      details["dob"] !== undefined
+        ? setBirthDate(new Date())
+        : setBirthDate(new Date(familyData[selectedIndex].dob));
 
       details["gender"] === undefined
         ? setCurGender(familyData[selectedIndex].gender)
@@ -114,29 +75,28 @@ export default function Passport() {
 
       reset({
         full_name: familyData[selectedIndex].full_name,
-        passport_no: familyData[selectedIndex].passport_no,
+        passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
       });
     }
-  }, [selectedIndex]);
+  }, [selectedIndex, familyData]);
 
   //to post the data
-  const onSubmit = (data) => {
-    console.log("data is ", data);
-    console.log("selectedIndex in onSubmit is:", selectedIndex);
+  const onSubmit = async (data) => {
+    data = getValues();
     data["passport_expiry"] = passportDate;
     data["dob"] = birthDate;
     data["gender"] = curGender;
-
     if (selectedIndex === 0) {
       try {
-        patchUserData(data, userId);
+        await patchUserData(data, userId);
       } catch (error) {
+        alert(error);
         console.log(error.response);
       }
     } else {
       try {
-        patchChildData(data, familyData[selectedIndex].id);
+        await patchChildData(data, familyData[selectedIndex].id);
       } catch (error) {
         console.log(error.response);
       }
@@ -148,21 +108,6 @@ export default function Passport() {
     } else {
       navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
     }
-
-    // patchUserData(PATCH_USER_URL, data, phoneNumber, selectedIndex)
-    //   .then((response) => {
-    //     if (onEdit === true) {
-    //       navigate("/review");
-    //       setOnEdit(false);
-    //     } else {
-    //       navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     // navigate("/review");
-    //     console.log(error.response);
-    //   });
-    // console.log(errors);
   };
 
   const onBackBtnSelected = () => {
@@ -173,53 +118,47 @@ export default function Passport() {
     }
   };
 
-  //TODO: finish up logic for carousel view
-  //need to post data between different selection of carousel view
-  const onClickSelected = (index) => {
+  const onClickSelected = async (index) => {
     let data = getValues();
     data["passport_expiry"] = passportDate;
     data["dob"] = birthDate;
     data["gender"] = curGender;
+    let copyFamilyData = familyData.slice();
+
+    const updateFamilyData = (memberData, data) => {
+      for (const key in memberData) {
+        if (data[key] != undefined) {
+          memberData[key] = data[key];
+        }
+      }
+      return memberData;
+    };
 
     //indicating parent
-    if (index === 0) {
+    if (selectedIndex === 0) {
       try {
-        patchUserData(data, userId);
-        const copyFamilyData = familyData.slice();
-        copyFamilyData[selectedIndex] = data; //update familyData in useState
-        setFamilyData(newDataState);
+        await patchUserData(data, userId);
+        copyFamilyData[selectedIndex] = updateFamilyData(
+          copyFamilyData[selectedIndex],
+          data
+        );
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
       }
     }
     //indicating child
     else {
       try {
-        patchChildData(data, familyData[index].id);
-        const copyFamilyData = familyData.slice();
-        copyFamilyData[selectedIndex] = data; //update familyData in useState
-        setFamilyData(newDataState);
+        await patchChildData(data, familyData[selectedIndex].id);
+        copyFamilyData[selectedIndex] = updateFamilyData(
+          copyFamilyData[selectedIndex],
+          data
+        );
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
       }
     }
-
-    // patchUserData(PATCH_USER_URL, data, phoneNumber, selectedIndex) //index for updating child?
-    //   .then((response) => {
-    //     const copyFamilyData = familyData.slice();
-    //     copyFamilyData[selectedIndex] = data;
-    //     setFamilyData(newDataState);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-
-    //TODO: rmb to remove this code for testing data when actual data and BE settled
-    const newDataState = familyData.slice();
-    newDataState[selectedIndex] = data;
-    console.log("copy newDataState is ", newDataState);
-    setFamilyData(newDataState);
-
+    setFamilyData(copyFamilyData);
     setSelectedIndex(index);
   };
 
@@ -251,7 +190,7 @@ export default function Passport() {
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
           {isFamily === true ? (
             <Carousel
-              nameArr={testFamilyArray}
+              nameArr={familyData} //TODO: replace with familyData
               onClickSelected={onClickSelected}
               selectedIndex={selectedIndex}
             />
@@ -274,10 +213,10 @@ export default function Passport() {
           />
 
           <FormFill
-            id="passport_no"
+            id="passport_number"
             text="Passport Number"
             type="text"
-            onFill={register("passport_no", {})}
+            onFill={register("passport_number", {})}
           />
 
           <div className="mb-3">
