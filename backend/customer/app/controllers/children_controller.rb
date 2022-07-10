@@ -12,7 +12,7 @@ class ChildrenController < ApplicationController
     @parent_id = User.where(id: '1')
     #@parent_id = User.where(id: params['id'])
     @children_record = Child.where(user_id: @parent_id)
-    render json: @children_record
+    render json: (@parent_id + @children_record)
   end
 
   # GET /children/1
