@@ -173,12 +173,12 @@ export default function Details() {
             type="number"
             name="parent_number"
             onFill={register("phone_number", {})}
-          />
+            />
 
           <FormFill
             type="email"
-            text="Email Address (Optional)"
             name="parent_email"
+            text="Email Address (Optional)"
             onFill={register("email", {})}
           />
           <Button
