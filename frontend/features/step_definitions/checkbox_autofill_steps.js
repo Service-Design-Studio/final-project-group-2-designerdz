@@ -47,13 +47,11 @@ Given("that I have saved my details", function() {
 
   const nextButton = driver.findElement(By.className("next"));
   nextButton.click();
-  // assert.equal(driver.getCurrentUrl(), base_url + "family");  
 })
 
 Given("I add a new child", function() {
-  const addChildButton = driver.findElement(By.className("add"));
+  const addChildButton = driver.findElement(By.className(""));
   addChildButton.click();
-  // assert.equal(driver.getCurrentUrl(), base_url + "child");
 })
 
 When("I check the autofill checkbox", function() {
@@ -61,7 +59,7 @@ When("I check the autofill checkbox", function() {
   if(!autofillCheckbox.isSelected()) {
     autofillCheckbox.click();
   }
-  assert(autofillCheckbox.isSelected());
+  assert.equal(autofillCheckbox.isSelected(), true);
 })
 
 Then("I should see my child details autofilled", function(){
@@ -71,12 +69,13 @@ Then("I should see my child details autofilled", function(){
   assert.equal(childEmail.getAttribute("value"), "sally_abbot@gmail.com");  
 })
 
-When("I uncheck the autofill checkbox", function() {
+When("I uncheck the autofill checkbox", function() {	
   const autofillCheckbox = driver.findElement(By.className("autofill"));
+
   if(autofillCheckbox.isSelected()) {
     autofillCheckbox.click();
   }
-  assert(!autofillCheckbox.isSelected());
+  assert.equal(autofillCheckbox.isSelected(), false);
 })
 
 Then("I should see my child details as empty", function(){

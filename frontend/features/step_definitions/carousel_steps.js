@@ -37,18 +37,24 @@ After(function () {
 });
 
 
-Given("that I have saved my details", function() {
-  driver.get(base_url + "details");
-  const parentName = driver.findElement(By.id("parent_display_name"));
-  parentName.sendKeys("Sarah Abbot1");
-  const parentEmail = driver.findElement(By.id("parent_email"));
-  parentEmail.sendKeys("sarah_abbot@gmail.com");
-  const parentPhone = driver.findElement(By.id("parent_number"));
-  parentPhone.sendKeys("96183292");
-})
+// Given("I have filled in my details", function() {
+//   driver.get(base_url + "details");
+//   const parentName = driver.findElement(By.id("parent_display_name"));
+//   parentName.sendKeys("Sally Abbot");
+//   const parentEmail = driver.findElement(By.id("parent_email"));
+//   parentEmail.sendKeys("sally_abbot@gmail.com");
+//   const parentPhone = driver.findElement(By.id("parent_number"));
+//   parentPhone.sendKeys("96183292");
+// })
 
 Given("I have added a child", function () { 
-  //CODE
+  driver.get(base_url + "child");
+  const childName = driver.findElement(By.id("child_name"));
+  childName.sendKeys("Sarah Abbot");
+  const parentEmail = driver.findElement(By.id("child_email"));
+  parentEmail.sendKeys("sally_abbot@gmail.com");
+  const parentPhone = driver.findElement(By.id("child_number"));
+  parentPhone.sendKeys("96183292");
 });
 
 When("I navigate to the next page", function () { 
@@ -58,7 +64,11 @@ When("I navigate to the next page", function () {
 });
 
 Then("I should be able to see my child's and my name in the carousel", function () { 
-  //CODE
+  driver.get(base_url + "passport"); //unsure how to check if it's in carousel
+  const parentName = driver.findElement(By.className("parent_name"));
+  assert.equal(parentName.getAttribute("value"), "Sally Abbot");
+  const childName = driver.findElement(By.className("child_name"));
+  assert.equal(childName.getAttribute("value"), "Sarah Abbot");
 });
 
 Then("I should be able to fill in my passport details", function () { 
@@ -66,7 +76,7 @@ Then("I should be able to fill in my passport details", function () {
 });
 
 When("I click on my child name", function () { 
-  const child_name_button = driver.findElement(By.className(" "));
+  const ____ = driver.findElement(By.className("child_name"));
   child_name_button.click();
   driver.sleep(1000);
 });
@@ -78,17 +88,24 @@ Then("I should be able to fill in my child details", function () {
 When("I fill in my passport details", function () { 
   driver.get(base_url + "passport");
   const parentName = driver.findElement(By.id("parent_display_name"));
-  parentName.sendKeys("Sarah Abbot1");
-  const passportNumber = driver.findElement(By.id("parent_passport_number"));
-  passportNumber.sendKeys("E1234567S");
+  parentName.sendKeys("Sarah Abbot");
+  const parentPassportNumber = driver.findElement(By.id("parent_passport_number"));
+  parentPassportNumber.sendKeys("E1234567S");
   const nationality = driver.findElement(By.id("nationality"));
   nationality.sendKeys("American");
 });
 
 When("I click on my name", function () { 
-  //CODE
+  const ____ = driver.findElement(By.className("parent_name"));
+  child_name_button.click();
+  driver.sleep(1000);
 });
 
 Then("I should be able to view my own passport details", function () { 
-  //CODE
+  const parentName = driver.findElement(By.className("parent_name"));
+  assert.equal(childNumber.getAttribute("value"), "Sally Abbot");
+  const parentPassportNumber = driver.findElement(By.className("parent_passport_number"));
+  assert.equal(parentPassportNumber.getAttribute("value"), "E1234567S");
+  const parentNationality = driver.findElement(By.className("parent_passport_number"));
+  assert.equal(parentNationality.getAttribute("value"), "American");
 });

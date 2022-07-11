@@ -7,6 +7,6 @@ Feature: Checkbox Autofill
         When I check the autofill checkbox
         Then I should see my child details autofilled
     
-    # Scenario: Uncheck autofill
-    #     When I uncheck the autofill checkbox
-    #     Then I should see my child details as empty
+    Scenario: Uncheck autofill
+        When I uncheck the autofill checkbox
+        Then I should see my child details as empty

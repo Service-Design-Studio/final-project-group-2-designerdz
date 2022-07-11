@@ -1,83 +1,101 @@
-// const {
-//     Given,
-//     When,
-//     Then,
-//     Before,
-//     AfterAll,
-//     After,
-//   } = require("@cucumber/cucumber");
-//   const {
-//     Builder,
-//     By,
-//     Capabilities,
-//     Key,
-//     Button,
-//     ChromiumWebDriver,
-//   } = require("selenium-webdriver");
-//   const { initDriver } = require("../support/driverUtil");
-//   const { expect, assert } = require("chai");
-//   const { setDefaultTimeout } = require("@cucumber/cucumber");
-//   const pactum = require("pactum");
+const {
+    Given,
+    When,
+    Then,
+    Before,
+    AfterAll,
+    After,
+  } = require("@cucumber/cucumber");
+  const {
+    Builder,
+    By,
+    Capabilities,
+    Key,
+    Button,
+    ChromiumWebDriver,
+  } = require("selenium-webdriver");
+  const { initDriver } = require("../support/driverUtil");
+  const { expect, assert } = require("chai");
+  const { setDefaultTimeout } = require("@cucumber/cucumber");
+  const pactum = require("pactum");
   
-//   let spec = pactum.spec();
+  let spec = pactum.spec();
   
-// let base_url = "http://localhost:3001/";
+let base_url = "http://localhost:3001/";
   
-//   setDefaultTimeout(60 * 1000);
+  setDefaultTimeout(60 * 1000);
   
-//   let driver;
+  let driver;
   
-//   Before(function () {
-//     driver = initDriver();
-//     spec = pactum.spec();
-//   });
+  Before(function () {
+    driver = initDriver();
+    spec = pactum.spec();
+  });
   
-//   After(function () {
-//     driver.quit();
-//   });
+  After(function () {
+    driver.quit();
+  });
 
 
-//   Given("that I have saved my details", function() {
-//     driver.get(base_url + "details");
-//     const parentName = driver.findElement(By.id("parent_display_name"));
-//     parentName.sendKeys("Sarah Abbot1");
-//     const parentEmail = driver.findElement(By.id("parent_email"));
-//     parentEmail.sendKeys("sarah_abbot@gmail.com");
-//     const parentPhone = driver.findElement(By.id("parent_number"));
-//     parentPhone.sendKeys("96183292");
-//   })
+  // Given("that I have saved my details", function() {
+  //   driver.get(base_url + "details");
+  //   const parentName = driver.findElement(By.id("parent_display_name"));
+  //   parentName.sendKeys("Sally Abbot");
+  //   const parentEmail = driver.findElement(By.id("parent_email"));
+  //   parentEmail.sendKeys("sally_abbot@gmail.com");
+  //   const parentPhone = driver.findElement(By.id("parent_number"));
+  //   parentPhone.sendKeys("96183292");
+  // })
 
-//   When("I navigate to child details page", function() {
-//     const nextButton = driver.findElement(By.id("next"));
-//     nextButton.click();
-//     assert.equal(driver.getCurrentUrl(), base_url + "child-details");
-//   });
+  When("I navigate to child page", function() {
+    const nextButton = driver.findElement(By.id("next"));
+    nextButton.click();
+    assert.equal(driver.getCurrentUrl(), base_url + "child");
+  });
 
-//   When("I add a child" , function() {
-//     //code
-//   });
+  When("I add a child" , function() {
+    const childName = driver.findElement(By.id("child_name"));
+    parentEmail.sendKeys("Sarah Abbot");
+    const childPhoneNumber = driver.findElement(By.id("child_number"));
+    childPhoneNumber.sendKeys("96183292");
+    const childEmail = driver.findElement(By.id("child_email"));
+    childEmail.sendKeys("sally_abbot@gmail.com");
 
-//   Then("I should see my child on the family page" , function() {
-//     driver.get(base_url + "family");
-//     const childNumber = driver.findElement(By.className("child_num"));
-//     assert.equal(childNumber.getAttribute("value"), "");
-//     const childEmail = driver.findElement(By.className("child_email"));
-//     assert.equal(childEmail.getAttribute("value"), "");
-//   });
+    const nextButton = driver.findElement(By.className("next"));
+    nextButton.click();
+  });
 
-//   When("I change my child name" , function() {
-//     //code
-//   });
+  Then("I should see my child on the family page" , function() {
+    driver.get(base_url + "family");
+    const childNumber = driver.findElement(By.className("child_number"));
+    assert.equal(childNumber.getAttribute("value"), "96183292");
+    const childEmail = driver.findElement(By.className("child_email"));
+    assert.equal(childEmail.getAttribute("value"), "sally_abbot@gmail.com");
+  });
 
-//   Then("I should see my child name on the family page" , function() {
-//     //code
-//   });
+  When("I change my child name" , function() {
+    const onEditClick = driver.findElement(By.className("edit"));
+    onEditClick.click();
 
-//   When("I click on remove button for my child" , function() {
-//     const removeButton = driver.findElement(By.id("remove"));
-//     removeButton.click();
-//   });
+    const childName = driver.findElement(By.id("child_name"));
+    parentEmail.sendKeys("Sandra Abbot");
 
-//   Then("my child should be removed" , function() {
-//     assert.equal(____)
-//   });
+
+
+  });
+
+  Then("I should see my child name on the family page" , function() {
+    driver.get(base_url + "family");
+    const childName = driver.findElement(By.className("child_name"));
+    assert.equal(childNaem.getAttribute("value"), "Sandra Abbot");
+
+  });
+
+  When("I click on remove button for my child" , function() {
+    const removeButton = driver.findElement(By.id("remove"));
+    removeButton.click();
+  });
+
+  Then("my child should be removed" , function() {
+    assert.equal(____)
+  });
