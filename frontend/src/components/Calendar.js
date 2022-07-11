@@ -24,8 +24,9 @@ export default function Calendar({calendarType, curDate, setDetailsHandler}) {
       ? <DatePicker
           selected = {curDate}
           onChange = {(date) => handleDatePickerChange(date)}
-          showMonthDropdown
+          showMonthYearPicker
           showYearDropdown
+          peekNextMonth
           dropdownMode = "select"
           placeholderText ="Passport Expiry Date"
           dateFormat ="MM/yyyy"
@@ -34,10 +35,10 @@ export default function Calendar({calendarType, curDate, setDetailsHandler}) {
       : <DatePicker
           selected = {curDate}
           onChange = {(date) => handleDatePickerChange(date)}
-          showMonthDropdown
           showYearDropdown
           dropdownMode = "select"
           placeholderText ="Date of Birth"
+          dateFormatCalendar="MMMM"
           minDate = {new Date("1900", "01", "01")}
           maxDate = {new Date()}
           dateFormat ="dd/MM/yyyy"
