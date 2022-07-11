@@ -206,14 +206,14 @@ export default function Passport() {
           </div>
 
           <FormFill
-            id="full_name"
+            name="full_name"
             text="Full Name"
             type="text"
             onFill={register("full_name", {})}
           />
 
           <FormFill
-            id="passport_number"
+            name="passport_number"
             text="Passport Number"
             type="text"
             onFill={register("passport_number", {})}
