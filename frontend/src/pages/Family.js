@@ -41,10 +41,9 @@ export default function Family() {
     fetchData();
   }, []);
 
-  //TODO: need to pass childId to "/child"
   function onEditClick(childId) {
     navigate("/child", {
-      state: { parent_id: details.id, child_id: childId },
+      state: { parent_id: details.id, child_id: childId, phone_number: details.phone_number, email: details.email },
     });
   }
 
@@ -86,9 +85,6 @@ export default function Family() {
           <div className="rounded outline outline-1 outline-gray-300 py-6">
             <div className="grid grid-cols-2 px-4">
               <p>{details.title + " " + details.display_name}</p>
-              <b className="text-right">
-                <button onClick={() => navigate("/details")}>Edit</button>
-              </b>
             </div>
           </div>
           {familyMembers.map((child) => {

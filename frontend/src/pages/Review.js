@@ -58,7 +58,7 @@ export default function Review() {
   const onEditDetails = () => {
     if (selectedIndex > 0) {
       navigate("/child", {
-        state: { onEdit: true, child_id: familyData[selectedIndex].id },
+        state: { onEdit: true, child_id: familyData[selectedIndex].id, phone_number: familyData[0].phone_number, email: familyData[0].email  },
       });
     } else {
       navigate("/details", { state: { onEdit: true } });

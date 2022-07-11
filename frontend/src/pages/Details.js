@@ -53,21 +53,6 @@ export default function Details() {
     }
 
     fetchData();
-
-    // getUserData(GET_USER_URL, userId)
-    //   .then((response) => {
-    //     userData = response.data[0];
-    //     setDetails(userData);
-    //     reset({
-    //       display_name: userData.display_name,
-    //       title: userData.title,
-    //       phone_number: userData.phone_number,
-    //       email: userData.email,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }, []);
 
   //post request to database backend
@@ -99,25 +84,6 @@ export default function Details() {
         navigate("/passport");
       }
     }
-
-    // postUserData(POST_USER_URL, data, userId) //TODO: backend has to setup to intercept HTTP request, to check if user exist or not
-    //   .then((response) => {
-    //     localStorage.setItem("userId", data.phone_number); //this updates with latest phone number form form
-    //     if (onEdit === true) {
-    //       navigate("/review");
-    //       setOnEdit(false);
-    //     } else {
-    //       if (isFamily === true) {
-    //         navigate("/family");
-    //       } else {
-    //         navigate("/passport");
-    //       }
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     alert(error);
-    //     console.log(error);
-    //   });
   };
 
   return (

@@ -18,6 +18,7 @@ export default function ChildDetails() {
   const [details, setDetails] = useState({});
   const [onEdit, setOnEdit] = useState(false);
   const [autofill, setAutoFill] = useState(true);
+
   const {
     reset,
     getValues,
@@ -32,6 +33,7 @@ export default function ChildDetails() {
   let phoneNumber = location.state.phone_number;
   let email = location.state.email;
 
+
   useEffect(() => {
     try {
       setOnEdit(location.state.onEdit);
@@ -44,13 +46,17 @@ export default function ChildDetails() {
         const response = await getChildData(childId);
         childData = response.data;
         console.log(childData);
+        if (childData.phone_number == undefined) {
+          childData.phone_number = phoneNumber;
+          childData.email = email;
+        }
         setDetails(childData);
         reset({
           display_name: childData.display_name,
           title: childData.title,
           phone_number: childData.phone_number,
           email: childData.email,
-          autofill: true,
+          autofill: childData.phone_number == phoneNumber && childData.email == email ? true : false
         });
       } catch (error) {
         console.error(error.response);
@@ -95,7 +101,6 @@ export default function ChildDetails() {
       setValue("autofill", true);
       setValue("phone_number", phoneNumber);
       setValue("email", email);
-      // setValue("email", details.email);
     } else {
       setAutoFill(false);
       setValue("autofill", false);
@@ -179,12 +184,14 @@ export default function ChildDetails() {
             text="Phone Number"
             type="number"
             onFill={register("phone_number", {})}
+            autofill = {autofill}
           />
 
           <FormFill
             type="email"
             text="Email Address (Optional)"
             onFill={register("email", {})}
+            autofill = {autofill}
           />
           <Button
             name="next"
