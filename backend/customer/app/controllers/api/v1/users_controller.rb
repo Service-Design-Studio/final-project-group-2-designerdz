@@ -4,6 +4,16 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /users
   def index
+<<<<<<< HEAD
+=======
+    @users = User.all
+
+    render json: @users
+  end
+
+  # GET /users/:id or :phone_number
+  def show
+>>>>>>> 4fc7ea57944d3c2e80bfa3e489850be23e84d0e1
     if (params[:id])
       @users_info = User.where(id: params[:id])
     elsif (params[:phone_number])
