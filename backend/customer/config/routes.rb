@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do #domain/api/v1
       # resource routing, declare common routes e.g. get,post,put,delete
       resources :users #domain/api/v1/users 
-
+ 
     end 
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
