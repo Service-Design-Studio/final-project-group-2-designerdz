@@ -30,21 +30,14 @@ export default function Family() {
       if (details.length == undefined) {
         
         try {
-          console.log("MAKING API CALL")
           const userResponse = await getUserDataId(userId);
           userData = userResponse.data[0];
           setDetails(userData)
-          console.log("USER DATA")
-          console.log(userData)
 
           const childrenResponse = await getAllChildrenData(userId);
-          childrenData = childrenResponse.data[0];
-          console.log("CHILDREN DATA")
-          console.log(childrenData)
-          console.log(typeof childrenData)
+          childrenData = childrenResponse.data.slice(1);
           setFamilyMembers(childrenData)
         } catch (error) {
-          console.log("ERROR")
           console.log(error);
         }
       }

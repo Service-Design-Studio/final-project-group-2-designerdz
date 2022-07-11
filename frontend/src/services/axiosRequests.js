@@ -38,17 +38,12 @@ export function getChildData(childId) {
 
 //get all children of a parent using user id
 export function getAllChildrenData(parentId) {
-  const API_URL = CHILDREN_API.concat("/" + parentId);
-  console.log("API_URL is ");
-  console.log(API_URL);
-  return axios.get(API_URL, {params: { "id": parentId}});
+  return axios.get(CHILDREN_API, {params: { "id": parentId}});
 }
 
 //create new child entry using parent id
 export function postChildData(data, parentId) {
   data["user_id"] = parentId;
-  console.log("POST CHILD DATA")
-  console.log(data)
   return axios.post(CHILD_API, data);
 }
 
