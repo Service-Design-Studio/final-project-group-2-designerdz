@@ -4,16 +4,44 @@ import range from "lodash/range";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Customers() {
-    const [startDate, setStartDate] = useState(new Date());
-    
-    return (
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-        dateFormat="MM/yyyy"
-        showMonthYearPicker
-      />
+export default function Calendar({calendarType, curDate, setDetailsHandler}) {
+  if (curDate == undefined){
+    curDate = new Date()
+  } else {
+    curDate = new Date(curDate);
+  }
+  const handleDatePickerChange = (date) => {
+    setDetailsHandler (
+      prevState => ({
+        ...prevState,
+        [calendarType]: date
+      })
+    )
+  }
+
+  return (
+      (calendarType === "passport_expiry") 
+      ? <DatePicker
+          selected = {curDate}
+          onChange = {(date) => handleDatePickerChange(date)}
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode = "select"
+          placeholderText ="Passport Expiry Date"
+          dateFormat ="MM/yyyy"
+          minDate={new Date("2021", "01")}
+          />
+      : <DatePicker
+          selected = {curDate}
+          onChange = {(date) => handleDatePickerChange(date)}
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode = "select"
+          placeholderText ="Date of Birth"
+          minDate = {new Date("1900", "01", "01")}
+          maxDate = {new Date()}
+          dateFormat ="dd/MM/yyyy"
+          />
     );
   
   }
@@ -21,75 +49,4 @@ export default function Customers() {
 
 
 
-//   const years = range(startYear, endYear, 1);
-//   const months = [
-//     "January",
-//     "February",
-//     "March",
-//     "April",
-//     "May",
-//     "June",
-//     "July",
-//     "August",
-//     "September",
-//     "October",
-//     "November",
-//     "December",
-//   ];
-//   return (
-//     <DatePicker
-//       renderCustomHeader={({
-//         curDate,
-//         changeYear,
-//         changeMonth,
-//         decreaseMonth,
-//         increaseMonth,
-//         prevMonthButtonDisabled,
-//         nextMonthButtonDisabled,
-//       }) => (
-//         <div
-//           style={{
-//             margin: 10,
-//             display: "flex",
-//             justifyContent: "center",
-//           }}
-//         >
-//           <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-//             {"<"}
-//           </button>
-
-//           <select
-//             value={getYear(curDate)}
-//             onChange={({ target: { value } }) => changeYear(value)}
-//           >
-//             {years.map((option) => (
-//               <option key={option} value={option}>
-//                 {option}
-//               </option>
-//             ))}
-//           </select>
-
-//           <select
-//             value={months[getMonth(curDate)]}
-//             onChange={({ target: { value } }) =>
-//               changeMonth(months.indexOf(value))
-//             }
-//           >
-//             {months.map((option) => (
-//               <option key={option} value={option}>
-//                 {option}
-//               </option>
-//             ))}
-//           </select>
-
-//           <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-//             {">"}
-//           </button>
-//         </div>
-//       )}
-//       selected={curDate}
-//       onChange={(date = Date()) => setDate(date)}
-//     />
-//   );
-// }
 

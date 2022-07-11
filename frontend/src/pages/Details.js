@@ -64,6 +64,9 @@ export default function Details() {
         const response = await postUserData(data);
         localStorage.setItem("user_id", response.data.id);
       } catch (error) {
+        if (error.response.status === 500){
+          alert("User already exists! Do resume your registration process in the sign up page")
+        }
         console.log(error.response);
       }
     } else {

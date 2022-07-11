@@ -69,6 +69,12 @@ export default function ChildDetails() {
       console.log(childId);
       fetchData(childId);
     }
+
+    // If child_id is undefined then we are creating a new child  
+    reset({
+      phone_number: phoneNumber,
+      email: email,
+      autofill: true})
   }, []);
 
   const onSubmit = (data) => {

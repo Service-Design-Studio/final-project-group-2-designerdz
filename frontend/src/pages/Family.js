@@ -43,7 +43,11 @@ export default function Family() {
 
   function onEditClick(childId) {
     navigate("/child", {
-      state: { parent_id: details.id, child_id: childId, phone_number: details.phone_number, email: details.email },
+      state: { 
+        parent_id: details.id, 
+        child_id: childId, 
+        phone_number: details.phone_number, 
+        email: details.email },
     });
   }
 

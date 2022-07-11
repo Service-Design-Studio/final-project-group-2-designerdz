@@ -5,7 +5,7 @@ import { Button, BackButton } from "../components/Buttons.js";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
-// import Calendar from "../components/Calendar";
+import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
 import {
   patchUserData,
@@ -16,7 +16,7 @@ import {
 export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState({dob: new Date(), passport_expiry: new Date()});
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]); 
@@ -69,6 +69,7 @@ export default function Passport() {
       });
     }
   }, [selectedIndex, familyData]);
+
 
   //to post the data
   const onSubmit = async (data) => {
@@ -213,12 +214,11 @@ export default function Passport() {
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
             <div>
-              {/* <Calendar
+              <Calendar
+              calendarType = "passport_expiry"
                 curDate={details.passport_expiry}
-                setDetails={setDetails}
-                startYear={2020}
-                endYear={2050}
-              /> */}
+                setDetailsHandler={setDetails}
+              />
             </div>
           </div>
 
@@ -256,12 +256,11 @@ export default function Passport() {
             <label className="block font-medium">
               Date of Birth (DD/MM/YYYY)
             </label>
-            {/* <Calendar
-              curDate={birthDate}
-              setDate={setBirthDate}
-              startYear={1900}
-              endYear={2022}
-            /> */}
+            <Calendar
+              calendarType = "dob"
+                curDate={details.dob}
+                setDetailsHandler={setDetails}
+              />
           </div>
           <Button
             name="next"
