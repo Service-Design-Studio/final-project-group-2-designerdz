@@ -7,7 +7,6 @@ import {
   getAllChildrenData,
   getUserDataId,
 } from "../services/axiosRequests.js";
-import { getMonthYear, getDateMonthYear } from "../utilities/dateHelper.js";
 import Carousel from "../components/Carousel";
 
 export default function Review() {
@@ -26,6 +25,7 @@ export default function Review() {
           try {
             const response = await getAllChildrenData(userId);
             userData = response.data;
+            console.log(familyData[selectedIndex]);
             setFamilyData(userData);
             setDetails(familyData[selectedIndex]); //details for current selected user
           } catch (error) {
@@ -43,7 +43,7 @@ export default function Review() {
       }
     }
     fetchData();
-    setDetails(familyData[selectedIndex]);
+    
   }, [familyData]);
 
   const submitData = () => {
@@ -58,13 +58,14 @@ export default function Review() {
   const onEditDetails = () => {
     if (selectedIndex > 0) {
       navigate("/child", {
-        state: { onEdit: true, child_id: familyData[selectedIndex].id },
+        state: { onEdit: true, child_id: familyData[selectedIndex].id, phone_number: familyData[0].phone_number, email: familyData[0].email  },
       });
     } else {
       navigate("/details", { state: { onEdit: true } });
     }
   };
 
+  
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -124,7 +125,7 @@ export default function Review() {
           </p>
           <p>Passport Expiry:</p>
           <p className="text-right">
-            {details === undefined ? "" : getMonthYear(details.passport_expiry)}
+            {details === undefined ? "" : new Date(details.passport_expiry).toLocaleDateString('en-us', {year:"numeric", month:"short"})}
           </p>
           <p>Nationality:</p>
           <p className="text-right">
@@ -136,7 +137,7 @@ export default function Review() {
           </p>
           <p>Date of Birth:</p>
           <p className="text-right">
-            {details === undefined ? "" : getDateMonthYear(details.dob)}
+            {details === undefined ? "" : new Date(details.dob).toLocaleDateString('en-us', {year:"numeric", month:"short", day:"numeric"})}
           </p>
         </div>
         <Button

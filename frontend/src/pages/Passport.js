@@ -16,13 +16,10 @@ import {
 export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [details, setDetails] = useState({});
-  const [passportDate, setPassportDate] = useState(new Date());
-  const [birthDate, setBirthDate] = useState(new Date());
-  const [curGender, setCurGender] = useState("MALE");
+  const [details, setDetails] = useState({dob: new Date(), passport_expiry: new Date()});
   const [onEdit, setOnEdit] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0); //handle selected index of carousel
-  const [familyData, setFamilyData] = useState([]); //TODO: need check if need this not, to store family data for state change of carousel
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [familyData, setFamilyData] = useState([]); 
   const {
     reset,
     register,
@@ -59,19 +56,11 @@ export default function Passport() {
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
+        gender: familyData[selectedIndex].gender,
+        passport_expiry: familyData[selectedIndex].passport_expiry,
+        dob: familyData[selectedIndex].dob,
+        gender: familyData[selectedIndex].gender,
       });
-
-      details["passport_expiry"] !== undefined
-        ? setPassportDate(new Date())
-        : setPassportDate(new Date(familyData[selectedIndex].passport_expiry));
-
-      details["dob"] !== undefined
-        ? setBirthDate(new Date())
-        : setBirthDate(new Date(familyData[selectedIndex].dob));
-
-      details["gender"] === undefined
-        ? setCurGender(familyData[selectedIndex].gender)
-        : setCurGender("MALE");
 
       reset({
         full_name: familyData[selectedIndex].full_name,
@@ -81,12 +70,13 @@ export default function Passport() {
     }
   }, [selectedIndex, familyData]);
 
+
   //to post the data
   const onSubmit = async (data) => {
     data = getValues();
-    data["passport_expiry"] = passportDate;
-    data["dob"] = birthDate;
-    data["gender"] = curGender;
+    data["passport_expiry"] = details.passport_expiry;
+    data["dob"] = details.dob;
+    data["gender"] = details.gender;
     if (selectedIndex === 0) {
       try {
         await patchUserData(data, userId);
@@ -120,9 +110,10 @@ export default function Passport() {
 
   const onClickSelected = async (index) => {
     let data = getValues();
-    data["passport_expiry"] = passportDate;
-    data["dob"] = birthDate;
-    data["gender"] = curGender;
+    data["passport_expiry"] = details.passport_expiry;
+    data["dob"] = details.dob;
+    data["gender"] = details.gender;
+    console.log(data)
     let copyFamilyData = familyData.slice();
 
     const updateFamilyData = (memberData, data) => {
@@ -163,15 +154,16 @@ export default function Passport() {
   };
 
   const toggleGenderToMale = () => {
-    if (curGender === "FEMALE") {
-      setCurGender("MALE");
-    }
-  };
+    setDetails(prevState => ({
+      ...prevState,
+      "gender": "MALE"}
+  ))};
+
   const toggleGenderToFemale = () => {
-    if (curGender === "MALE") {
-      setCurGender("FEMALE");
-    }
-  };
+    setDetails(prevState => ({
+          ...prevState,
+          "gender": "FEMALE"}
+      ))};
 
   return (
     <div>
@@ -223,10 +215,9 @@ export default function Passport() {
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
             <div>
               <Calendar
-                curDate={passportDate}
-                setDate={setPassportDate}
-                startYear={2020}
-                endYear={2050}
+              calendarType = "passport_expiry"
+                curDate={details.passport_expiry}
+                setDetailsHandler={setDetails}
               />
             </div>
           </div>
@@ -243,7 +234,7 @@ export default function Passport() {
               <button
                 type="button"
                 className={`${
-                  curGender == "MALE" ? "bg-red-200" : "bg-gray-100"
+                  details.gender == "MALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
                 onClick={toggleGenderToMale}
               >
@@ -252,7 +243,7 @@ export default function Passport() {
               <button
                 type="button"
                 className={`${
-                  curGender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
+                  details.gender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
                 onClick={toggleGenderToFemale}
               >
@@ -266,11 +257,10 @@ export default function Passport() {
               Date of Birth (DD/MM/YYYY)
             </label>
             <Calendar
-              curDate={birthDate}
-              setDate={setBirthDate}
-              startYear={1900}
-              endYear={2022}
-            />
+              calendarType = "dob"
+                curDate={details.dob}
+                setDetailsHandler={setDetails}
+              />
           </div>
           <Button
             name="next"
