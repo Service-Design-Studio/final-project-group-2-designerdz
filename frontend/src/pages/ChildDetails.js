@@ -84,8 +84,7 @@ export default function ChildDetails() {
       }
   }, []);
 
-  const onSubmit = async (data) => {
-    // TODO: Check if validForm is true, if not, don't post to backend and do not navigate away
+  const onSubmit = async (data) => { 
     if (childId) {
       try {
         console.log("In patch request");
@@ -121,8 +120,8 @@ export default function ChildDetails() {
     } else {
       setAutoFill(false);
       setValue("autofill", false);
-      setValue("phone_number");
-      setValue("email");
+      setValue("phone_number", "");
+      setValue("email", "");
     }
   };
 
