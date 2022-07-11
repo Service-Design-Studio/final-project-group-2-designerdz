@@ -4,21 +4,15 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all
-
-    render json: @user
-  end
-
-  # GET /users/:id or :phone_number
-  def show
     if (params[:id])
-      @user_ph = User.where(id: params[:id])
+      @users_info = User.where(id: params[:id])
     elsif (params[:phone_number])
-      @user_ph = User.where(phone_number: params[:phone_number])
+      @users_info = User.where(phone_number: params[:phone_number])
+    else
+      @users_info = User.all
     end
-    render json: @user_ph
+    render json: @users_info
   end
-
 
 
   # POST /users ## when users click on next after submitting phone number
