@@ -11,9 +11,10 @@ RUN gem install bundler && bundler install
 ENV RAILS_ENV=production
 
 ARG MASTER_KEY
+ARG SECRET_KEY_BASE
 
 ENV RAILS_MASTER_KEY=$MASTER_KEY
-
+ENV SECRET_KEY_BASE=${SECRET_KEY_BASE}
 ENV INSTANCE_CONNECTION_NAME=dbs-backend-1:asia-southeast1:database1-instance
 
 EXPOSE 8080
