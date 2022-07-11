@@ -6,15 +6,11 @@ class Api::V1::UsersController < ApplicationController
   def index
     @users = User.all
 
-    render json: @users
-  end
-
-  # GET /profile/:id
-  def show
     render json: @user
   end
 
-  def retrieve
+  # GET /users/:id or :phone_number
+  def show
     if (params[:id])
       @user_ph = User.where(id: params[:id])
     elsif (params[:phone_number])
@@ -22,6 +18,8 @@ class Api::V1::UsersController < ApplicationController
     end
     render json: @user_ph
   end
+
+
 
   # POST /users ## when users click on next after submitting phone number
   def create

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   post 'api/v1/users' => 'users#create', :as => 'user'
 
   # manually setting the uri routes for get and patch
-  get  'api/v1/users/:phone_number(.:format)', to: 'api/v1/users#retrieve'
+  #get  'api/v1/users/:phone_number(.:format)', to: 'api/v1/users#retrieve'
   delete 'api/v1/profile/delete', to: 'api/v1/users#destroy'
 
   # Defines the root path route ("/")
