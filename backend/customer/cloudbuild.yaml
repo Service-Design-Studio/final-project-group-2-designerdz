@@ -4,6 +4,7 @@ steps:
     entrypoint: "bash"
     args:
       [
+        "pwd",
         "-c",
         "docker build --build-arg MASTER_KEY=$$RAILS_KEY -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . ",
       ]
