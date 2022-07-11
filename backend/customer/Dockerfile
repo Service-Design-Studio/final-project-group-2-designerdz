@@ -17,6 +17,8 @@ ENV RAILS_MASTER_KEY=$MASTER_KEY
 ENV SECRET_KEY_BASE=${SECRET_KEY_BASE}
 ENV INSTANCE_CONNECTION_NAME=dbs-backend-1:asia-southeast1:database1-instance
 
+RUN echo SECRET_KEY_BASE
+
 EXPOSE 8080
 
 CMD ["bin/rails", "server", "--port", "8080" , "-b", "0.0.0.0", "-e", "production"]
