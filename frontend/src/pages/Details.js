@@ -62,6 +62,7 @@ export default function Details() {
     if (userId == null) {
       try {
         const response = await postUserData(data);
+        console.log("response is " + response);
         localStorage.setItem("user_id", response.data.id);
       } catch (error) {
         if (error.response.status === 500){

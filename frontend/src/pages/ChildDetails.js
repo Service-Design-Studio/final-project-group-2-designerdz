@@ -84,19 +84,23 @@ export default function ChildDetails() {
       }
   }, []);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // TODO: Check if validForm is true, if not, don't post to backend and do not navigate away
     if (childId) {
       try {
-        patchChildData(data, childId);
+        console.log("In patch request");
+        await patchChildData(data, childId);
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
-        postChildData(data, parentId);
+        console.log("In post request");
+        console.log(parentId)
+        console.log("parent id is above")
+        await postChildData(data, parentId);
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
       }
     }
 
