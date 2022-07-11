@@ -18,6 +18,7 @@ export default function ChildDetails() {
   const [details, setDetails] = useState({});
   const [onEdit, setOnEdit] = useState(false);
   const [autofill, setAutoFill] = useState(true);
+
   const {
     reset,
     getValues,
@@ -32,6 +33,7 @@ export default function ChildDetails() {
   let phoneNumber = location.state.phone_number;
   let email = location.state.email;
 
+
   useEffect(() => {
     try {
       setOnEdit(location.state.onEdit);
@@ -44,13 +46,23 @@ export default function ChildDetails() {
         const response = await getChildData(childId);
         childData = response.data;
         console.log(childData);
+        if (childData.phone_number == undefined) {
+          childData.phone_number = phoneNumber;
+          childData.email = email;
+        }
+        if (childData.phone_number == phoneNumber && childData.email == email){
+          setAutoFill(true);
+        } else {
+          setAutoFill(false);
+        }
+
         setDetails(childData);
         reset({
           display_name: childData.display_name,
           title: childData.title,
           phone_number: childData.phone_number,
           email: childData.email,
-          autofill: true,
+          autofill: childData.phone_number == phoneNumber && childData.email == email ? true : false
         });
       } catch (error) {
         console.error(error.response);
@@ -62,7 +74,14 @@ export default function ChildDetails() {
       console.log("Fetching Data for existing child id");
       console.log(childId);
       fetchData(childId);
-    }
+    } else {
+      // If child_id is undefined then we are creating a new child  
+      setAutoFill(true)
+      reset({
+        phone_number: phoneNumber,
+        email: email,
+        autofill: true})
+      }
   }, []);
 
   const onSubmit = (data) => {
@@ -95,7 +114,6 @@ export default function ChildDetails() {
       setValue("autofill", true);
       setValue("phone_number", phoneNumber);
       setValue("email", email);
-      // setValue("email", details.email);
     } else {
       setAutoFill(false);
       setValue("autofill", false);
@@ -174,17 +192,19 @@ export default function ChildDetails() {
               Select if same as parent
             </label>
           </div>
-
+          {console.log("AUTOFILL STATE" + autofill)}
           <FormFill
             text="Phone Number"
             type="number"
             onFill={register("phone_number", {})}
+            autofill = {autofill}
           />
 
           <FormFill
             type="email"
             text="Email Address (Optional)"
             onFill={register("email", {})}
+            autofill = {autofill}
           />
           <Button
             name="next"
