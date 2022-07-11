@@ -2,6 +2,7 @@ steps:
   - id: "build image"
     name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
+    dir: "backend/customer/Dockerfile"
     args:
       [
         "-c",
