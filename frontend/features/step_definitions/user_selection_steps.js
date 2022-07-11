@@ -58,7 +58,11 @@ const {
   });
 
   Then("I should see my child on the family page" , function() {
-    //code
+    driver.get(base_url + "family");
+    const childNumber = driver.findElement(By.className("child_num"));
+    assert.equal(childNumber.getAttribute("value"), "");
+    const childEmail = driver.findElement(By.className("child_email"));
+    assert.equal(childEmail.getAttribute("value"), "");
   });
 
   When("I change my child name" , function() {
@@ -70,9 +74,10 @@ const {
   });
 
   When("I click on remove button for my child" , function() {
-    //code
+    const removeButton = driver.findElement(By.id("remove"));
+    removeButton.click();
   });
 
   Then("my child should be removed" , function() {
-    //code
+    assert.equal(____)
   });
