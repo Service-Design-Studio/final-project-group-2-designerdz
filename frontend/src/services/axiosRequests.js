@@ -39,7 +39,9 @@ export function getChildData(childId) {
 //get all children of a parent using user id
 export function getAllChildrenData(parentId) {
   const API_URL = CHILDREN_API.concat("/" + parentId);
-  return axios.get(API_URL);
+  console.log("API_URL is ");
+  console.log(API_URL);
+  return axios.get(API_URL, {params: { "id": parentId}});
 }
 
 //create new child entry using parent id
@@ -53,7 +55,6 @@ export function postChildData(data, parentId) {
 //update existing child entry using child id
 export function patchChildData(data, childId) {
   const API_URL = CHILD_API.concat("/" + childId);
-  // data = JSON.parse(data);
   return axios.patch(API_URL, data);
 }
 

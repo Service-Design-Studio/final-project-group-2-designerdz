@@ -34,23 +34,17 @@ export default function Family() {
           const userResponse = await getUserDataId(userId);
           userData = userResponse.data[0];
           setDetails(userData)
+          console.log("USER DATA")
+          console.log(userData)
 
           const childrenResponse = await getAllChildrenData(userId);
           childrenData = childrenResponse.data[0];
-          setFamilyMembers(childrenData.slice[1])
-
-        //   const response = await getAllChildrenData(userId);
-        //   console.log("RESPONSE IS")
-        //   console.log(response)
-        //  childrenData = response.data[0];
-        //   childrenData = response.data.slice(1);
-        //   console.log("family userData is: ");
-        //   console.log(userData);
-        //   console.log("childrenData is: ");
-        //   console.log(childrenData);
-        //   setDetails(userData);
-        //   setFamilyMembers(childrenData);
+          console.log("CHILDREN DATA")
+          console.log(childrenData)
+          console.log(typeof childrenData)
+          setFamilyMembers(childrenData)
         } catch (error) {
+          console.log("ERROR")
           console.log(error);
         }
       }
