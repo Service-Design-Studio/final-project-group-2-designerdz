@@ -164,7 +164,7 @@ export default function ChildDetails() {
 
           <div className="flex">
             <input
-              className="text-xl w-6 h-8 mx-4"
+              className="autofill text-xl w-6 h-8 mx-4"
               type="checkbox"
               {...register("autofill", {})}
               onChange={autofillFamily}
@@ -178,12 +178,14 @@ export default function ChildDetails() {
           <FormFill
             text="Phone Number"
             type="number"
+            name="child_number"
             onFill={register("phone_number", {})}
           />
 
           <FormFill
             type="email"
             text="Email Address (Optional)"
+            name="child_email"
             onFill={register("email", {})}
           />
           <Button

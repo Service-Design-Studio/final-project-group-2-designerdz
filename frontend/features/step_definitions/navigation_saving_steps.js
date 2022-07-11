@@ -21,7 +21,7 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-base_url = "https://react-frontend-353408.as.r.appspot.com/";
+let base_url = "http://localhost:3001/";
 
 setDefaultTimeout(60 * 1000);
 
@@ -68,6 +68,10 @@ Then("I should go back to the {string} page", async function (previous) {
 });
 
 Given("I am on the passport page", function () {
+  driver.get(base_url + "passport");
+});
+
+Given("I am on passport", function () {
   driver.get(base_url + "passport");
 });
 

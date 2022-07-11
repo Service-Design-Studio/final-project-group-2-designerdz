@@ -21,7 +21,7 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-base_url = "https://react-frontend-353408.as.r.appspot.com/";
+let base_url = "http://localhost:3001/";
 
 setDefaultTimeout(60 * 1000);
 
@@ -60,7 +60,7 @@ Then("I should be able to fill in my passport details", function () {
 });
 
 When("I click on my child name", function () { 
-  const child_name_button = driver.findElement(By.className(" ")
+  const child_name_button = driver.findElement(By.className(" "));
   child_name_button.click();
   driver.sleep(1000);
 });
