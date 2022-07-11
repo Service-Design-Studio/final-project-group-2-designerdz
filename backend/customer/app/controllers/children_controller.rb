@@ -8,9 +8,9 @@ class ChildrenController < ApplicationController
   end
 
   def indexChild
-    # hardcoded value to associate child with parent id of '1', can be replaced with params[:id] once a POST is made
-    @parent_id = User.where(id: '1')
-    #@parent_id = User.where(id: params['id'])
+    # hardcoded value to associate child with parent id of '1', can be replaced with params[:id] once a GET is made
+    #@parent_id = User.where(id: '1')
+    @parent_id = User.where(id: params['id'])
     @children_record = Child.where(user_id: @parent_id)
     render json: (@parent_id + @children_record)
   end
