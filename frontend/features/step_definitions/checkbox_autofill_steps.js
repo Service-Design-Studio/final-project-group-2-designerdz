@@ -38,22 +38,48 @@ After(function () {
 
 Given("that I have saved my details", function() {
   driver.get(base_url + "details");
-  const parentName = driver.findElement(By.id("parent_display_name"));
-  parentName.sendKeys("Sarah Abbot1");
-  const parentEmail = driver.findElement(By.id("parent_email"));
-  parentEmail.sendKeys("sarah_abbot@gmail.com");
-  const parentPhone = driver.findElement(By.id("parent_number"));
+  const parentName = driver.findElement(By.className("parent_display_name"));
+  parentName.sendKeys("Sally Abbot1");
+  const parentEmail = driver.findElement(By.className("parent_email"));
+  parentEmail.sendKeys("sally_abbot@gmail.com");
+  const parentPhone = driver.findElement(By.className("parent_number"));
   parentPhone.sendKeys("96183292");
 })
 
 Given("I navigate to child details page", function() {
-  const nextButton = driver.findElement(By.id("next"));
+  const nextButton = driver.findElement(By.className("next"));
   nextButton.click();
   assert.equal(driver.getCurrentUrl(), base_url + "child");
 })
 
 When("I check the autofill checkbox", function() {
-  const autofillCheckbox = driver.findElement(By.id("autofill"));
-  autofillCheckbox.click();
+  const autofillCheckbox = driver.findElement(By.className("autofill"));
+  if(!autofillCheckbox.isSelected()) {
+    autofillCheckbox.click();
+  }
+  assert.equal(autofillCheckbox.isSelected(), true);
 })
+
+Then("I should see my child de  tails autofilled", function() {
+  const childNumber = driver.findElement(By.className("child_number"));
+  assert.equal(childNumber.getAttribute("value"), "96183292");
+  const childEmail = driver.findElement(By.className("child_email"));
+  assert.equal(childEmail.getAttribute("value"), "sarah_abbot@gmail.com");
+})
+
+When("I uncheck the autofill checkbox", function() {
+  const autofillCheckbox = driver.findElement(By.className("autofill"));
+  if(autofillCheckbox.isSelected()) {
+    autofillCheckbox.click();
+  }
+  assert.equal(autofillCheckbox.isSelected(), false);
+})
+
+Then("I should see my child details as empty", function() {
+  const childNumber = driver.findElement(By.className("child_number"));
+  assert.equal(childNumber.getAttribute("value"), "");
+  const childEmail = driver.findElement(By.className("child_email"));
+  assert.equal(childEmail.getAttribute("value"), "");
+})
+
 

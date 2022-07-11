@@ -37,9 +37,15 @@ After(function () {
 });
 
 
-Given("I have filled in my details", function () { 
-  //CODE
-});
+Given("that I have saved my details", function() {
+  driver.get(base_url + "details");
+  const parentName = driver.findElement(By.id("parent_display_name"));
+  parentName.sendKeys("Sarah Abbot1");
+  const parentEmail = driver.findElement(By.id("parent_email"));
+  parentEmail.sendKeys("sarah_abbot@gmail.com");
+  const parentPhone = driver.findElement(By.id("parent_number"));
+  parentPhone.sendKeys("96183292");
+})
 
 Given("I have added a child", function () { 
   //CODE
@@ -70,7 +76,13 @@ Then("I should be able to fill in my child details", function () {
 });
 
 When("I fill in my passport details", function () { 
-  //CODE
+  driver.get(base_url + "passport");
+  const parentName = driver.findElement(By.id("parent_display_name"));
+  parentName.sendKeys("Sarah Abbot1");
+  const passportNumber = driver.findElement(By.id("parent_passport_number"));
+  passportNumber.sendKeys("E1234567S");
+  const nationality = driver.findElement(By.id("nationality"));
+  nationality.sendKeys("American");
 });
 
 When("I click on my name", function () { 

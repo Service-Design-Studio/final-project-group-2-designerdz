@@ -54,7 +54,8 @@ const {
   });
 
   When("I add a child" , function() {
-    //code
+    const addChildButton = driver.findElement(By.id("add_child"));
+    addChildButton.click();
   });
 
   Then("I should see my child on the family page" , function() {
