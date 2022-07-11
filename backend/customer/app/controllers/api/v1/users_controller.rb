@@ -17,7 +17,7 @@ class Api::V1::UsersController < ApplicationController
   def retrieve
     if (params[:id])
       @user_ph = User.where(id: params[:id])
-    else
+    elsif (params[:phone_number])
       @user_ph = User.where(phone_number: params[:phone_number])
     end
     render json: @user_ph

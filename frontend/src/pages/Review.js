@@ -25,9 +25,8 @@ export default function Review() {
           try {
             const response = await getAllChildrenData(userId);
             userData = response.data;
-            console.log(familyData[selectedIndex]);
             setFamilyData(userData);
-            setDetails(familyData[selectedIndex]); //details for current selected user
+            setDetails(userData[selectedIndex]); //details for current selected user
           } catch (error) {
             console.log(error.response);
           }
@@ -35,6 +34,7 @@ export default function Review() {
       } else {
         try {
           const response = await getUserDataId(userId);
+          console.log(response)
           userData = response.data[0];
           setDetails(userData);
         } catch (error) {
@@ -44,7 +44,7 @@ export default function Review() {
     }
     fetchData();
     
-  }, [familyData]);
+  }, []);
 
   const submitData = () => {
     navigate("/success");
