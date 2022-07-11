@@ -4,7 +4,11 @@ import { useForm } from "react-hook-form";
 import ProgressBar from "../components/ProgressBar";
 import TextDesc from "../components/TextDesc.js";
 import FormFill from "../components/FormFill";
-import {getChildData, postChildData, patchChildData} from "../services/axiosRequests.js";
+import {
+  getChildData,
+  postChildData,
+  patchChildData,
+} from "../services/axiosRequests.js";
 import { Button, BackButton } from "../components/Buttons.js";
 
 export default function ChildDetails() {
@@ -23,9 +27,10 @@ export default function ChildDetails() {
     formState: { errors },
   } = useForm();
   let childData;
-  let parentId = location.state.parent_id
-  let childId = location.state.child_id
-  let phoneNumber = location.state.phoneNumber;
+  let parentId = location.state.parent_id;
+  let childId = location.state.child_id;
+  let phoneNumber = location.state.phone_number;
+  let email = location.state.email;
 
   useEffect(() => {
     try {
@@ -33,7 +38,7 @@ export default function ChildDetails() {
     } catch (error) {
       console.error(error);
     }
-          
+
     async function fetchData(childId) {
       try {
         const response = await getChildData(childId);
@@ -54,8 +59,8 @@ export default function ChildDetails() {
 
     // If child_id is not undefined then we are editing an existing child
     if (childId) {
-      console.log("Fetching Data for existing child id")
-      console.log(childId)
+      console.log("Fetching Data for existing child id");
+      console.log(childId);
       fetchData(childId);
     }
   }, []);
@@ -66,7 +71,7 @@ export default function ChildDetails() {
       try {
         patchChildData(data, childId);
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
       }
     } else {
       try {
@@ -75,7 +80,7 @@ export default function ChildDetails() {
         console.log(error.response);
       }
     }
-    
+
     if (onEdit === true) {
       navigate("/review");
       setOnEdit(false);
@@ -89,7 +94,8 @@ export default function ChildDetails() {
       setAutoFill(true);
       setValue("autofill", true);
       setValue("phone_number", phoneNumber);
-      setValue("email", details.email);
+      setValue("email", email);
+      // setValue("email", details.email);
     } else {
       setAutoFill(false);
       setValue("autofill", false);
