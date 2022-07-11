@@ -2,12 +2,12 @@ steps:
   - id: "build image"
     name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
-    dir: "backend/customer/Dockerfile"
     args:
       [
         "-c",
         "docker build --build-arg MASTER_KEY=$$RAILS_KEY -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . ",
       ]
+    dir: "backend/customer/Dockerfile"
     secretEnv: ["RAILS_KEY"]
   - id: "push image"
     name: "gcr.io/cloud-builders/docker"
