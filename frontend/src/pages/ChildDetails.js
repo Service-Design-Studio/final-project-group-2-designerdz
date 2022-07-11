@@ -50,6 +50,12 @@ export default function ChildDetails() {
           childData.phone_number = phoneNumber;
           childData.email = email;
         }
+        if (childData.phone_number == phoneNumber && childData.email == email){
+          setAutoFill(true);
+        } else {
+          setAutoFill(false);
+        }
+
         setDetails(childData);
         reset({
           display_name: childData.display_name,
@@ -68,13 +74,14 @@ export default function ChildDetails() {
       console.log("Fetching Data for existing child id");
       console.log(childId);
       fetchData(childId);
-    }
-
-    // If child_id is undefined then we are creating a new child  
-    reset({
-      phone_number: phoneNumber,
-      email: email,
-      autofill: true})
+    } else {
+      // If child_id is undefined then we are creating a new child  
+      setAutoFill(true)
+      reset({
+        phone_number: phoneNumber,
+        email: email,
+        autofill: true})
+      }
   }, []);
 
   const onSubmit = (data) => {
@@ -185,7 +192,7 @@ export default function ChildDetails() {
               Select if same as parent
             </label>
           </div>
-
+          {console.log("AUTOFILL STATE" + autofill)}
           <FormFill
             text="Phone Number"
             type="number"
