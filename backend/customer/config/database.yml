@@ -27,7 +27,7 @@ production:
   database: dbs-database
   <% if Rails.env.production? %>
   username: dbs_user1
-  secret_key_base: <%= Rails.application.secret_key_base %>
+  secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
   password: <%= Rails.application.credentials.gcp[:db_password] %>
   host:  "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
   <% end %>

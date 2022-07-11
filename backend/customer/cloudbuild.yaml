@@ -19,6 +19,8 @@ steps:
         "-c",
         "/buildstep/execute.sh -i gcr.io/$PROJECT_ID/${_SERVICE_NAME} -s ${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME} -e RAILS_MASTER_KEY=$$RAILS_KEY -- bundle exec rails db:migrate",
       ]
+    env:
+      - "SECRET_BASE_KEY=${_SECRET_BASE_KEY}"
     secretEnv: ["RAILS_KEY"]
 substitutions:
   _REGION: asia-southeast1
