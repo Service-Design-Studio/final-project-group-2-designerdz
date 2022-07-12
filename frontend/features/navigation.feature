@@ -6,10 +6,8 @@
 
 #   Examples:
 #   | page       | next       |
-#   | ""         | "signup"   |
 #   | "signup"   | "details"  |
-#   | "details"  | "passport" |
-#   | passport | "review"   |
+#   | passport   | "review"   |
 #   | "review"   | "success"  |
 
 #   Scenario:
@@ -20,7 +18,6 @@
 #   Examples:
 #     | previous   | page       |
 #     | ""         | "signup"   |
-#     | "signup"   | "details"  |
 #     | "details"  | "passport" |
 #     | "passport" | "review"   |
 
