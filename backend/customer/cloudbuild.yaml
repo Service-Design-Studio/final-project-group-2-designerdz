@@ -5,7 +5,7 @@ steps:
     args:
       [
         "-c",
-        "cd backend/customer && docker build --build-arg MASTER_KEY=$$RAILS_KEY SECRET_KEY_BASE=${_SECRET_KEY_BASE} DB_PASSWORD=${_DB_PASSWORD} -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . ",
+        "cd backend/customer && docker build --build-arg MASTER_KEY=$$RAILS_KEY --build-arg SECRET_KEY_BASE=${_SECRET_KEY_BASE} --build-arg DB_PASSWORD=${_DB_PASSWORD} -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . ",
       ]
     secretEnv: ["RAILS_KEY"]
   - id: "push image"
