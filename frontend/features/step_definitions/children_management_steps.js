@@ -21,7 +21,7 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-let base_url = "http://localhost:3001/";
+let base_url = "https://react-frontend-353408.as.r.appspot.com/";
 
 setDefaultTimeout(60 * 1000);
 
