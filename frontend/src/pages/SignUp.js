@@ -39,7 +39,7 @@ export default function Landing() {
         </button>
 
         <button
-          className="bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
+          className="family-next bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
           onClick={onClickFamily}
         >
           Yes, for me and my children...

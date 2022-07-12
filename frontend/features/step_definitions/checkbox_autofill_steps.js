@@ -41,7 +41,7 @@ Given("that I have saved my details", async function () {
   await driver.get(base_url + "signup");
   await driver.sleep(1000);
   
-  const detailsButton = await driver.findElement(By.className("next"));
+  const detailsButton = await driver.findElement(By.className("family-next"));
   detailsButton.click();
 
   await driver.sleep(1000);

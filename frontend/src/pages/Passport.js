@@ -224,6 +224,7 @@ export default function Passport() {
 
           <FormFill
             text="Nationality"
+            name="nationality"
             type="text"
             onFill={register("nationality", {})}
           />
