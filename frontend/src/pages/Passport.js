@@ -113,7 +113,7 @@ export default function Passport() {
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
     data["gender"] = details.gender;
-    console.log(data)
+    // console.log(data)
     let copyFamilyData = familyData.slice();
 
     const updateFamilyData = (memberData, data) => {

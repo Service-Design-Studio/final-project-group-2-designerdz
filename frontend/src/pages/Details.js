@@ -41,8 +41,8 @@ export default function Details() {
         // }
         const response = await getUserDataId(userId);
         userData = response.data[0];
-        console.log(response);
-        console.log(userData);
+        // console.log(response);
+        // console.log(userData);
         setDetails(userData);
         reset({
           display_name: userData.display_name,
@@ -62,15 +62,16 @@ export default function Details() {
   const onSubmit = async (data) => {
     if (userId == "") {
       try {
+        // console.log("DATA is ", data);
         const response = await postUserData(data);
-        console.log("response is " + response);
         localStorage.setItem("user_id", response.data.id);
       } catch (error) {
         if (error.response.status === 500) {
-          console.log(error.response.data);
-          alert(
-            "User already exists! Do resume your registration process in the sign up page or enter a new phone number"
-          );
+          // console.log("ERROR 500 HERE")
+          // console.log(error.response.data);
+          // alert(
+          //   "User already exists! Do resume your registration process in the sign up page or enter a new phone number"
+          // );
           return;
         }
         console.log(error.response);

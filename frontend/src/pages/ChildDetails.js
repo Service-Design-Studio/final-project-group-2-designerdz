@@ -87,16 +87,12 @@ export default function ChildDetails() {
   const onSubmit = async (data) => { 
     if (childId) {
       try {
-        console.log("In patch request");
         await patchChildData(data, childId);
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
-        console.log("In post request");
-        console.log(parentId)
-        console.log("parent id is above")
         await postChildData(data, parentId);
       } catch (error) {
         console.log(error);

@@ -24,8 +24,6 @@ export default function Family() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(details.length == undefined);
-      console.log(details);
       if (details.length == undefined) {
         try {
           const userResponse = await getUserDataId(userId);
