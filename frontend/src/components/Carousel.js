@@ -7,6 +7,7 @@ export default function Carousel({ nameArr, onClickSelected, selectedIndex }) {
         return currentIndex == selectedIndex ? (
           <UserCardSelected
             onClick={onClickSelected}
+            id={`${"user".concat(currentIndex)}`}
             name={member.display_name}
             index={currentIndex}
             key={currentIndex} //need find better alt for key
@@ -14,6 +15,7 @@ export default function Carousel({ nameArr, onClickSelected, selectedIndex }) {
         ) : (
           <UserCardNotSelected
             onClick={onClickSelected}
+            id={`${"user".concat(currentIndex)}`}
             name={member.display_name}
             index={currentIndex}
             key={currentIndex} //need find better alt for key
