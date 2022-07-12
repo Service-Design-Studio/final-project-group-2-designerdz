@@ -18,7 +18,7 @@ const { initDriver } = require("../support/driverUtil");
 const { expect, assert, AssertionError } = require("chai");
 const { setDefaultTimeout } = require("@cucumber/cucumber");
 const pactum = require("pactum");
-import { deleteAllData } from "../../services/axiosRequests.js";
+const axios =  require("axios");
 
 let spec = pactum.spec();
 
@@ -38,8 +38,16 @@ After(async function () {
 });
 
 Given("that I have saved my details", async function () {
-  await driver.get(base_url + "details");
+  await driver.get(base_url + "signup");
   await driver.sleep(1000);
+  
+  const detailsButton = await driver.findElement(By.className("next"));
+  detailsButton.click();
+
+  await driver.sleep(1000);
+
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, base_url + "details");
 
   const parentName = await driver.findElement(
     By.className("parent_display_name")
@@ -52,11 +60,12 @@ Given("that I have saved my details", async function () {
 
   const nextButton = await driver.findElement(By.className("next"));
 
-  deleteAllData();
-  // FIXME: Having issues with the alert
+  // FIXME: Clearing of local storage
+  
+  axios.delete(base_url.concat("api/v1/profile/delete")).then(function(res){}).catch(function (error){})
+  
   // nextButton.click();
-
-  await driver.sleep(1000);
+  // await driver.sleep(1000);
 
   // var actual_url = await driver.getCurrentUrl();
   // assert.equal(actual_url, base_url + "family");
@@ -89,7 +98,6 @@ When("I check the autofill checkbox", async function () {
 });
 
 Then("I should see my child details autofilled", async function () {
-  // FIXME: To show the number?
   const childNumber = await driver.findElement(By.className("child_number"));
   var childNumberValue = await childNumber.getAttribute("value");
   assert.equal(childNumberValue, "96183292");

@@ -104,11 +104,15 @@ export default function Family() {
                 <div className="grid grid-cols-2 px-4">
                   <p>{child.title + " " + child.display_name}</p>
                   <b className="text-right">
-                    <button onClick={() => onEditClick(child.id)}>Edit</button>
+
+                    <button className = "child_edit"
+                      onClick={() => onEditClick(child.id)}>Edit</button>
+
                     <button
-                      className="text-gray-300"
+                      className="child_delete"
                       onClick={() => onRemoveClick(child.id)}
                     >
+
                       &nbsp;/ Remove
                     </button>
                   </b>

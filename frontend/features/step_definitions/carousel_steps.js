@@ -36,16 +36,39 @@ After(function () {
   driver.quit();
 });
 
+Given("I have filled in my details", function() {
+  await driver.get(base_url + "signup");
+  await driver.sleep(1000);
+  
+  const detailsButton = await driver.findElement(By.className("next"));
+  detailsButton.click();
 
-// Given("I have filled in my details", function() {
-//   driver.get(base_url + "details");
-//   const parentName = driver.findElement(By.id("parent_display_name"));
-//   parentName.sendKeys("Sally Abbot");
-//   const parentEmail = driver.findElement(By.id("parent_email"));
-//   parentEmail.sendKeys("sally_abbot@gmail.com");
-//   const parentPhone = driver.findElement(By.id("parent_number"));
-//   parentPhone.sendKeys("96183292");
-// })
+  await driver.sleep(1000);
+
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, base_url + "details");
+
+  const parentName = await driver.findElement(
+    By.className("parent_display_name")
+  );
+  parentName.sendKeys("Sally Abbot");
+  const parentEmail = await driver.findElement(By.className("parent_email"));
+  parentEmail.sendKeys("sally_abbot@gmail.com");
+  const parentPhone = await driver.findElement(By.className("parent_number"));
+  parentPhone.sendKeys("96183292");
+
+  const nextButton = await driver.findElement(By.className("next"));
+
+  // FIXME: Clearing of local storage
+  
+  axios.delete(base_url.concat("api/v1/profile/delete")).then(function(res){}).catch(function (error){})
+  
+  // nextButton.click();
+  // await driver.sleep(1000);
+
+  // var actual_url = await driver.getCurrentUrl();
+  // assert.equal(actual_url, base_url + "family");
+})
 
 Given("I have added a child", function () { 
   driver.get(base_url + "child");
