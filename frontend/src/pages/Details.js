@@ -60,8 +60,6 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = async (data) => {
-    console.log("userId is :" + userId);
-    console.log(userId == "");
     if (userId == "") {
       try {
         const response = await postUserData(data);
