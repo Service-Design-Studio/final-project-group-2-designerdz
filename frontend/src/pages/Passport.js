@@ -113,7 +113,7 @@ export default function Passport() {
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
     data["gender"] = details.gender;
-    console.log(data)
+    // console.log(data)
     let copyFamilyData = familyData.slice();
 
     const updateFamilyData = (memberData, data) => {
@@ -198,14 +198,14 @@ export default function Passport() {
           </div>
 
           <FormFill
-            id="full_name"
+            name="full_name"
             text="Full Name"
             type="text"
             onFill={register("full_name", {})}
           />
 
           <FormFill
-            id="passport_number"
+            name="passport_number"
             text="Passport Number"
             type="text"
             onFill={register("passport_number", {})}

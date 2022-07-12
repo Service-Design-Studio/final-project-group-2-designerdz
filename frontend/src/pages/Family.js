@@ -24,8 +24,6 @@ export default function Family() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(details.length == undefined);
-      console.log(details);
       if (details.length == undefined) {
         try {
           const userResponse = await getUserDataId(userId);
@@ -101,20 +99,21 @@ export default function Family() {
                 key={child.name}
               >
                 <div className="grid grid-cols-2 px-4">
-                  <p className={`${child.display_name}`}>
+                  <p id={`${"name_".concat(index)}`}>
                     {child.title + " " + child.display_name}
                   </p>
                   <b className="text-right">
                     <button
-                      className={`${"edit_".concat(index)}`}
+                      id={`${"edit_".concat(index)}`}
                       onClick={() => onEditClick(child.id)}
                     >
                       Edit
                     </button>
                     <button
-                      className="text-gray-300"
+                      id={`${"delete_".concat(index)}`}
                       onClick={() => onRemoveClick(child.id)}
                     >
+
                       &nbsp;/ Remove
                     </button>
                   </b>

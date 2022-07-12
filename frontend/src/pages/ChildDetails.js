@@ -87,16 +87,12 @@ export default function ChildDetails() {
   const onSubmit = async (data) => { 
     if (childId) {
       try {
-        console.log("In patch request");
         await patchChildData(data, childId);
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
-        console.log("In post request");
-        console.log(parentId)
-        console.log("parent id is above")
         await postChildData(data, parentId);
       } catch (error) {
         console.log(error);
@@ -165,7 +161,7 @@ export default function ChildDetails() {
 
               <input
                 type="text"
-                className="rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="child_display_name rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
                 {...register("display_name", {})}
               />
@@ -185,7 +181,7 @@ export default function ChildDetails() {
 
           <div className="flex">
             <input
-              className="text-xl w-6 h-8 mx-4"
+              className="autofill text-xl w-6 h-8 mx-4"
               type="checkbox"
               {...register("autofill", {})}
               onChange={autofillFamily}
@@ -199,6 +195,7 @@ export default function ChildDetails() {
           <FormFill
             text="Phone Number"
             type="number"
+            name="child_number"
             onFill={register("phone_number", {})}
             autofill = {autofill}
           />
@@ -206,6 +203,7 @@ export default function ChildDetails() {
           <FormFill
             type="email"
             text="Email Address (Optional)"
+            name="child_email"
             onFill={register("email", {})}
             autofill = {autofill}
           />

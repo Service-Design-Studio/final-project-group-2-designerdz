@@ -1,4 +1,4 @@
-export default function FormFill({ text, type, onFill, id, autofill}) {    
+export default function FormFill({ text, type, onFill, name, autofill}) {    
     return (
         <div className="mb-3">
         <label 
@@ -7,7 +7,7 @@ export default function FormFill({ text, type, onFill, id, autofill}) {
         </label>
         <input 
             type={type}
-            className={`${id} ${autofill ? "bg-gray-300 select-none text-gray-500" : "bg-gray-100 text-gray-900"} border border-gray-300  text-sm rounded-lg w-full p-2.5 `}
+            className={`${name} ${autofill ? "bg-gray-300 select-none text-gray-500" : "bg-gray-100 text-gray-900"} border border-gray-300  text-sm rounded-lg w-full p-2.5 `}
             placeholder={text}
             disabled = {autofill}
             {...onFill}
