@@ -7,12 +7,12 @@ Feature: Carousel System
     Scenario: Correct number of children
         Then I should be able to see my child's and my name in the carousel
 
-    # Scenario: Navigation from parent to child
-    #     When I fill in my passport details
-    #     And I navigate to my child tab
-    #     And I navigate back to my tab 
-    #     Then I should be able to view my own passport details
+    Scenario: Navigation from parent to child
+        When I fill in my passport details
+        And I navigate to my child tab
+        And I navigate back to my tab 
+        Then I should be able to view my own passport details
 
-    # Scenario: Selection of user
-    #     When I navigate to my child tab
-    #     Then my child icon should be selected
+    Scenario: Selection of user
+        When I navigate to my child tab
+        Then my child icon should be selected

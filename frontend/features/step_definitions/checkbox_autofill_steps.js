@@ -57,7 +57,7 @@ Given("that I have saved my details", async function () {
   await driver.sleep(1000);
 
   const parentPhone = await driver.findElement(By.className("parent_number"));
-  parentPhone.sendKeys("475380816");
+  parentPhone.sendKeys("2847892073");
   await driver.sleep(1000);
   
   assert.equal(await driver.getCurrentUrl(), base_url + "details")
@@ -98,9 +98,9 @@ When("I check the autofill checkbox", async function () {
 Then("I should see my child details autofilled", async function () {
   const childNumber = await driver.findElement(By.className("child_number"));
   var childNumberValue = await childNumber.getAttribute("value");
-  assert.equal(childNumberValue, "475380816");
+  assert.equal(childNumberValue, "2847892073");
 
-  var childEmail = driver.findElement(By.className("child_email"));
+  var childEmail = await driver.findElement(By.className("child_email"));
   var childEmailValue = await childEmail.getAttribute("value");
   assert.equal(childEmailValue, "sally@gmail.comabc");
 });
