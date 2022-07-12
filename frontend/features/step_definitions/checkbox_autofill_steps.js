@@ -38,52 +38,50 @@ After(async function () {
 });
 
 Given("that I have saved my details", async function () {
-  await driver.get(base_url + "signup");
+  await driver.get(base_url);
+  await driver.sleep(1000);
+  const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
+  notACustomerYetButton.click();
+  await driver.sleep(1000);
+
+  const familyButton = await driver.findElement(By.className("family-next"))
+  familyButton.click();
   await driver.sleep(1000);
   
-  const detailsButton = await driver.findElement(By.className("next"));
-  detailsButton.click();
-
+  const displayNameField = await driver.findElement(By.className("parent_display_name"))
+  displayNameField.sendKeys("Sally Abbotaa");
   await driver.sleep(1000);
 
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "details");
-
-  const parentName = await driver.findElement(
-    By.className("parent_display_name")
-  );
-  parentName.sendKeys("Sally Abbot");
   const parentEmail = await driver.findElement(By.className("parent_email"));
-  parentEmail.sendKeys("sally_abbot@gmail.com");
+  parentEmail.sendKeys("sally@gmail.comabc");
+  await driver.sleep(1000);
+
   const parentPhone = await driver.findElement(By.className("parent_number"));
-  parentPhone.sendKeys("96183292");
+  parentPhone.sendKeys("2847892073");
+  await driver.sleep(1000);
+  
+  assert.equal(await driver.getCurrentUrl(), base_url + "details")
 
   const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+  await driver.sleep(1000);
 
-  // FIXME: Clearing of local storage
-  
-  axios.delete(base_url.concat("api/v1/profile/delete")).then(function(res){}).catch(function (error){})
-  
-  // nextButton.click();
-  // await driver.sleep(1000);
+  assert.equal(await driver.getCurrentUrl(), base_url + "family")
 
-  // var actual_url = await driver.getCurrentUrl();
-  // assert.equal(actual_url, base_url + "family");
 });
 
 Given("I add a new child", async function () {
-  // TODO: Remove once the top works
-  await driver.get(base_url + "family");
-  await driver.sleep(1000);
-  // TODO: Remove from here
+  assert.equal(await driver.getCurrentUrl(), base_url + "family");
 
   const addChildButton = await driver.findElement(By.className("add"));
-  await addChildButton.click();
-
+  addChildButton.click();
   await driver.sleep(1000);
 
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, base_url + "child");
+
+  const childName = await driver.findElement(By.className("child_display_name"));
+  childName.sendKeys("Salah Abbot");
 });
 
 When("I check the autofill checkbox", async function () {
@@ -100,11 +98,11 @@ When("I check the autofill checkbox", async function () {
 Then("I should see my child details autofilled", async function () {
   const childNumber = await driver.findElement(By.className("child_number"));
   var childNumberValue = await childNumber.getAttribute("value");
-  assert.equal(childNumberValue, "96183292");
+  assert.equal(childNumberValue, "2847892073");
 
-  var childEmail = driver.findElement(By.className("child_email"));
+  var childEmail = await driver.findElement(By.className("child_email"));
   var childEmailValue = await childEmail.getAttribute("value");
-  assert.equal(childEmailValue, "sally_abbot@gmail.com");
+  assert.equal(childEmailValue, "sally@gmail.comabc");
 });
 
 When("I uncheck the autofill checkbox", async function () {

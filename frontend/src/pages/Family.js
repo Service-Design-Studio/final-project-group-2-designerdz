@@ -20,7 +20,6 @@ export default function Family() {
   let userData;
   let childrenData;
   let userId = localStorage.getItem("user_id");
-  console.log("userId is " + userId);
 
   useEffect(() => {
     async function fetchData() {

@@ -1,7 +1,7 @@
 Feature: Children management
     Background: Added one child
         Given I have successfully added a child
-        When that I am on the family page
+        And that I am on the family page
         Then I should see my child on the family page                 
 
     Scenario: Edit child details
