@@ -5,9 +5,15 @@ class Api::V1::UsersController < ApplicationController
   # GET /users
   def index
     if (params[:id])
-      @users_info = User.where(id: params[:id])
+      if (params[:id] == "")
+        @users_info = nil
+      else
+        @users_info = User.where(id: params[:id])
+      end
     elsif (params[:phone_number])
       @users_info = User.where(phone_number: params[:phone_number])
+    # elsif (params[:id] == "invalid")
+    #   @users_info = nil
     else
       @users_info = User.all
     end
@@ -24,6 +30,7 @@ class Api::V1::UsersController < ApplicationController
     #   @user.update(user_params)
     # creates a new record if it dosen't exist  
       flash[:error] = "Error"
+
     else
       @user = User.new(user_params)
       if @user.save
