@@ -22,7 +22,7 @@ const axios =  require("axios");
 
 let spec = pactum.spec();
 
-let base_url = "http://localhost:3001/";
+let base_url = "https://react-frontend-353408.as.r.appspot.com/";
 
 setDefaultTimeout(60 * 1000);
 
@@ -107,19 +107,21 @@ When("I fill in my passport details", async function() {
 When("I navigate to my child tab", async function() {
     const childButton = await driver.findElement(By.id("user_1"));
     await childButton.click();
+    await driver.sleep(1000);
 })
 
 When("I navigate back to my tab", async function() {
   const parentButton = await driver.findElement(By.id("user_0"));
   await parentButton.click();
+  await driver.sleep(1000);
 })
 
 Then("I should be able to view my own passport details", async function() {
-    var parentNameValue = await driver.findElement(By.className("full_name")).getAttribute("value");
-    assert.equal(parentNameValue, "Sally Abbot");
-
     var parentPassportValue = await driver.findElement(By.className("passport_number")).getAttribute("value");
     assert.equal(parentPassportValue, "E1234567S");
+
+  var parentNameValue = await driver.findElement(By.className("full_name")).getAttribute("value");
+    assert.equal(parentNameValue, "Sally Abbot");
 
     var parentNationalityValue = await driver.findElement(By.className("nationality")).getAttribute("value")
     assert.equal(parentNationalityValue, "American");

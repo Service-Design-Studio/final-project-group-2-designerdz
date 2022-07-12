@@ -22,7 +22,7 @@ const axios =  require("axios");
 
 let spec = pactum.spec();
 
-let base_url = "http://localhost:3001/";
+let base_url = "https://react-frontend-353408.as.r.appspot.com/";
 
 setDefaultTimeout(60 * 1000);
 
@@ -41,11 +41,11 @@ Given("that I have saved my details", async function () {
   await driver.get(base_url);
   await driver.sleep(1000);
   const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
-  notACustomerYetButton.click();
+  await notACustomerYetButton.click();
   await driver.sleep(1000);
 
   const familyButton = await driver.findElement(By.className("family-next"))
-  familyButton.click();
+  await familyButton.click();
   await driver.sleep(1000);
   
   const displayNameField = await driver.findElement(By.className("parent_display_name"))
@@ -57,13 +57,13 @@ Given("that I have saved my details", async function () {
   await driver.sleep(1000);
 
   const parentPhone = await driver.findElement(By.className("parent_number"));
-  parentPhone.sendKeys("2847892073");
+  parentPhone.sendKeys("999999999");
   await driver.sleep(1000);
   
   assert.equal(await driver.getCurrentUrl(), base_url + "details")
 
   const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
+  await nextButton.click();
   await driver.sleep(1000);
 
   assert.equal(await driver.getCurrentUrl(), base_url + "family")
@@ -74,7 +74,7 @@ Given("I add a new child", async function () {
   assert.equal(await driver.getCurrentUrl(), base_url + "family");
 
   const addChildButton = await driver.findElement(By.className("add"));
-  addChildButton.click();
+  await addChildButton.click();
   await driver.sleep(1000);
 
   var actual_url = await driver.getCurrentUrl();
@@ -98,7 +98,7 @@ When("I check the autofill checkbox", async function () {
 Then("I should see my child details autofilled", async function () {
   const childNumber = await driver.findElement(By.className("child_number"));
   var childNumberValue = await childNumber.getAttribute("value");
-  assert.equal(childNumberValue, "2847892073");
+  assert.equal(childNumberValue, "999999999");
 
   var childEmail = await driver.findElement(By.className("child_email"));
   var childEmailValue = await childEmail.getAttribute("value");
