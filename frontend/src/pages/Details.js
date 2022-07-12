@@ -23,7 +23,7 @@ export default function Details() {
     formState: { errors },
   } = useForm();
   let userData;
-  let userId = localStorage.getItem("user_id");
+  let userId = localStorage.getItem("user_id") || "";
   let isFamily = localStorage.getItem("is_family") === "true"; //will have to get this info from db de
 
   //on first render do GET request
@@ -36,6 +36,9 @@ export default function Details() {
 
     async function fetchData() {
       try {
+        // if (userId == null) {
+        //   userId = "";
+        // }
         const response = await getUserDataId(userId);
         userData = response.data[0];
         console.log(response);
@@ -57,16 +60,18 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = async (data) => {
-    console.log("userId is :" + userId);
-    console.log(userId == null);
-    if (userId == null) {
+    if (userId == "") {
       try {
         const response = await postUserData(data);
         console.log("response is " + response);
         localStorage.setItem("user_id", response.data.id);
       } catch (error) {
-        if (error.response.status === 500){
-          alert("User already exists! Do resume your registration process in the sign up page")
+        if (error.response.status === 500) {
+          console.log(error.response.data);
+          alert(
+            "User already exists! Do resume your registration process in the sign up page or enter a new phone number"
+          );
+          return;
         }
         console.log(error.response);
       }
