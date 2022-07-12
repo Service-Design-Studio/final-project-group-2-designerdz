@@ -9,6 +9,7 @@ import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import {
   getAllChildrenData,
+  getUserDataId,
   deleteChildData,
 } from "../services/axiosRequests.js";
 
@@ -24,18 +25,21 @@ export default function Family() {
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const response = await getAllChildrenData(userId);
-        userData = response.data[0];
-        childrenData = response.data.slice(1);
-        console.log("family userData is: ");
-        console.log(userData);
-        console.log("childrenData is: ");
-        console.log(childrenData);
-        setDetails(userData);
-        setFamilyMembers(childrenData);
-      } catch (error) {
-        console.log(error.reponse);
+      console.log(details.length == undefined)
+      console.log(details)
+      if (details.length == undefined) {
+        
+        try {
+          const userResponse = await getUserDataId(userId);
+          userData = userResponse.data[0];
+          setDetails(userData)
+
+          const childrenResponse = await getAllChildrenData(userId);
+          childrenData = childrenResponse.data.slice(1);
+          setFamilyMembers(childrenData)
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
     fetchData();

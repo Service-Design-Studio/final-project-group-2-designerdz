@@ -5,7 +5,7 @@ steps:
     args:
       [
         "-c",
-        "docker build --build-arg MASTER_KEY=$$RAILS_KEY -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . ",
+        "cd backend/customer && docker build --build-arg MASTER_KEY=$$RAILS_KEY -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . ",
       ]
     secretEnv: ["RAILS_KEY"]
   - id: "push image"
@@ -17,7 +17,7 @@ steps:
     args:
       [
         "-c",
-        "/buildstep/execute.sh -i gcr.io/$PROJECT_ID/${_SERVICE_NAME} -s ${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME} -e RAILS_MASTER_KEY=$$RAILS_KEY -- bundle exec rails db:migrate",
+        "/buildstep/execute.sh -i gcr.io/$PROJECT_ID/${_SERVICE_NAME} -s ${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME} -e RAILS_MASTER_KEY=$$RAILS_KEY -e SECRET_KEY_BASE=${_SECRET_KEY_BASE} -e DB_PASSWORD=${_DB_PASSWORD} -- bundle exec rails db:migrate",
       ]
     secretEnv: ["RAILS_KEY"]
 substitutions:
