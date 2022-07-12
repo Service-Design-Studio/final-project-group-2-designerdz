@@ -5,6 +5,7 @@ const {
   Before,
   AfterAll,
   After,
+  And,
 } = require("@cucumber/cucumber");
 const {
   Builder,
@@ -83,7 +84,8 @@ Then("I should see my child on the family page", async function() {
 
 When("I edit my child name", async function() {
   //FIXME: Button cannot be found
-  var edit_button = await driver.findElement(By.className("child_edit"));
+
+  var edit_button = await driver.findElement(By.id("edit_0"));
 
   await edit_button.click();
   await driver.sleep(1000);

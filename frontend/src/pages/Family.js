@@ -17,7 +17,6 @@ export default function Family() {
   const navigate = useNavigate();
   const [details, setDetails] = useState({});
   const [familyMembers, setFamilyMembers] = useState([]);
-
   let userData;
   let childrenData;
   let userId = localStorage.getItem("user_id");
@@ -25,18 +24,17 @@ export default function Family() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(details.length == undefined)
-      console.log(details)
+      console.log(details.length == undefined);
+      console.log(details);
       if (details.length == undefined) {
-        
         try {
           const userResponse = await getUserDataId(userId);
           userData = userResponse.data[0];
-          setDetails(userData)
+          setDetails(userData);
 
           const childrenResponse = await getAllChildrenData(userId);
           childrenData = childrenResponse.data.slice(1);
-          setFamilyMembers(childrenData)
+          setFamilyMembers(childrenData);
         } catch (error) {
           console.log(error);
         }
@@ -47,11 +45,12 @@ export default function Family() {
 
   function onEditClick(childId) {
     navigate("/child", {
-      state: { 
-        parent_id: details.id, 
-        child_id: childId, 
-        phone_number: details.phone_number, 
-        email: details.email },
+      state: {
+        parent_id: details.id,
+        child_id: childId,
+        phone_number: details.phone_number,
+        email: details.email,
+      },
     });
   }
 
@@ -95,21 +94,25 @@ export default function Family() {
               <p>{details.title + " " + details.display_name}</p>
             </div>
           </div>
-          {familyMembers.map((child) => {
+          {familyMembers.map((child, index) => {
             return (
               <div
                 className="rounded outline outline-1 outline-gray-300 py-6"
                 key={child.name}
               >
                 <div className="grid grid-cols-2 px-4">
-                  <p>{child.title + " " + child.display_name}</p>
+                  <p id={`${"name_".concat(index)}`}>
+                    {child.title + " " + child.display_name}
+                  </p>
                   <b className="text-right">
-
-                    <button className = "child_edit"
-                      onClick={() => onEditClick(child.id)}>Edit</button>
-
                     <button
-                      className="child_delete"
+                      id={`${"edit_".concat(index)}`}
+                      onClick={() => onEditClick(child.id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      id={`${"delete_".concat(index)}`}
                       onClick={() => onRemoveClick(child.id)}
                     >
 
