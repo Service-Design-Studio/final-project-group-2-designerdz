@@ -5,7 +5,6 @@ const {
   Before,
   AfterAll,
   After,
-  And,
 } = require("@cucumber/cucumber");
 const {
   Builder,
@@ -22,7 +21,7 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-let base_url = "http://localhost:3001/";
+let base_url = "http://localhost:3000/";
 
 setDefaultTimeout(60 * 1000);
 
@@ -38,10 +37,25 @@ After(async function () {
 });
 
 Given("I have successfully added a child", async function() {
-  await driver.get(base_url + "family");
+  await driver.get(base_url);
+  await driver.sleep(1000);
+  const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
+  notACustomerYetButton.click();
   await driver.sleep(1000);
 
-  const addChildButton = await driver.findElement(By.className("add"));
+  const familyButton = await driver.findElement(By.className("family-next"))
+  familyButton.click();
+  await driver.sleep(1000);
+
+  const displayNameField = await driver.findElement(By.className("parent_display_name"))
+  displayNameField.sendKeys("John Doe Doe");
+  await driver.sleep(1000);
+
+  const detailsNextButton = await driver.findElement(By.className("next"))
+  detailsNextButton.click();
+  await driver.sleep(1000);
+
+  const addChildButton = await driver.findElement(By.className("add"))
   addChildButton.click();
   await driver.sleep(1000);
 
@@ -62,72 +76,49 @@ Given("I have successfully added a child", async function() {
 
   await driver.sleep(1000);
 
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "family");
 })
 
-Given("that I am on the family page", async function() {
-  await driver.get(base_url + "family");
-  await driver.sleep(1000);
-
+When("that I am on the family page", async function() {
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, base_url + "family");
 })
 
 Then("I should see my child on the family page", async function() {
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "family");
-
-  // FIXME:
-  // assert.equal("Sally Abbot", source_code_test);
-})
+  const childName = await driver.findElement(By.id("name_0")).getText();
+  assert.equal(childName, "Mr Salah Abbot");
+}
+)
 
 When("I edit my child name", async function() {
-  //FIXME: Button cannot be found
-
-  var edit_button = await driver.findElement(By.id("edit_0"));
-
-  await edit_button.click();
+  const edit_button = await driver.findElement(By.id("edit_0"));
+  edit_button.click();
   await driver.sleep(1000);
 
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "child");
+  const childName2 = await driver.findElement(By.className("child_display_name"));
+  childName2.sendKeys(" Edited");
 
-
+  const nextButton2 = await driver.findElement(By.className("next"));
+  nextButton2.click();
+  await driver.sleep(1000);
 })
 
 Then("I should see my edited child name on the family page", async function() {
-  //TODO: Should mimic the above function but with a different name  
-
-  const childName = await driver.findElement(By.className("child_display_name"));
-  childName.sendKeys("Sally Abbot");
-
-  const autofillCheckbox = await driver.findElement(By.className("autofill"));
-
-  if(!autofillCheckbox.isSelected()) {
-    autofillCheckbox.click();
-  }
-
-  var checked = await autofillCheckbox.isSelected();
-  assert.equal(checked, true);
-
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-
-  await driver.sleep(1000);
-
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "family");
+  const childName = await driver.findElement(By.id("name_0")).getText();
+  assert.equal(childName, "Mr Salah Abbot Edited");
 })
 
 When("I click on remove button for my child", async function() {
-  var remove_button = await driver.findElement(By.className("child_remove"));
-  await remove_button.click();
+  const removeButton = await driver.findElement(By.id("delete_0"));
+  removeButton.click();
   await driver.sleep(1000);
 })
 
 Then("my child should be removed", async function() {
-  // TODO: should mimic the above functionality but assert for not containing
+  try {
+    const childNameDeleted = await driver.findElement(By.id("name_0"));
+  } catch (error) {
+    assert.equal(error.name, "NoSuchElementError");
+  }
 })
 
 

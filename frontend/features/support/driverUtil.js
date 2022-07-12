@@ -12,6 +12,9 @@ const height = 999;
 exports.initDriver = () => {
     const driver = new webdriver.Builder().forBrowser('chrome').setChromeOptions(options).build();
     driver.manage().window().setRect({width: width, height: height});
+    driver.executeScript(function() {
+        localStorage.clear()
+    })
     return driver;
 }
 
