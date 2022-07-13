@@ -96,8 +96,8 @@ export default function Details() {
       </div>
 
       <TextDesc
-        headerText="Tell me about yourself first"
-        bodyText="sth know you better sth know you better"
+        headerText="Tell me about yourself"
+        bodyText="We want to know you better!"
       />
       <div className="grid h-screen place-content-center mx-8">
         <form onSubmit={handleSubmit(onSubmit)}>

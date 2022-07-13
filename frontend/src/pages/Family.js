@@ -80,7 +80,7 @@ export default function Family() {
         <ProgressBar percent="33%" />
       </div>
 
-      <TextDesc headerText="Family Details" bodyText="ssth sth about family" />
+      <TextDesc headerText="Family Details" bodyText="How many joint-alternate accounts do you want to register?" />
 
       <div className="absolute top-[25%] w-full px-8 ">
         <b className="text-l">All Family Members</b>
