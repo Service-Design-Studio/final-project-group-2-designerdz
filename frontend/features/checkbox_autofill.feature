@@ -1,4 +1,8 @@
 Feature: Checkbox Autofill 
+As a parent with young kids registering for my children
+I want to be able to share common information between myself and my children
+So that I do not have to repeatedly fill up information
+
     Background: Filling up of parent details
         Given that I have saved my details
         And I add a new child

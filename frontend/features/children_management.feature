@@ -1,4 +1,8 @@
 Feature: Children management
+As a parent with young kids
+I want to select the number of children I have
+So that I register bank account for them
+
     Background: Added one child
         Given I have successfully added a child
         And that I am on the family page
