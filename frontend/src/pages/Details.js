@@ -107,6 +107,7 @@ export default function Details() {
             <div className="flex">
               <select
                 className="title inline-flex items-center px-3 text-sm border border-r-0 border-gray-300 rounded-l-md dark:text-gray-900 dark:border-gray-600"
+                name = "title"
                 {...register("title", {})}
               >
                 <option value="Mr">Mr</option>
@@ -120,6 +121,7 @@ export default function Details() {
                 type="text"
                 className="parent_display_name rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
+                name = "display_name"
                 {...register("display_name", { required: "Display Name is Required" })}
               />
             </div>
@@ -140,7 +142,7 @@ export default function Details() {
           <FormFill
             text="Phone Number"
             type="number"
-            name="parent_number"
+            name="phone_number"
             onFill={register("phone_number", { required:"Phone Number is Required", valueAsNumber: true })}
             />
           {errors.phone_number && <p className="text-red-500">{errors.phone_number.message}</p>}
@@ -148,7 +150,7 @@ export default function Details() {
             type="email"
             name="parent_email"
             text="Email Address (Optional)"
-            onFill={register("email", {})}
+            onFill={register("parent_email", {})}
           />
           <Button
             name="next"

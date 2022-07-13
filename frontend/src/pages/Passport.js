@@ -201,15 +201,18 @@ export default function Passport() {
             name="full_name"
             text="Full Name"
             type="text"
-            onFill={register("full_name", {})}
+            onFill={register("full_name", {required:"Full Name is Required"})}
           />
+          {errors.full_name && <p className="text-red-500">{errors.full_name.message}</p>}
+          
 
           <FormFill
             name="passport_number"
             text="Passport Number"
             type="text"
-            onFill={register("passport_number", {})}
+            onFill={register("passport_number", {required:"Passport Number is Required"})}
           />
+          {errors.passport_number && <p className="text-red-500">{errors.passport_number.message}</p>}
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
@@ -226,8 +229,9 @@ export default function Passport() {
             text="Nationality"
             name="nationality"
             type="text"
-            onFill={register("nationality", {})}
+            onFill={register("nationality", {required: "Please choose a gender"})}
           />
+          {errors.nationality && <p className="text-red-500">{errors.nationality.message}</p>}
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
