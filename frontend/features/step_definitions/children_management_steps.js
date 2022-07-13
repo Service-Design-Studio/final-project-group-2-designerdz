@@ -78,7 +78,7 @@ Given("I have successfully added a child", async function() {
 
 })
 
-When("that I am on the family page", async function() {
+When("I am on the family page", async function() {
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, base_url + "family");
 })
