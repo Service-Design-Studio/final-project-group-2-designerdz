@@ -175,7 +175,7 @@ export default function Passport() {
 
       <TextDesc
         headerText="Fill up your passport details"
-        bodyText="important for us verify bla bla"
+        bodyText="This is important for us to verify your information"
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
