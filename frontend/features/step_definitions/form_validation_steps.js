@@ -45,8 +45,8 @@ const {
         notACustomerYetButton.click();
         await driver.sleep(1000);
         
-        const nextButton = await driver.findElement(By.className("next"))
-        nextButton.click();
+        const familyNextButton = await driver.findElement(By.className("family-next"))
+        familyNextButton.click();
         await driver.sleep(1000);
 
         expect(await driver.getCurrentUrl()).to.equal(base_url + page)
@@ -58,7 +58,7 @@ const {
     await driver.sleep(1000);
   });
 
-  Then('I should stay on {string}', async function (page) {
+  Then('I should be on {string}', async function (page) {
     // Get current url
     expect(await driver.getCurrentUrl()).to.equal(base_url + page);
   });
@@ -70,5 +70,22 @@ const {
     for (let i = 0; i < error_elements.length; i++) {
         let error_text = await error_elements[i].getText();
         expect(error_text).to.equal(error_array[i] + " is Required");
+    }
+  });
+
+  When('I fill up {string}', async function (string) {
+    let form_fields = string.split(",");    
+    for (let i = 0; i < form_fields.length; i++) {
+      let form_field = await driver.findElement(By.className(form_fields[i]));
+      let form_field_type = await form_field.getAttribute("type");
+      if (form_field_type == "text") {
+        await form_field.sendKeys("test");
+      } else if (form_field_type == "email") {
+        await form_field.sendKeys("testing@123.com")
+      } else if (form_field_type == "password") {
+        await form_field.sendKeys("test")
+      } else if (form_field_type == "number") {
+        await form_field.sendKeys("123456789")
+      }
     }
   });
