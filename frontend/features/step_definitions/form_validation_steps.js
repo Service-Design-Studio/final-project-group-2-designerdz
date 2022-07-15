@@ -21,7 +21,7 @@ const {
   
   let spec = pactum.spec();
   
-  let base_url = "https://react-frontend-353408.as.r.appspot.com/";
+  let base_url = "http://localhost:3000/";
   
   setDefaultTimeout(60 * 1000);
   
@@ -44,9 +44,9 @@ const {
         const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
         notACustomerYetButton.click();
         await driver.sleep(1000);
-
-        const familyButton = await driver.findElement(By.className("family-next"))
-        familyButton.click();
+        
+        const nextButton = await driver.findElement(By.className("next"))
+        nextButton.click();
         await driver.sleep(1000);
 
         expect(await driver.getCurrentUrl()).to.equal(base_url + page)
@@ -65,9 +65,10 @@ const {
 
   Then('I should see {string}', async function (errors) {
     let error_elements = await driver.findElements(By.className("text-red-500"));
-    expect(error_elements.length).to.be.at.least(1);
+    let error_array = errors.split(",");
+    expect(error_elements.length).to.equal(error_array.length);
     for (let i = 0; i < error_elements.length; i++) {
         let error_text = await error_elements[i].getText();
-        expect(error_text).to.equal(errors[i]);
+        expect(error_text).to.equal(error_array[i] + " is Required");
     }
   });
