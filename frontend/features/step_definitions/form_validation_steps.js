@@ -37,19 +37,26 @@ const {
   });
 
   Given('I am on {string} and I have not filled in any fields', async function (page) {
-    if (page == "details") {
-        await driver.get(base_url)
+      await driver.get(base_url)
+      await driver.sleep(1000)
+
+      const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
+      notACustomerYetButton.click();
+      await driver.sleep(1000);
+      
+      const familyNextButton = await driver.findElement(By.className("family-next"))
+      familyNextButton.click();
+      await driver.sleep(1000);
+
+      if (page == "child") {
+        await driver.findElement(By.className("display_name")).sendKeys("John")
+        await driver.findElement(By.className("phone_number")).sendKeys("1234567890")
+        driver.findElement(By.className("next")).click()
+        await driver.sleep(1000)
+        driver.findElement(By.className("add")).click()
         await driver.sleep(1000)
 
-        const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
-        notACustomerYetButton.click();
-        await driver.sleep(1000);
-        
-        const familyNextButton = await driver.findElement(By.className("family-next"))
-        familyNextButton.click();
-        await driver.sleep(1000);
-
-        expect(await driver.getCurrentUrl()).to.equal(base_url + page)
+      expect(await driver.getCurrentUrl()).to.equal(base_url + page)
     }
   });
 
@@ -85,6 +92,12 @@ const {
       } else if (form_field_type == "password") {
         await form_field.sendKeys("test")
       } else if (form_field_type == "number") {
+        let form_field_disabled = await form_field.getAttribute("disabled");
+        if (form_field_disabled != null) {
+          let checkbox = await driver.findElement(By.className("autofill"));
+          checkbox.click();
+          await driver.sleep(1000);
+        } 
         await form_field.sendKeys("123456789")
       }
     }

@@ -161,11 +161,12 @@ export default function ChildDetails() {
 
               <input
                 type="text"
-                className="child_display_name rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="display_name rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
-                {...register("display_name", {})}
+                {...register("display_name", { required: "Display Name is Required"})}
               />
             </div>
+            {errors.display_name && <p className="text-red-500">{errors.display_name.message}</p>}
 
             <h3 className="opacity-50 text-xs mb-4">
               This is how you will be acknowledged on PayLah! and digibank.
@@ -195,10 +196,11 @@ export default function ChildDetails() {
           <FormFill
             text="Phone Number"
             type="number"
-            name="child_number"
-            onFill={register("phone_number", {})}
+            name="phone_number"
+            onFill={register("phone_number", {required:"Phone Number is Required", valueAsNumber: true})}
             autofill = {autofill}
           />
+          {errors.phone_number && <p className="text-red-500">{errors.phone_number.message}</p>}
 
           <FormFill
             type="email"
