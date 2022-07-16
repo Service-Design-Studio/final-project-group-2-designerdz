@@ -34,7 +34,7 @@ export default function Review() {
       } else {
         try {
           const response = await getUserDataId(userId);
-          console.log(response)
+          console.log(response);
           userData = response.data[0];
           setDetails(userData);
         } catch (error) {
@@ -43,14 +43,13 @@ export default function Review() {
       }
     }
     fetchData();
-    
   }, []);
 
   const submitData = () => {
     navigate("/success");
   };
 
-  const onClickSelected = (index) => {
+  const onUserSelected = (index) => {
     setSelectedIndex(index);
     setDetails(familyData[index]);
   };
@@ -58,14 +57,22 @@ export default function Review() {
   const onEditDetails = () => {
     if (selectedIndex > 0) {
       navigate("/child", {
-        state: { onEdit: true, child_id: familyData[selectedIndex].id, phone_number: familyData[0].phone_number, email: familyData[0].email  },
+        state: {
+          onEdit: true,
+          child_id: familyData[selectedIndex].id,
+          phone_number: familyData[0].phone_number,
+          email: familyData[0].email,
+        },
       });
     } else {
       navigate("/details", { state: { onEdit: true } });
     }
   };
 
-  
+  const onEditPassport = () => {
+    navigate("/passport", { state: { onEdit: true, index: selectedIndex } });
+  };
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -79,7 +86,7 @@ export default function Review() {
         {isFamily === true ? (
           <Carousel
             nameArr={familyData}
-            onClickSelected={onClickSelected}
+            onClickSelected={onUserSelected}
             selectedIndex={selectedIndex}
           />
         ) : null}
@@ -108,9 +115,10 @@ export default function Review() {
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
-            <EditButton
+            <EditButton onClick={onEditPassport} />
+            {/* <EditButton
               onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
-            />
+            /> */}
           </b>
         </div>
 
@@ -125,7 +133,12 @@ export default function Review() {
           </p>
           <p>Passport Expiry:</p>
           <p className="text-right">
-            {details === undefined ? "" : new Date(details.passport_expiry).toLocaleDateString('en-us', {year:"numeric", month:"short"})}
+            {details === undefined
+              ? ""
+              : new Date(details.passport_expiry).toLocaleDateString("en-us", {
+                  year: "numeric",
+                  month: "short",
+                })}
           </p>
           <p>Nationality:</p>
           <p className="text-right">
@@ -137,7 +150,13 @@ export default function Review() {
           </p>
           <p>Date of Birth:</p>
           <p className="text-right">
-            {details === undefined ? "" : new Date(details.dob).toLocaleDateString('en-us', {year:"numeric", month:"short", day:"numeric"})}
+            {details === undefined
+              ? ""
+              : new Date(details.dob).toLocaleDateString("en-us", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
           </p>
         </div>
         <Button

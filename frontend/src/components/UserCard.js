@@ -4,7 +4,7 @@ function UserCardSelected({ id, name, onClick, index }) {
       type="button"
       onClick={() => onClick(index)}
       id={`${id}`}
-      className="grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2"
+      className="grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -18,9 +18,7 @@ function UserCardSelected({ id, name, onClick, index }) {
           clipRule="evenodd"
         />
       </svg>
-      <p className={ `"user_${index} text-ellipsis overflow-hidden text-center text-sm"`}>
-        {name}
-      </p>
+      <p className={`"user_${index} text-center `}>{name}</p>
     </button>
   );
 }
@@ -30,7 +28,7 @@ function UserCardNotSelected({ id, name, onClick, index }) {
       type="button"
       onClick={() => onClick(index)}
       id={`${id}`}
-      className="grid grid-cols-1 justify-items-center h-24 w-24 p-2"
+      className="grid grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +44,7 @@ function UserCardNotSelected({ id, name, onClick, index }) {
           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
         />
       </svg>
-      <p id={`"userText_${index}"`} className={`"user_${index} text-ellipsis overflow-hidden text-center text-sm"`}>
+      <p id={`"userText_${index}"`} className={`"user_${index} text-center"`}>
         {name}
       </p>
     </button>

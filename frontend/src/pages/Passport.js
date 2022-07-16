@@ -16,10 +16,13 @@ import {
 export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [details, setDetails] = useState({dob: new Date(), passport_expiry: new Date()});
+  const [details, setDetails] = useState({
+    dob: new Date(),
+    passport_expiry: new Date(),
+  });
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [familyData, setFamilyData] = useState([]); 
+  const [familyData, setFamilyData] = useState([]);
   const {
     reset,
     register,
@@ -29,11 +32,19 @@ export default function Passport() {
   } = useForm();
   let userId = localStorage.getItem("user_id");
   let isFamily = localStorage.getItem("is_family") === "true";
+  console.log(userId == null);
 
   //on first render do GET request
   useEffect(() => {
+    //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
+    if (userId == null) {
+      navigate("/", { state: { pop_up: true } }); //testing to see if it works
+      alert("Enter phone number at landing page!"); //TODO: remember to remove
+    }
+
     try {
       setOnEdit(location.state.onEdit);
+      setSelectedIndex(location.state.index);
     } catch (error) {
       console.error(error);
     }
@@ -69,7 +80,6 @@ export default function Passport() {
       });
     }
   }, [selectedIndex, familyData]);
-
 
   //to post the data
   const onSubmit = async (data) => {
@@ -108,7 +118,7 @@ export default function Passport() {
     }
   };
 
-  const onClickSelected = async (index) => {
+  const onUserSelected = async (index) => {
     let data = getValues();
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
@@ -154,16 +164,18 @@ export default function Passport() {
   };
 
   const toggleGenderToMale = () => {
-    setDetails(prevState => ({
+    setDetails((prevState) => ({
       ...prevState,
-      "gender": "MALE"}
-  ))};
+      gender: "MALE",
+    }));
+  };
 
   const toggleGenderToFemale = () => {
-    setDetails(prevState => ({
-          ...prevState,
-          "gender": "FEMALE"}
-      ))};
+    setDetails((prevState) => ({
+      ...prevState,
+      gender: "FEMALE",
+    }));
+  };
 
   return (
     <div>
@@ -182,8 +194,8 @@ export default function Passport() {
         <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
           {isFamily === true ? (
             <Carousel
-              nameArr={familyData} //TODO: replace with familyData
-              onClickSelected={onClickSelected}
+              nameArr={familyData}
+              onClickSelected={onUserSelected}
               selectedIndex={selectedIndex}
             />
           ) : null}
@@ -201,24 +213,31 @@ export default function Passport() {
             name="full_name"
             text="Full Name"
             type="text"
-            onFill={register("full_name", {required:"Full Name is Required"})}
+            onFill={register("full_name", {
+              required: "Full Name is Required",
+            })}
           />
-          {errors.full_name && <p className="text-red-500">{errors.full_name.message}</p>}
-          
+          {errors.full_name && (
+            <p className="text-red-500">{errors.full_name.message}</p>
+          )}
 
           <FormFill
             name="passport_number"
             text="Passport Number"
             type="text"
-            onFill={register("passport_number", {required:"Passport Number is Required"})}
+            onFill={register("passport_number", {
+              required: "Passport Number is Required",
+            })}
           />
-          {errors.passport_number && <p className="text-red-500">{errors.passport_number.message}</p>}
+          {errors.passport_number && (
+            <p className="text-red-500">{errors.passport_number.message}</p>
+          )}
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
             <div>
               <Calendar
-              calendarType = "passport_expiry"
+                calendarType="passport_expiry"
                 curDate={details.passport_expiry}
                 setDetailsHandler={setDetails}
               />
@@ -229,9 +248,13 @@ export default function Passport() {
             text="Nationality"
             name="nationality"
             type="text"
-            onFill={register("nationality", {required: "Please choose a gender"})}
+            onFill={register("nationality", {
+              required: "Please choose a gender",
+            })}
           />
-          {errors.nationality && <p className="text-red-500">{errors.nationality.message}</p>}
+          {errors.nationality && (
+            <p className="text-red-500">{errors.nationality.message}</p>
+          )}
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
@@ -262,10 +285,10 @@ export default function Passport() {
               Date of Birth (DD/MM/YYYY)
             </label>
             <Calendar
-              calendarType = "dob"
-                curDate={details.dob}
-                setDetailsHandler={setDetails}
-              />
+              calendarType="dob"
+              curDate={details.dob}
+              setDetailsHandler={setDetails}
+            />
           </div>
           <Button
             name="next"

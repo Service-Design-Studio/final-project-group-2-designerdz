@@ -1,10 +1,25 @@
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "../components/Buttons.js";
 import Popup from "reactjs-popup";
 import Restore from "./Restore.js";
 
 export default function Landing() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
+  // const [showPopup, setShowPopup] = useState(false);
+  let showPopup = false;
+
+  useEffect(() => {
+    try {
+      setOpen(location.state.pop_up);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const closeModal = () => setOpen(false);
 
   return (
     <div className="grid h-screen place-content-center mx-8">
@@ -27,15 +42,17 @@ export default function Landing() {
           onClick={() => alert("Sorry we are not DBS!")}
         />
       </div>
+      <button className="button">
+        <a>
+          Left registration midway?
+          <span className="underline">Continue where you left.</span>
+        </a>
+      </button>
       <Popup
-        trigger={
-          <button className="button">
-            <a>
-              Left registration midway?{" "}
-              <span className="underline">Continue where you left.</span>
-            </a>{" "}
-          </button>
-        }
+        open={open}
+        closeOnDocumentClick
+        onClose={closeModal}
+        // trigger
       >
         <div className="fixed top-2/4 left-0 right-0">
           <div className="w-8/12 m-auto">

@@ -33,7 +33,6 @@ export default function ChildDetails() {
   let phoneNumber = location.state.phone_number;
   let email = location.state.email;
 
-
   useEffect(() => {
     try {
       setOnEdit(location.state.onEdit);
@@ -50,7 +49,7 @@ export default function ChildDetails() {
           childData.phone_number = phoneNumber;
           childData.email = email;
         }
-        if (childData.phone_number == phoneNumber && childData.email == email){
+        if (childData.phone_number == phoneNumber && childData.email == email) {
           setAutoFill(true);
         } else {
           setAutoFill(false);
@@ -62,7 +61,10 @@ export default function ChildDetails() {
           title: childData.title,
           phone_number: childData.phone_number,
           email: childData.email,
-          autofill: childData.phone_number == phoneNumber && childData.email == email ? true : false
+          autofill:
+            childData.phone_number == phoneNumber && childData.email == email
+              ? true
+              : false,
         });
       } catch (error) {
         console.error(error.response);
@@ -75,16 +77,17 @@ export default function ChildDetails() {
       console.log(childId);
       fetchData(childId);
     } else {
-      // If child_id is undefined then we are creating a new child  
-      setAutoFill(true)
+      // If child_id is undefined then we are creating a new child
+      setAutoFill(true);
       reset({
         phone_number: phoneNumber,
         email: email,
-        autofill: true})
-      }
+        autofill: true,
+      });
+    }
   }, []);
 
-  const onSubmit = async (data) => { 
+  const onSubmit = async (data) => {
     if (childId) {
       try {
         await patchChildData(data, childId);
@@ -163,10 +166,14 @@ export default function ChildDetails() {
                 type="text"
                 className="display_name rounded-none rounded-r-lg border focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Last / Display Name"
-                {...register("display_name", { required: "Display Name is Required"})}
+                {...register("display_name", {
+                  required: "Display Name is Required",
+                })}
               />
             </div>
-            {errors.display_name && <p className="text-red-500">{errors.display_name.message}</p>}
+            {errors.display_name && (
+              <p className="text-red-500">{errors.display_name.message}</p>
+            )}
 
             <h3 className="opacity-50 text-xs mb-4">
               This is how you will be acknowledged on PayLah! and digibank.
@@ -192,22 +199,26 @@ export default function ChildDetails() {
               Select if same as parent
             </label>
           </div>
-          {console.log("AUTOFILL STATE" + autofill)}
           <FormFill
             text="Phone Number"
             type="number"
             name="phone_number"
-            onFill={register("phone_number", {required:"Phone Number is Required", valueAsNumber: true})}
-            autofill = {autofill}
+            onFill={register("phone_number", {
+              required: "Phone Number is Required",
+              valueAsNumber: true,
+            })}
+            autofill={autofill}
           />
-          {errors.phone_number && <p className="text-red-500">{errors.phone_number.message}</p>}
+          {errors.phone_number && (
+            <p className="text-red-500">{errors.phone_number.message}</p>
+          )}
 
           <FormFill
             type="email"
             text="Email Address (Optional)"
             name="child_email"
             onFill={register("email", {})}
-            autofill = {autofill}
+            autofill={autofill}
           />
           <Button
             name="next"
