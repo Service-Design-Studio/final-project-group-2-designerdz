@@ -42,7 +42,7 @@ export default function Landing() {
           onClick={() => alert("Sorry we are not DBS!")}
         />
       </div>
-      <button className="button">
+      <button className="button" onClick={() => setOpen(true)}>
         <a>
           Left registration midway?
           <span className="underline">Continue where you left.</span>
