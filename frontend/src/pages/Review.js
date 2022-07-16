@@ -14,36 +14,28 @@ export default function Review() {
   const [details, setDetails] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
+  const [isFamily, setIsFamily] = useState(false);
   let userData;
   let userId = localStorage.getItem("user_id");
-  let isFamily = localStorage.getItem("is_family") === "true";
 
   useEffect(() => {
     async function fetchData() {
-      if (isFamily) {
-        if (familyData.length === 0) {
-          try {
-            const response = await getAllChildrenData(userId);
-            userData = response.data;
-            setFamilyData(userData);
-            setDetails(userData[selectedIndex]); //details for current selected user
-          } catch (error) {
-            console.log(error.response);
-          }
-        }
-      } else {
+      if (familyData.length === 0) {
         try {
-          const response = await getUserDataId(userId);
-          console.log(response);
-          userData = response.data[0];
-          setDetails(userData);
+          const response = await getAllChildrenData(userId);
+          userData = response.data;
+          setFamilyData(userData);
+          setDetails(userData[selectedIndex]); //details for current selected user
         } catch (error) {
           console.log(error);
         }
+      } else if (familyData.length > 1) {
+        //this means family registration
+        setIsFamily(true);
       }
     }
     fetchData();
-  }, []);
+  }, [familyData]);
 
   const submitData = () => {
     navigate("/success");

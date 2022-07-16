@@ -8,8 +8,6 @@ export default function Landing() {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
-  // const [showPopup, setShowPopup] = useState(false);
-  let showPopup = false;
 
   useEffect(() => {
     try {

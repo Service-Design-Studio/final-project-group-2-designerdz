@@ -23,6 +23,7 @@ export default function Passport() {
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
+  const [isFamily, setIsFamily] = useState(false);
   const {
     reset,
     register,
@@ -31,8 +32,8 @@ export default function Passport() {
     formState: { errors },
   } = useForm();
   let userId = localStorage.getItem("user_id");
-  let isFamily = localStorage.getItem("is_family") === "true";
-  console.log(userId == null);
+  // let isFamily = localStorage.getItem("is_family") === "true";
+  // let isFamily = false;
 
   //on first render do GET request
   useEffect(() => {
@@ -60,6 +61,9 @@ export default function Passport() {
 
     if (familyData.length === 0) {
       fetchData();
+    } else if (familyData.length > 1) {
+      // this means family registration
+      setIsFamily(true);
     }
 
     if (familyData[selectedIndex] !== undefined) {

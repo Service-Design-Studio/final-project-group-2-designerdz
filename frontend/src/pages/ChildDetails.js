@@ -125,8 +125,6 @@ export default function ChildDetails() {
   };
 
   const validateInputs = () => {
-    console.log("changing");
-    console.log(getValues());
     if (
       getValues().phone_number === "" ||
       getValues().email === "" ||
