@@ -12,7 +12,11 @@ export default function Restore() {
   const onSubmit = async (data) => {
     const response = await getUserDataPhoneNumber(data.phone_number);
     localStorage.setItem("user_id", response.data[0].id);
+<<<<<<< HEAD
     navigate("/review"); //TODO: get the path to redirect the user to & how to know if got family not
+=======
+    navigate("/review");
+>>>>>>> c6ab999 (fix css styling added redirect when no userId)
   };
   console.log(errors);
   return (
