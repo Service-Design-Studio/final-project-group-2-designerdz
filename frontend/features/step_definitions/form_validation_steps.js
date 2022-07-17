@@ -21,7 +21,7 @@ const {
   
   let spec = pactum.spec();
   
-  let base_url = "http://localhost:3000/";
+  let base_url = "http://localhost:3001/";
   
   setDefaultTimeout(60 * 1000);
   
@@ -38,23 +38,46 @@ const {
 
   Given('I am on {string} and I have not filled in any fields', async function (page) {
       await driver.get(base_url)
-      await driver.sleep(1000)
+      await driver.sleep(2000)
 
       const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
       notACustomerYetButton.click();
       await driver.sleep(1000);
       
-      const familyNextButton = await driver.findElement(By.className("family-next"))
-      familyNextButton.click();
-      await driver.sleep(1000);
+      if (page == "details") {
+        const familyNextButton = await driver.findElement(By.className("family-next"))
+        familyNextButton.click();
+        await driver.sleep(1000);
+      }
 
       if (page == "child") {
+        const familyNextButton = await driver.findElement(By.className("family-next"))
+        familyNextButton.click();
+        await driver.sleep(1000);
+
         await driver.findElement(By.className("display_name")).sendKeys("John")
-        await driver.findElement(By.className("phone_number")).sendKeys("1234567890")
+        await driver.findElement(By.className("phone_number")).sendKeys("12345678907")
         driver.findElement(By.className("next")).click()
         await driver.sleep(1000)
         driver.findElement(By.className("add")).click()
         await driver.sleep(1000)
+
+        const autofill = await driver.findElement(By.className("autofill"))
+        autofill.click()
+        await driver.sleep(1000);
+
+      if (page == "passport") {
+        const goToDetailsButton = await driver.findElement(By.className("next"))
+        goToDetailsButton.click()
+        await driver.sleep(1000)
+
+        await driver.findElement(By.className("display_name")).sendKeys("John")
+        await driver.findElement(By.className("phone_number")).sendKeys("12345678907564")
+        
+        const goToPassportButton = await driver.findElement(By.className("next"))
+        goToPassportButton.click()
+        await driver.sleep(1000)
+      }
 
       expect(await driver.getCurrentUrl()).to.equal(base_url + page)
     }
@@ -66,7 +89,6 @@ const {
   });
 
   Then('I should be on {string}', async function (page) {
-    // Get current url
     expect(await driver.getCurrentUrl()).to.equal(base_url + page);
   });
 
