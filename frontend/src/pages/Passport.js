@@ -29,7 +29,7 @@ export default function Passport() {
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { isValid, errors },
   } = useForm();
   let userId = localStorage.getItem("user_id");
   // let isFamily = localStorage.getItem("is_family") === "true";
@@ -91,29 +91,32 @@ export default function Passport() {
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
     data["gender"] = details.gender;
-    if (selectedIndex === 0) {
-      try {
-        await patchUserData(data, userId);
-      } catch (error) {
-        alert(error);
-        console.log(error.response);
+    // check if form is valid
+    
+    if (isValid) {
+      if (selectedIndex === 0) {
+        try {
+          await patchUserData(data, userId);
+        } catch (error) {
+          alert(error);
+          console.log(error.response);
+        }
+      } else {
+        try {
+          await patchChildData(data, familyData[selectedIndex].id);
+        } catch (error) {
+          console.log(error.response);
+        }
       }
-    } else {
-      try {
-        await patchChildData(data, familyData[selectedIndex].id);
-      } catch (error) {
-        console.log(error.response);
+
+      if (onEdit === true) {
+        navigate("/review");
+        setOnEdit(false);
+      } else {
+        navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
       }
-    }
-
-    if (onEdit === true) {
-      navigate("/review");
-      setOnEdit(false);
-    } else {
-      navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
-    }
-  };
-
+    };
+  }
   const onBackBtnSelected = () => {
     if (isFamily) {
       navigate("/family");
@@ -253,7 +256,7 @@ export default function Passport() {
             name="nationality"
             type="text"
             onFill={register("nationality", {
-              required: "Please choose a gender",
+              required: "Nationality is Required",
             })}
           />
           {errors.nationality && (
