@@ -108,9 +108,6 @@ export default function Review() {
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
             <EditButton onClick={onEditPassport} />
-            {/* <EditButton
-              onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
-            /> */}
           </b>
         </div>
 
