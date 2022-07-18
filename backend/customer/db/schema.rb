@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_08_104045) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_18_100312) do
   create_table "children", force: :cascade do |t|
     t.integer "user_id"
     t.string "display_name"
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_08_104045) do
     t.string "dob"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image_url"
     t.index ["user_id"], name: "index_children_on_user_id"
   end
 
@@ -41,6 +42,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_08_104045) do
     t.string "dob"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "url"
+    t.string "image_url"
+    t.string "is_family"
   end
 
   add_foreign_key "children", "users"
