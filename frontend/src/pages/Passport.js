@@ -23,7 +23,6 @@ export default function Passport() {
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
-  const [isFamily, setIsFamily] = useState(false);
   const {
     reset,
     register,
@@ -32,8 +31,8 @@ export default function Passport() {
     formState: { isValid, errors },
   } = useForm();
   let userId = localStorage.getItem("user_id");
-  // let isFamily = localStorage.getItem("is_family") === "true";
-  // let isFamily = false;
+  let isFamily = localStorage.getItem("is_family") === "true";
+  console.log(userId == null);
 
   //on first render do GET request
   useEffect(() => {

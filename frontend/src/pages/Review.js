@@ -22,10 +22,10 @@ export default function Review() {
     async function fetchData() {
       if (familyData.length === 0) {
         try {
-          const response = await getAllChildrenData(userId);
-          userData = response.data;
-          setFamilyData(userData);
-          setDetails(userData[selectedIndex]); //details for current selected user
+          const response = await getUserDataId(userId);
+          console.log(response);
+          userData = response.data[0];
+          setDetails(userData);
         } catch (error) {
           console.log(error);
         }
@@ -35,7 +35,7 @@ export default function Review() {
       }
     }
     fetchData();
-  }, [familyData]);
+  }, []);
 
   const submitData = () => {
     navigate("/success");
@@ -108,6 +108,9 @@ export default function Review() {
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
             <EditButton onClick={onEditPassport} />
+            {/* <EditButton
+              onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
+            /> */}
           </b>
         </div>
 

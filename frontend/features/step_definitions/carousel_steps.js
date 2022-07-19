@@ -21,14 +21,21 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-let base_url = "https://react-frontend-353408.as.r.appspot.com/";
+// let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
+let baseUrl = "http://localhost:3001/";
 
 setDefaultTimeout(60 * 1000);
 
 let driver;
 
-Before(function () {
+Before(async function () {
   driver = initDriver();
+  driver = initDriver();
+  await driver.get(baseUrl);
+  await driver.sleep(1000);
+  await driver.executeScript(function () {
+    localStorage.clear();
+  });
   spec = pactum.spec();
 });
 
@@ -37,7 +44,22 @@ After(function () {
 });
 
 Given("I have filled in my details", async function () {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   await driver.get(base_url);
+=======
+  await driver.get(baseUrl);
+>>>>>>> c0b4c4e (edited step definition for local storage to work)
+=======
+  await driver.get(baseUrl);
+=======
+  await driver.get(base_url);
+>>>>>>> d334d80 (fix css styling added redirect when no userId)
+>>>>>>> c6ab999 (fix css styling added redirect when no userId)
+=======
+  await driver.get(baseUrl);
+>>>>>>> c0b4c4e (edited step definition for local storage to work)
   await driver.sleep(1000);
   const notACustomerYetButton = await driver.findElement(
     By.className("bg-red-500")
@@ -74,6 +96,9 @@ Given("I have added a child", async function () {
   nextButton.click();
   await driver.sleep(1000);
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   assert.equal(await driver.getCurrentUrl(), base_url + "family");
 });
 
@@ -85,8 +110,46 @@ When("I navigate to the passport page", async function () {
 
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, base_url + "passport");
+=======
+=======
+>>>>>>> c6ab999 (fix css styling added redirect when no userId)
+=======
+>>>>>>> c0b4c4e (edited step definition for local storage to work)
+  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
 });
 
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+
+  await driver.sleep(1000);
+
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, baseUrl + "passport");
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> c0b4c4e (edited step definition for local storage to work)
+=======
+=======
+  assert.equal(await driver.getCurrentUrl(), base_url + "family");
+});
+
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+
+  await driver.sleep(1000);
+
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, base_url + "passport");
+>>>>>>> d334d80 (fix css styling added redirect when no userId)
+>>>>>>> c6ab999 (fix css styling added redirect when no userId)
+});
+
+=======
+});
+
+>>>>>>> c0b4c4e (edited step definition for local storage to work)
 Then(
   "I should be able to see my child's and my name in the carousel",
   async function () {
