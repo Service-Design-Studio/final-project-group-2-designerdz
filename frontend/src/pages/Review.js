@@ -22,17 +22,10 @@ export default function Review() {
     async function fetchData() {
       if (familyData.length === 0) {
         try {
-<<<<<<< HEAD
-          const response = await getAllChildrenData(userId);
-          userData = response.data;
-          setFamilyData(userData);
-          setDetails(userData[selectedIndex]); //details for current selected user
-=======
           const response = await getUserDataId(userId);
           console.log(response);
           userData = response.data[0];
           setDetails(userData);
->>>>>>> c6ab999 (fix css styling added redirect when no userId)
         } catch (error) {
           console.log(error);
         }
@@ -42,11 +35,7 @@ export default function Review() {
       }
     }
     fetchData();
-<<<<<<< HEAD
-  }, [familyData]);
-=======
   }, []);
->>>>>>> c6ab999 (fix css styling added redirect when no userId)
 
   const submitData = () => {
     navigate("/success");
@@ -119,12 +108,9 @@ export default function Review() {
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
             <EditButton onClick={onEditPassport} />
-<<<<<<< HEAD
-=======
             {/* <EditButton
               onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
             /> */}
->>>>>>> c6ab999 (fix css styling added redirect when no userId)
           </b>
         </div>
 
