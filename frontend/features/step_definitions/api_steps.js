@@ -6,6 +6,7 @@ let spec = pactum.spec();
 
 Before(() => { spec = pactum.spec(); });
 
+
 Given('I make a GET request to {string}', function (url) {
   spec.get(url);
 });

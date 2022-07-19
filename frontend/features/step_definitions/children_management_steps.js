@@ -21,14 +21,22 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-let base_url = "https://react-frontend-353408.as.r.appspot.com/";
+let base_url = "http://localhost:3001/";
 
 setDefaultTimeout(60 * 1000);
 
 let driver;
 
-Before(function () {
+Before(async function () {
   driver = initDriver();
+
+  await driver.get(base_url);
+  await driver.sleep(100);
+
+  await driver.executeScript(function() {
+      localStorage.clear()
+  });
+
   spec = pactum.spec();
 });
 

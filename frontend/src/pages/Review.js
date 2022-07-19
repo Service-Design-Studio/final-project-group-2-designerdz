@@ -14,43 +14,34 @@ export default function Review() {
   const [details, setDetails] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
+  const [isFamily, setIsFamily] = useState(false);
   let userData;
   let userId = localStorage.getItem("user_id");
-  let isFamily = localStorage.getItem("is_family") === "true";
 
   useEffect(() => {
     async function fetchData() {
-      if (isFamily) {
-        if (familyData.length === 0) {
-          try {
-            const response = await getAllChildrenData(userId);
-            userData = response.data;
-            setFamilyData(userData);
-            setDetails(userData[selectedIndex]); //details for current selected user
-          } catch (error) {
-            console.log(error.response);
-          }
-        }
-      } else {
+      if (familyData.length === 0) {
         try {
-          const response = await getUserDataId(userId);
-          console.log(response)
-          userData = response.data[0];
-          setDetails(userData);
+          const response = await getAllChildrenData(userId);
+          userData = response.data;
+          setFamilyData(userData);
+          setDetails(userData[selectedIndex]); //details for current selected user
         } catch (error) {
           console.log(error);
         }
+      } else if (familyData.length > 1) {
+        //this means family registration
+        setIsFamily(true);
       }
     }
     fetchData();
-    
-  }, []);
+  }, [familyData]);
 
   const submitData = () => {
     navigate("/success");
   };
 
-  const onClickSelected = (index) => {
+  const onUserSelected = (index) => {
     setSelectedIndex(index);
     setDetails(familyData[index]);
   };
@@ -58,14 +49,22 @@ export default function Review() {
   const onEditDetails = () => {
     if (selectedIndex > 0) {
       navigate("/child", {
-        state: { onEdit: true, child_id: familyData[selectedIndex].id, phone_number: familyData[0].phone_number, email: familyData[0].email  },
+        state: {
+          onEdit: true,
+          child_id: familyData[selectedIndex].id,
+          phone_number: familyData[0].phone_number,
+          email: familyData[0].email,
+        },
       });
     } else {
       navigate("/details", { state: { onEdit: true } });
     }
   };
 
-  
+  const onEditPassport = () => {
+    navigate("/passport", { state: { onEdit: true, index: selectedIndex } });
+  };
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -79,7 +78,7 @@ export default function Review() {
         {isFamily === true ? (
           <Carousel
             nameArr={familyData}
-            onClickSelected={onClickSelected}
+            onClickSelected={onUserSelected}
             selectedIndex={selectedIndex}
           />
         ) : null}
@@ -108,9 +107,7 @@ export default function Review() {
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
-            <EditButton
-              onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
-            />
+            <EditButton onClick={onEditPassport} />
           </b>
         </div>
 
@@ -125,7 +122,12 @@ export default function Review() {
           </p>
           <p>Passport Expiry:</p>
           <p className="text-right">
-            {details === undefined ? "" : new Date(details.passport_expiry).toLocaleDateString('en-us', {year:"numeric", month:"short"})}
+            {details === undefined
+              ? ""
+              : new Date(details.passport_expiry).toLocaleDateString("en-us", {
+                  year: "numeric",
+                  month: "short",
+                })}
           </p>
           <p>Nationality:</p>
           <p className="text-right">
@@ -137,7 +139,13 @@ export default function Review() {
           </p>
           <p>Date of Birth:</p>
           <p className="text-right">
-            {details === undefined ? "" : new Date(details.dob).toLocaleDateString('en-us', {year:"numeric", month:"short", day:"numeric"})}
+            {details === undefined
+              ? ""
+              : new Date(details.dob).toLocaleDateString("en-us", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
           </p>
         </div>
         <Button
