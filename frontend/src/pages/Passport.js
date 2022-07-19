@@ -76,7 +76,7 @@ export default function Passport() {
       fetchData();
     } else if (familyData.length > 1) {
       // this means family registration
-      setIsFamily(true);
+      isFamily = true
     }
 
     if (familyData[selectedIndex] !== undefined) {
