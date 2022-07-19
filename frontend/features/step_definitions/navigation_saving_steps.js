@@ -21,13 +21,14 @@ const pactum = require("pactum");
 
 let spec = pactum.spec();
 
-let base_url = "https://react-frontend-353408.as.r.appspot.com/";
+// let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
+let baseUrl = "http://localhost:3001/";
 
 setDefaultTimeout(60 * 1000);
 
 let driver;
 
-Before(function () {
+Before(async function () {
   driver = initDriver();
   spec = pactum.spec();
 });
@@ -37,8 +38,11 @@ After(async function () {
 });
 
 Given("I am on {string}", async function (page) {
-  await driver.get(base_url + page);
+  await driver.get(baseUrl + page);
   await driver.sleep(1000);
+  driver.executeScript(function () {
+    localStorage.clear();
+  });
 });
 
 When("I click on the next button", async function () {
@@ -68,11 +72,11 @@ Then("I should go back to the {string} page", async function (previous) {
 });
 
 Given("I am on the passport page", function () {
-  driver.get(base_url + "passport");
+  driver.get(baseUrl + "passport");
 });
 
 Given("I am on passport", function () {
-  driver.get(base_url + "passport");
+  driver.get(baseUrl + "passport");
 });
 
 Given("I have filled in my {string}", function (full_name) {
@@ -80,7 +84,7 @@ Given("I have filled in my {string}", function (full_name) {
 });
 
 Then("I should move forward to the review page", function () {
-  driver.get(base_url + "review");
+  driver.get(baseUrl + "review");
 });
 
 Then("my {string} should be shown", async function (full_name) {
@@ -97,12 +101,12 @@ When("I restart the app", function () {
 Then(
   "I should be redirected back to {string} where I left off",
   async function (page) {
-    expect(driver.getCurrentUrl, base_url + page);
+    expect(driver.getCurrentUrl, baseUrl + page);
   }
 );
 
 Given("I am on the restore page", function () {
-  driver.get(base_url + "restore");
+  driver.get(baseUrl + "restore");
   driver.sleep(1000);
 });
 
