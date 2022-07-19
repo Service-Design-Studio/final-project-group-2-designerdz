@@ -47,13 +47,27 @@ export default function Passport() {
       setOnEdit(location.state.onEdit);
       setSelectedIndex(location.state.index);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
+    }
+
+    function checkIncompleteData(familyData) {
+      let compulsory_fields = ["full_name", "passport_number", "nationality"]
+      console.log(familyData.length)
+      for (var i=0; i < familyData.length; i++) {
+        familyData[i]["status"] = true
+        for (let field of compulsory_fields) {
+          if (familyData[i][field] == undefined || familyData[i][field] == null || familyData[i][field] == "" || familyData[i][field] == " ") {
+            familyData[i]["status"] = false;
+          }
+        }
+      }
+      return familyData;
     }
 
     async function fetchData() {
       try {
         const response = await getAllChildrenData(userId);
-        setFamilyData(response.data);
+        setFamilyData(checkIncompleteData(response.data));
       } catch (error) {
         console.log(error.response);
       }
@@ -139,6 +153,16 @@ export default function Passport() {
           memberData[key] = data[key];
         }
       }
+      let compulsory_fields = ["full_name", "passport_number", "nationality"]
+      memberData["status"] = true;
+      for (const field of compulsory_fields) {
+        if (memberData[field] == undefined || memberData[field] == null || memberData[field] == "" || memberData[field] == " ") {
+          console.log("Setting to false")
+          memberData["status"] = false;
+        }
+      }
+      console.log(memberData)
+      console.log("MEMBER")
       return memberData;
     };
 

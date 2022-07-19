@@ -1,4 +1,4 @@
-function UserCardSelected({ id, name, onClick, index }) {
+function UserCardSelected({ id, name, onClick, index, status }) {
   return (
     <button
       type="button"
@@ -6,6 +6,7 @@ function UserCardSelected({ id, name, onClick, index }) {
       id={`${id}`}
       className="grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
     >
+      {status ? null : <p id ={`incomplete_${index}`} className="text-red-600">i</p>}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-12 w-12"
@@ -22,7 +23,7 @@ function UserCardSelected({ id, name, onClick, index }) {
     </button>
   );
 }
-function UserCardNotSelected({ id, name, onClick, index }) {
+function UserCardNotSelected({ id, name, onClick, index, status }) {
   return (
     <button
       type="button"
@@ -30,6 +31,7 @@ function UserCardNotSelected({ id, name, onClick, index }) {
       id={`${id}`}
       className="grid grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
     >
+            {status ? null : <p id ={`incomplete_${index}`} className="text-red-600">i</p>}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-12 w-12"
@@ -44,7 +46,7 @@ function UserCardNotSelected({ id, name, onClick, index }) {
           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
         />
       </svg>
-      <p id={`"userText_${index}"`} className={`"user_${index} text-center"`}>
+      <p id={`userText_${index}`} className={`user_${index} text-center`}>
         {name}
       </p>
     </button>

@@ -26,6 +26,11 @@ const {
   setDefaultTimeout(60 * 1000);
   
   let driver;
+
+  // make a random number
+  let random1 = Math.floor(Math.random() * 10000);
+  let random2 = Math.floor(Math.random() * 10000);
+  let random3 = Math.floor(Math.random() * 10000);
   
   Before(function () {
     driver = initDriver();
@@ -56,7 +61,7 @@ const {
         await driver.sleep(1000);
 
         await driver.findElement(By.className("display_name")).sendKeys("John")
-        await driver.findElement(By.className("phone_number")).sendKeys("12907")
+        await driver.findElement(By.className("phone_number")).sendKeys(random1)
         driver.findElement(By.className("next")).click()
         await driver.sleep(1000)
         driver.findElement(By.className("add")).click()
@@ -72,7 +77,7 @@ const {
         await driver.sleep(1000)
 
         await driver.findElement(By.className("display_name")).sendKeys("John")
-        await driver.findElement(By.className("phone_number")).sendKeys("1234564")
+        await driver.findElement(By.className("phone_number")).sendKeys(random2)
         
         const goToPassportButton = await driver.findElement(By.className("next"))
         goToPassportButton.click()
@@ -125,3 +130,44 @@ const {
       }
     }
   });
+
+  Given('I am on passport page, have at least one child and have not completed the fields on the current page', async function () {
+    await driver.get(base_url)
+    await driver.sleep(2000)
+
+    
+
+    const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
+    notACustomerYetButton.click();
+    await driver.sleep(1000);
+
+    const familyNextButton = await driver.findElement(By.className("family-next"))
+    familyNextButton.click();
+    await driver.sleep(1000);
+
+    await driver.findElement(By.className("display_name")).sendKeys("John")
+    await driver.findElement(By.className("phone_number")).sendKeys(random3)
+    driver.findElement(By.className("next")).click()
+    await driver.sleep(1000)
+    driver.findElement(By.className("add")).click()
+    await driver.sleep(1000)
+
+    await driver.findElement(By.className("display_name")).sendKeys("John Child")
+    await driver.findElement(By.className("next")).click()
+    await driver.sleep(1000)
+
+    await driver.findElement(By.className("next")).click()
+    await driver.sleep(1000)
+
+    expect(await driver.getCurrentUrl()).to.equal(base_url + "passport")
+  });
+
+When('I click on another family member', async function () {
+  await driver.findElement(By.id("user_1")).click()
+  await driver.sleep(1000)
+});
+
+Then('I should see an icon on the carousel of the family member I just navigated away from', async function () {
+  let found = await driver.findElements(By.id('incomplete_0'))
+  expect(found.length).to.equal(1);
+})
