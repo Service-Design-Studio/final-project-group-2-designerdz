@@ -8,11 +8,8 @@ export default function Landing() {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
-<<<<<<< HEAD
-=======
   // const [showPopup, setShowPopup] = useState(false);
   let showPopup = false;
->>>>>>> c6ab999 (fix css styling added redirect when no userId)
 
   useEffect(() => {
     try {
@@ -45,11 +42,7 @@ export default function Landing() {
           onClick={() => alert("Sorry we are not DBS!")}
         />
       </div>
-<<<<<<< HEAD
-      <button className="button" onClick={() => setOpen(true)}>
-=======
       <button className="button">
->>>>>>> c6ab999 (fix css styling added redirect when no userId)
         <a>
           Left registration midway?
           <span className="underline">Continue where you left.</span>
