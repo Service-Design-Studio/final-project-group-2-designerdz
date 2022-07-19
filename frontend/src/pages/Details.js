@@ -36,6 +36,7 @@ export default function Details() {
 
     async function fetchData() {
       try {
+        
         const response = await getUserDataId(userId);
         userData = response.data[0];
         setDetails(userData);

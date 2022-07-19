@@ -18,10 +18,12 @@ const { initDriver } = require("../support/driverUtil");
 const { expect, assert } = require("chai");
 const { setDefaultTimeout } = require("@cucumber/cucumber");
 const pactum = require("pactum");
+const axios = require("axios");
 
 let spec = pactum.spec();
 
-let base_url = "http://localhost:3001/";
+// let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
+let baseUrl = "http://localhost:3001/";
 
 setDefaultTimeout(60 * 1000);
 
@@ -29,14 +31,12 @@ let driver;
 
 Before(async function () {
   driver = initDriver();
-
-  await driver.get(base_url);
-  await driver.sleep(100);
-
-  await driver.executeScript(function() {
-      localStorage.clear()
+  driver = initDriver();
+  await driver.get(baseUrl);
+  await driver.sleep(1000);
+  await driver.executeScript(function () {
+    localStorage.clear();
   });
-  
   spec = pactum.spec();
 });
 
@@ -45,7 +45,7 @@ After(function () {
 });
 
 Given("I have filled in my details", async function () {
-  await driver.get(base_url);
+  await driver.get(baseUrl);
   await driver.sleep(1000);
   const notACustomerYetButton = await driver.findElement(
     By.className("bg-red-500")
@@ -82,7 +82,7 @@ Given("I have added a child", async function () {
   nextButton.click();
   await driver.sleep(1000);
 
-  assert.equal(await driver.getCurrentUrl(), base_url + "family");
+  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
 });
 
 When("I navigate to the passport page", async function () {
@@ -92,7 +92,7 @@ When("I navigate to the passport page", async function () {
   await driver.sleep(1000);
 
   var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "passport");
+  assert.equal(actual_url, baseUrl + "passport");
 });
 
 Then(
