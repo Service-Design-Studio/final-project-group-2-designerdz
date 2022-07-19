@@ -46,6 +46,7 @@ After(function () {
 Given("I have filled in my details", async function () {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   await driver.get(base_url);
 =======
   await driver.get(baseUrl);
@@ -56,6 +57,9 @@ Given("I have filled in my details", async function () {
   await driver.get(base_url);
 >>>>>>> d334d80 (fix css styling added redirect when no userId)
 >>>>>>> c6ab999 (fix css styling added redirect when no userId)
+=======
+  await driver.get(baseUrl);
+>>>>>>> c0b4c4e (edited step definition for local storage to work)
   await driver.sleep(1000);
   const notACustomerYetButton = await driver.findElement(
     By.className("bg-red-500")
@@ -94,6 +98,7 @@ Given("I have added a child", async function () {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   assert.equal(await driver.getCurrentUrl(), base_url + "family");
 });
 
@@ -108,6 +113,8 @@ When("I navigate to the passport page", async function () {
 =======
 =======
 >>>>>>> c6ab999 (fix css styling added redirect when no userId)
+=======
+>>>>>>> c0b4c4e (edited step definition for local storage to work)
   assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
 });
 
@@ -119,6 +126,7 @@ When("I navigate to the passport page", async function () {
 
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, baseUrl + "passport");
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> c0b4c4e (edited step definition for local storage to work)
 =======
@@ -138,6 +146,10 @@ When("I navigate to the passport page", async function () {
 >>>>>>> c6ab999 (fix css styling added redirect when no userId)
 });
 
+=======
+});
+
+>>>>>>> c0b4c4e (edited step definition for local storage to work)
 Then(
   "I should be able to see my child's and my name in the carousel",
   async function () {
