@@ -21,21 +21,24 @@ export default function Review() {
   useEffect(() => {
     async function fetchData() {
       if (familyData.length === 0) {
+        console.log("If statement");
         try {
-          const response = await getUserDataId(userId);
+          const response = await getAllChildrenData(userId);
           console.log(response);
           userData = response.data[0];
           setDetails(userData);
+          setFamilyData(response.data);
         } catch (error) {
           console.log(error);
         }
       } else if (familyData.length > 1) {
+        console.log("family data here");
         //this means family registration
         setIsFamily(true);
       }
     }
     fetchData();
-  }, []);
+  }, [familyData]);
 
   const submitData = () => {
     navigate("/success");
