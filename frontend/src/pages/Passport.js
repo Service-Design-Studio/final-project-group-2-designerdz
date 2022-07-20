@@ -30,9 +30,13 @@ export default function Passport() {
     handleSubmit,
     getValues,
     trigger,
-    formState: { isValid, errors },
-  } = useForm();
+    formState: { isValid, isValidating, isSubmitSuccessful, errors },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: { full_name: "", nationality: "", passport_number: "" },
+  });
 
+  // const storage = new Storage();
   let userId = localStorage.getItem("user_id");
 
   // Creates a client
@@ -102,7 +106,6 @@ export default function Passport() {
         dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
       });
-
       reset({
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
@@ -118,7 +121,6 @@ export default function Passport() {
     data["dob"] = details.dob;
     data["gender"] = details.gender;
     // check if form is valid
-
     if (isValid) {
       if (selectedIndex === 0) {
         data["url"] = "review"; //only parent database have url field
@@ -178,8 +180,6 @@ export default function Passport() {
           memberData["status"] = false;
         }
       }
-      console.log(memberData);
-      console.log("MEMBER");
       return memberData;
     };
 
