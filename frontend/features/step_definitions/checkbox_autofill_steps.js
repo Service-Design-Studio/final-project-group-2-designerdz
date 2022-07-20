@@ -27,8 +27,8 @@ let baseUrl = "http://localhost:3001/";
 
 setDefaultTimeout(60 * 1000);
 
-let parent_number = Math.floor(Math.random() * 10000);
-let child_number = Math.floor(Math.random() * 10000);
+let parent_number;
+let child_number;
 
 let driver;
 
@@ -39,6 +39,8 @@ Before(async function () {
   await driver.executeScript(function () {
     localStorage.clear();
   });
+  parent_number = Math.floor(Math.random() * 10000);
+  child_number = Math.floor(Math.random() * 10000);
   spec = pactum.spec();
 });
 
@@ -59,7 +61,7 @@ Given("that I have saved my details", async function () {
   await driver.sleep(1000);
   
   await driver.findElement(By.className("display_name")).sendKeys("Sally Abbot");
-  await driver.findElement(By.className("email")).sendKeys("sally@gmail.comabc");
+  await driver.findElement(By.className("email")).sendKeys("sally@gmail.com");
   await driver.findElement(By.className("phone_number")).sendKeys(parent_number);
   await driver.sleep(1000);
 
@@ -99,7 +101,7 @@ Then("I should see my child details autofilled", async function () {
   assert.equal(childNumberValue, parent_number);
 
   var childEmailValue = await driver.findElement(By.className("email")).getAttribute("value");
-  assert.equal(childEmailValue, "sally@gmail.comabc");
+  assert.equal(childEmailValue, "sally@gmail.com");
 });
 
 When("I move to the review page", async function() {
@@ -107,14 +109,34 @@ When("I move to the review page", async function() {
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
 
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, baseUrl + "family");
+
   // Move to passport page
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
 
-  // Move to review page
-  // FIXME: Will have issues with form validation
-  await driver.findElement(By.className("next")).click();
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, baseUrl + "passport");
+
+  await driver.findElement(By.className("full_name")).sendKeys("Sally Abbot");
+  await driver.findElement(By.className("passport_number")).sendKeys("E32521921");
+  await driver.findElement(By.className("nationality")).sendKeys("American");
+  await driver.findElement(By.className("female")).click();
   await driver.sleep(500);
+
+  await driver.findElement(By.id("user_1")).click();
+  await driver.sleep(500);
+
+  await driver.findElement(By.className("full_name")).sendKeys("Sarah Abbot");
+  await driver.findElement(By.className("passport_number")).sendKeys("E34152315");
+  await driver.findElement(By.className("nationality")).sendKeys("American");
+  await driver.findElement(By.className("female")).click();
+  await driver.sleep(500);
+
+  // Move to review page
+  await driver.findElement(By.className("next")).click();
+  await driver.sleep(1000);
 
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, baseUrl + "review");
@@ -127,11 +149,10 @@ When("I click on my child icon", async function() {
 
 Then("I should be able to see that my child details are the same as mine", async function() {
   var childNumberValue = await driver.findElement(By.className("phone_number")).getAttribute("value");
-  // FIXME:
-  // assert.equal(childNumberValue, parent_number);
+  assert.equal(childNumberValue, parent_number);
 
   var childEmailValue = await driver.findElement(By.className("email")).getAttribute("value");
-  // assert.equal(childEmailValue, "sally@gmail.comabc");
+  assert.equal(childEmailValue, "sally@gmail.com");
 });
 
 
@@ -153,9 +174,8 @@ When("I edit my child contact details", async function() {
 
 Then("I should be able to see that my child details are different", async function() {
   var childNumberValue = await driver.findElement(By.className("phone_number")).getAttribute("value");
-  // FIXME:
-  // assert.equal(childNumberValue, child_number);
+  assert.equal(childNumberValue, child_number);
 
   var childEmailValue = await driver.findElement(By.className("email")).getAttribute("value");
-  // assert.equal(childEmailValue, "sarah@gmail.com");
+  assert.equal(childEmailValue, "sarah@gmail.com");
 });

@@ -3,6 +3,7 @@
 const { Builder } = require("selenium-webdriver");
 var chrome = require("selenium-webdriver/chrome");
 var options = new chrome.Options().headless();
+// var options = new chrome.Options();
 
 require("chromedriver");
 
@@ -15,7 +16,7 @@ exports.initDriver = () => {
     .forBrowser("chrome")
     .setChromeOptions(options)
     .build();
-
+  // driver.manage().window().setRect({width: width, height: height});
   return driver;
 };
 

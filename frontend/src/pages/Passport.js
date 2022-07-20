@@ -304,7 +304,7 @@ export default function Passport() {
             <div className="flex justify-around">
               <button
                 type="button"
-                className={`${
+                className={`male ${
                   details.gender == "MALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
                 onClick={toggleGenderToMale}
@@ -313,7 +313,7 @@ export default function Passport() {
               </button>
               <button
                 type="button"
-                className={`${
+                className={`female ${
                   details.gender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
                 onClick={toggleGenderToFemale}

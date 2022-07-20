@@ -68,6 +68,12 @@ export default function Details() {
         const response = await postUserData(data);
         localStorage.setItem("user_id", response.data.id);
       } catch (error) {
+        if (error.response.status === 422){
+          console.log("User already exists!");
+          navigate("/");
+          alert("User already exists!");
+        }
+        
         console.log(error.response);
       }
     } else {

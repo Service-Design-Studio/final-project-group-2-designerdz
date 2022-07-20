@@ -35,7 +35,7 @@ Before(async function () {
   await driver.sleep(100);
 
   await driver.executeScript(function() {
-      localStorage.setItem("user_id", "1");
+      localStorage.setItem("user_id", "0");
   });
 
   spec = pactum.spec();

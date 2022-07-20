@@ -19,7 +19,7 @@ function UserCardSelected({ id, name, onClick, index, status }) {
           clipRule="evenodd"
         />
       </svg>
-      <p className={`"user_${index} text-center `}>{name}</p>
+      <p className={`user_${index} text-center `}>{name}</p>
     </button>
   );
 }
