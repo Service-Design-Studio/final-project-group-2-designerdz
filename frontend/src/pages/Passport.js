@@ -28,6 +28,7 @@ export default function Passport() {
     register,
     handleSubmit,
     getValues,
+    trigger,
     formState: { isValid, errors },
   } = useForm();
   let userId = localStorage.getItem("user_id");
@@ -46,21 +47,16 @@ export default function Passport() {
       setOnEdit(location.state.onEdit);
       setSelectedIndex(location.state.index);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
 
     function checkIncompleteData(familyData) {
-      let compulsory_fields = ["full_name", "passport_number", "nationality"];
-      console.log(familyData.length);
-      for (var i = 0; i < familyData.length; i++) {
-        familyData[i]["status"] = true;
+      let compulsory_fields = ["full_name", "passport_number", "nationality"]
+      console.log(familyData.length)
+      for (var i=0; i < familyData.length; i++) {
+        familyData[i]["status"] = true
         for (let field of compulsory_fields) {
-          if (
-            familyData[i][field] == undefined ||
-            familyData[i][field] == null ||
-            familyData[i][field] == "" ||
-            familyData[i][field] == " "
-          ) {
+          if (familyData[i][field] == undefined || familyData[i][field] == null || familyData[i][field] == "" || familyData[i][field] == " ") {
             familyData[i]["status"] = false;
           }
         }
@@ -81,7 +77,7 @@ export default function Passport() {
       fetchData();
     } else if (familyData.length > 1) {
       // this means family registration
-      isFamily = true;
+      isFamily = true
     }
 
     if (familyData[selectedIndex] !== undefined) {
@@ -109,11 +105,8 @@ export default function Passport() {
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
     data["gender"] = details.gender;
-    console.log("data: " + JSON.stringify(data));
-
-    console.log("IN ONSUBMIT");
-    console.log(isValid);
     // check if form is valid
+    
     if (isValid) {
       if (selectedIndex === 0) {
         try {
@@ -136,8 +129,8 @@ export default function Passport() {
       } else {
         navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
       }
-    }
-  };
+    };
+  }
   const onBackBtnSelected = () => {
     if (isFamily) {
       navigate("/family");
@@ -160,21 +153,16 @@ export default function Passport() {
           memberData[key] = data[key];
         }
       }
-      let compulsory_fields = ["full_name", "passport_number", "nationality"];
+      let compulsory_fields = ["full_name", "passport_number", "nationality"]
       memberData["status"] = true;
       for (const field of compulsory_fields) {
-        if (
-          memberData[field] == undefined ||
-          memberData[field] == null ||
-          memberData[field] == "" ||
-          memberData[field] == " "
-        ) {
-          console.log("Setting to false");
+        if (memberData[field] == undefined || memberData[field] == null || memberData[field] == "" || memberData[field] == " ") {
+          console.log("Setting to false")
           memberData["status"] = false;
         }
       }
-      console.log(memberData);
-      console.log("MEMBER");
+      console.log(memberData)
+      console.log("MEMBER")
       return memberData;
     };
 
@@ -220,6 +208,13 @@ export default function Passport() {
     }));
   };
 
+  
+  const onPassportUpload = async (data) => {
+    const file = data.target.files[0]
+    console.log(file)
+
+  }
+ 
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -248,7 +243,9 @@ export default function Passport() {
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
               placeholder="Passport"
-              {...register("Passport", {})}
+              name="passport_img"
+              onInput={onPassportUpload}
+              {...register("passport_img", {})}
             />
           </div>
 
