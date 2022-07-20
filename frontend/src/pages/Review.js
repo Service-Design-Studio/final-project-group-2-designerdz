@@ -19,17 +19,40 @@ export default function Review() {
   let userId = localStorage.getItem("user_id");
 
   useEffect(() => {
+
+    function checkIncompleteData(familyData) {
+      let compulsory_fields = ["full_name", "passport_number", "nationality"];
+      console.log(familyData.length);
+      for (var i = 0; i < familyData.length; i++) {
+        familyData[i]["status"] = true;
+        for (let field of compulsory_fields) {
+          if (
+            familyData[i][field] == undefined ||
+            familyData[i][field] == null ||
+            familyData[i][field] == "" ||
+            familyData[i][field] == " "
+          ) {
+            familyData[i]["status"] = false;
+          }
+        }
+      }
+      return familyData;
+    }
+
     async function fetchData() {
       if (familyData.length === 0) {
+        console.log("If statement");
         try {
           const response = await getAllChildrenData(userId);
-          userData = response.data;
-          setFamilyData(userData);
-          setDetails(userData[selectedIndex]); //details for current selected user
+          let updatedFamilyData = checkIncompleteData(response.data);
+          userData = updatedFamilyData[0];
+          setDetails(userData);
+          setFamilyData(updatedFamilyData);
         } catch (error) {
           console.log(error);
         }
       } else if (familyData.length > 1) {
+        console.log("family data here");
         //this means family registration
         setIsFamily(true);
       }
@@ -108,6 +131,9 @@ export default function Review() {
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
             <EditButton onClick={onEditPassport} />
+            {/* <EditButton
+              onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
+            /> */}
           </b>
         </div>
 

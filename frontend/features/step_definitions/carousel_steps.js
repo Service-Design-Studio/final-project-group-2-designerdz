@@ -92,6 +92,27 @@ When("I navigate to the passport page", async function () {
 
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, baseUrl + "passport");
+  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
+});
+
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+
+  await driver.sleep(1000);
+
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, baseUrl + "passport");
+});
+
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+
+  await driver.sleep(1000);
+
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, baseUrl + "passport");
 });
 
 Then(

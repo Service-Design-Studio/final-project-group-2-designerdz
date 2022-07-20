@@ -55,9 +55,16 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = async (data) => {
+    //update isFamily
+    data["is_family"] = isFamily;
+    if (isFamily) {
+      data["url"] = "family"; //will be redirected to /family on resumption
+    } else {
+      data["url"] = "passport"; //will be redirected to /passport on resumption
+    }
     if (userId == "") {
       try {
-        console.log("onSubmit hereeeee")
+        //update path
         const response = await postUserData(data);
         localStorage.setItem("user_id", response.data.id);
       } catch (error) {

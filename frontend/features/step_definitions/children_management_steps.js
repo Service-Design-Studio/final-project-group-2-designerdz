@@ -31,7 +31,11 @@ let driver;
 Before(async function () {
   driver = initDriver();
   await driver.get(baseUrl);
+<<<<<<< HEAD
   await driver.sleep(500);
+=======
+  await driver.sleep(1000);
+>>>>>>> ab6d63fbc21391d1fee6fae03299d63b530224cb
   await driver.executeScript(function () {
     localStorage.clear();
   });

@@ -23,17 +23,16 @@ export default function Passport() {
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
-  const [isFamily, setIsFamily] = useState(false);
   const {
     reset,
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { isValid, errors },
   } = useForm();
   let userId = localStorage.getItem("user_id");
-  // let isFamily = localStorage.getItem("is_family") === "true";
-  // let isFamily = false;
+  let isFamily = localStorage.getItem("is_family") === "true";
+  console.log(userId == null);
 
   //on first render do GET request
   useEffect(() => {
@@ -50,10 +49,29 @@ export default function Passport() {
       console.error(error);
     }
 
+    function checkIncompleteData(familyData) {
+      let compulsory_fields = ["full_name", "passport_number", "nationality"];
+      console.log(familyData.length);
+      for (var i = 0; i < familyData.length; i++) {
+        familyData[i]["status"] = true;
+        for (let field of compulsory_fields) {
+          if (
+            familyData[i][field] == undefined ||
+            familyData[i][field] == null ||
+            familyData[i][field] == "" ||
+            familyData[i][field] == " "
+          ) {
+            familyData[i]["status"] = false;
+          }
+        }
+      }
+      return familyData;
+    }
+
     async function fetchData() {
       try {
         const response = await getAllChildrenData(userId);
-        setFamilyData(response.data);
+        setFamilyData(checkIncompleteData(response.data));
       } catch (error) {
         console.log(error.response);
       }
@@ -63,7 +81,7 @@ export default function Passport() {
       fetchData();
     } else if (familyData.length > 1) {
       // this means family registration
-      setIsFamily(true);
+      isFamily = true;
     }
 
     if (familyData[selectedIndex] !== undefined) {
@@ -91,29 +109,35 @@ export default function Passport() {
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
     data["gender"] = details.gender;
-    if (selectedIndex === 0) {
-      try {
-        await patchUserData(data, userId);
-      } catch (error) {
-        alert(error);
-        console.log(error.response);
-      }
-    } else {
-      try {
-        await patchChildData(data, familyData[selectedIndex].id);
-      } catch (error) {
-        console.log(error.response);
-      }
-    }
+    console.log("data: " + JSON.stringify(data));
 
-    if (onEdit === true) {
-      navigate("/review");
-      setOnEdit(false);
-    } else {
-      navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+    console.log("IN ONSUBMIT");
+    console.log(isValid);
+    // check if form is valid
+    if (isValid) {
+      if (selectedIndex === 0) {
+        try {
+          await patchUserData(data, userId);
+        } catch (error) {
+          alert(error);
+          console.log(error.response);
+        }
+      } else {
+        try {
+          await patchChildData(data, familyData[selectedIndex].id);
+        } catch (error) {
+          console.log(error.response);
+        }
+      }
+
+      if (onEdit === true) {
+        navigate("/review");
+        setOnEdit(false);
+      } else {
+        navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+      }
     }
   };
-
   const onBackBtnSelected = () => {
     if (isFamily) {
       navigate("/family");
@@ -136,6 +160,21 @@ export default function Passport() {
           memberData[key] = data[key];
         }
       }
+      let compulsory_fields = ["full_name", "passport_number", "nationality"];
+      memberData["status"] = true;
+      for (const field of compulsory_fields) {
+        if (
+          memberData[field] == undefined ||
+          memberData[field] == null ||
+          memberData[field] == "" ||
+          memberData[field] == " "
+        ) {
+          console.log("Setting to false");
+          memberData["status"] = false;
+        }
+      }
+      console.log(memberData);
+      console.log("MEMBER");
       return memberData;
     };
 
@@ -253,7 +292,7 @@ export default function Passport() {
             name="nationality"
             type="text"
             onFill={register("nationality", {
-              required: "Please choose a gender",
+              required: "Nationality is Required",
             })}
           />
           {errors.nationality && (

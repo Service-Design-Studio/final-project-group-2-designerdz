@@ -8,6 +8,8 @@ export default function Landing() {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  // const [showPopup, setShowPopup] = useState(false);
+  let showPopup = false;
 
   useEffect(() => {
     try {
@@ -40,7 +42,7 @@ export default function Landing() {
           onClick={() => alert("Sorry we are not DBS!")}
         />
       </div>
-      <button className="button" onClick={() => setOpen(true)}>
+      <button className="button">
         <a>
           Left registration midway?
           <span className="underline">Continue where you left.</span>

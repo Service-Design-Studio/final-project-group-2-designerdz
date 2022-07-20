@@ -94,20 +94,34 @@
 //   }
 // );
 
+<<<<<<< HEAD
 // // And("I click {string}", async function (buttonName) {
 // //   //
 // // });
+=======
+// When("I click {string}", async function (buttonName) {
+//   //
+// });
+>>>>>>> ab6d63fbc21391d1fee6fae03299d63b530224cb
 
 // Then("I should be on {string} page", async function (page) {
 //   //check if on the page
 // });
 
 // //Scenario: Updating of correct information at relevant pages after clicking edit button
+<<<<<<< HEAD
 // And("I am on {string}", async function (page) {
 //   //check if at correct page
 // });
 
 // And("I have updated my {string} on the relevant pages", async function (info) {
+=======
+// When("I am on {string}", async function (page) {
+//   //check if at correct page
+// });
+
+// When("I have updated my {string} on the relevant pages", async function (info) {
+>>>>>>> ab6d63fbc21391d1fee6fae03299d63b530224cb
 //   //update new info
 // });
 
@@ -115,7 +129,11 @@
 //   //click on the button
 // });
 
+<<<<<<< HEAD
 // And(
+=======
+// When(
+>>>>>>> ab6d63fbc21391d1fee6fae03299d63b530224cb
 //   "I should see my information updated with {string} as well",
 //   async function (info) {
 //     //check review page if got the same info not
