@@ -18,6 +18,10 @@ const { initDriver } = require("../support/driverUtil");
 const { expect, assert } = require("chai");
 const { setDefaultTimeout } = require("@cucumber/cucumber");
 const pactum = require("pactum");
+<<<<<<< HEAD
+=======
+const axios = require("axios");
+>>>>>>> 50bbf117fd4a60e7a691cddb4ba532e5821cdcff
 
 let spec = pactum.spec();
 
@@ -47,6 +51,7 @@ Given("I have filled in my details", async function () {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   await driver.get(base_url);
 =======
   await driver.get(baseUrl);
@@ -60,6 +65,9 @@ Given("I have filled in my details", async function () {
 =======
   await driver.get(baseUrl);
 >>>>>>> c0b4c4e (edited step definition for local storage to work)
+=======
+  await driver.get(baseUrl);
+>>>>>>> 50bbf117fd4a60e7a691cddb4ba532e5821cdcff
   await driver.sleep(1000);
   const notACustomerYetButton = await driver.findElement(
     By.className("bg-red-500")
@@ -96,6 +104,7 @@ Given("I have added a child", async function () {
   nextButton.click();
   await driver.sleep(1000);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -150,6 +159,21 @@ When("I navigate to the passport page", async function () {
 });
 
 >>>>>>> c0b4c4e (edited step definition for local storage to work)
+=======
+  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
+});
+
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+
+  await driver.sleep(1000);
+
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, baseUrl + "passport");
+});
+
+>>>>>>> 50bbf117fd4a60e7a691cddb4ba532e5821cdcff
 Then(
   "I should be able to see my child's and my name in the carousel",
   async function () {

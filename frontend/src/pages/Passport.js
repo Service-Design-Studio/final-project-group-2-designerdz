@@ -12,6 +12,7 @@ import {
   getAllChildrenData,
   patchChildData,
 } from "../services/axiosRequests.js";
+import { uploadFile } from "../services/uploadPassportImage.js";
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -31,9 +32,20 @@ export default function Passport() {
     trigger,
     formState: { isValid, errors },
   } = useForm();
+  
+
+  
   let userId = localStorage.getItem("user_id");
   let isFamily = localStorage.getItem("is_family") === "true";
   console.log(userId == null);
+
+  const {Storage} = require('@google-cloud/storage');
+
+// Creates a client
+  const storage = new Storage();
+
+
+
 
   //on first render do GET request
   useEffect(() => {
@@ -72,6 +84,9 @@ export default function Passport() {
         console.log(error.response);
       }
     }
+
+    
+
 
     if (familyData.length === 0) {
       fetchData();
@@ -208,6 +223,7 @@ export default function Passport() {
     }));
   };
 
+<<<<<<< HEAD
   
   const onPassportUpload = async (data) => {
     const file = data.target.files[0]
@@ -215,6 +231,14 @@ export default function Passport() {
 
   }
  
+=======
+
+  const onPassportUpload =() => {
+    let filePath= app.storage().ref()
+    uploadFile(filePath,userId)
+  }
+
+>>>>>>> 50bbf117fd4a60e7a691cddb4ba532e5821cdcff
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -243,9 +267,14 @@ export default function Passport() {
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
               placeholder="Passport"
+<<<<<<< HEAD
               name="passport_img"
               onInput={onPassportUpload}
               {...register("passport_img", {})}
+=======
+              onInput={onPassportUpload}
+              {...register("Passport", {})}
+>>>>>>> 50bbf117fd4a60e7a691cddb4ba532e5821cdcff
             />
           </div>
 
