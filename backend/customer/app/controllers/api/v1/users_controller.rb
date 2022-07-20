@@ -29,6 +29,7 @@ class Api::V1::UsersController < ApplicationController
     if !(User.exists? phone_number: params[:phone_number])
       # if user does not exist, create a new user
       @user = User.new(user_params)
+      ### TO-DO validate form before saving, remove all spaces and default to null
       if @user.save
         render json: @user, status: :created, location: @user
       else
@@ -65,6 +66,6 @@ class Api::V1::UsersController < ApplicationController
     # Assigns a list of allowable attributes through.
     def user_params
       params.require(:user).permit(:display_name, :title, :phone_number, :email, :full_name, :passport_number, 
-      :passport_expiry, :nationality, :gender, :dob)
+      :passport_expiry, :nationality, :gender, :dob, :is_family, :url, :image_url)
     end
 end
