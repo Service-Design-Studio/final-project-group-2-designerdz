@@ -5,11 +5,11 @@ import ImageToText as ImageToText
 app = Flask(__name__)
 
 @app.route("/upload")
-def upload():
-    return bucket_upload.upload_blob()
+def upload(bucket_name, source_file_name, destination_blob_name):
+    return bucket_upload.upload_blob(bucket_name, source_file_name, destination_blob_name)
 
 @app.route("/vision")
-def vision():
+def vision(uri):
     return ImageToText.detect_text_uri()
 
 if __name__ == "__main__":
