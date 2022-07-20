@@ -12,6 +12,7 @@ import {
   getAllChildrenData,
   patchChildData,
 } from "../services/axiosRequests.js";
+import { uploadFile } from "../services/uploadPassportImage.js";
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -32,8 +33,13 @@ export default function Passport() {
     trigger,
     formState: { isValid, errors },
   } = useForm();
-  
+
   let userId = localStorage.getItem("user_id");
+
+  const { Storage } = require("@google-cloud/storage");
+
+  // Creates a client
+  const storage = new Storage();
 
   //on first render do GET request
   useEffect(() => {
@@ -222,9 +228,9 @@ export default function Passport() {
     }));
   };
 
-  const onPassportUpload = async (data) => {
-    const file = data.target.files[0];
-    console.log(file);
+  const onPassportUpload = () => {
+    let filePath = app.storage().ref();
+    uploadFile(filePath, userId);
   };
 
   return (
