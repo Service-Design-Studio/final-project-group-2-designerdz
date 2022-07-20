@@ -32,6 +32,7 @@ export default function Passport() {
     trigger,
     formState: { isValid, errors },
   } = useForm();
+  
   let userId = localStorage.getItem("user_id");
 
   //on first render do GET request
