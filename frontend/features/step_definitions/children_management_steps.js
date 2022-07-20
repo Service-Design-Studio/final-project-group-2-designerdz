@@ -31,7 +31,7 @@ let driver;
 Before(async function () {
   driver = initDriver();
   await driver.get(baseUrl);
-  await driver.sleep(1000);
+  await driver.sleep(500);
   await driver.executeScript(function () {
     localStorage.clear();
   });
@@ -44,35 +44,32 @@ After(async function () {
 
 Given("I have successfully added a child", async function () {
   await driver.get(baseUrl);
-  await driver.sleep(1000);
+  await driver.sleep(500);
   const notACustomerYetButton = await driver.findElement(
     By.className("bg-red-500")
   );
   notACustomerYetButton.click();
-  await driver.sleep(1000);
+  await driver.sleep(500);
 
   const familyButton = await driver.findElement(By.className("family-next"));
   familyButton.click();
-  await driver.sleep(1000);
+  await driver.sleep(500);
 
-  const displayNameField = await driver.findElement(
-    By.className("parent_display_name")
-  );
-  displayNameField.sendKeys("John Doe Doe");
-  await driver.sleep(1000);
+  await driver.findElement(By.className("display_name")).sendKeys("John Doe Doe");
+  await driver.findElement(By.className("phone_number")).sendKeys(Math.floor(Math.random() * 10000));
+  await driver.sleep(500);
 
-  const detailsNextButton = await driver.findElement(By.className("next"));
-  detailsNextButton.click();
-  await driver.sleep(1000);
+  await driver.findElement(By.className("next")).click();
+  await driver.sleep(500);
 
-  const addChildButton = await driver.findElement(By.className("add"));
-  addChildButton.click();
-  await driver.sleep(1000);
+  var actual_url = await driver.getCurrentUrl();
+  actual_url = actual_url.split("/")[3];
+  expect(actual_url).to.equal("family");
 
-  const childName = await driver.findElement(
-    By.className("child_display_name")
-  );
-  childName.sendKeys("Salah Abbot");
+  await driver.findElement(By.className("add")).click();
+  await driver.sleep(500);
+
+  await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
 
   const autofillCheckbox = await driver.findElement(By.className("autofill"));
 
@@ -83,10 +80,12 @@ Given("I have successfully added a child", async function () {
   var checked = await autofillCheckbox.isSelected();
   assert.equal(checked, true);
 
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
+  await driver.findElement(By.className("next")).click();
+  await driver.sleep(500);
 
-  await driver.sleep(1000);
+  var actual_url = await driver.getCurrentUrl();
+  actual_url = actual_url.split("/")[3];
+  expect(actual_url).to.equal("family");
 });
 
 When("I am on the family page", async function () {
@@ -102,16 +101,16 @@ Then("I should see my child on the family page", async function () {
 When("I edit my child name", async function () {
   const edit_button = await driver.findElement(By.id("edit_0"));
   edit_button.click();
-  await driver.sleep(1000);
+  await driver.sleep(500);
 
   const childName2 = await driver.findElement(
-    By.className("child_display_name")
+    By.className("display_name")
   );
   childName2.sendKeys(" Edited");
 
   const nextButton2 = await driver.findElement(By.className("next"));
   nextButton2.click();
-  await driver.sleep(1000);
+  await driver.sleep(500);
 });
 
 Then("I should see my edited child name on the family page", async function () {
@@ -120,9 +119,8 @@ Then("I should see my edited child name on the family page", async function () {
 });
 
 When("I click on remove button for my child", async function () {
-  const removeButton = await driver.findElement(By.id("delete_0"));
-  removeButton.click();
-  await driver.sleep(1000);
+  await driver.findElement(By.id("delete_0")).click();
+  await driver.sleep(500);
 });
 
 Then("my child should be removed", async function () {

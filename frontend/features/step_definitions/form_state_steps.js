@@ -2,6 +2,9 @@ const pactum = require('pactum');
 const { Given, When, Then, Before } = require('@cucumber/cucumber');
 const request = pactum.request; //for API responses
 
+const { setDefaultTimeout } = require("@cucumber/cucumber");
+setDefaultTimeout(60 * 1000);
+
 let spec = pactum.spec();
 
 Before(() => { spec = pactum.spec(); });

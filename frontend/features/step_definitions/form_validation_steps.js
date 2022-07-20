@@ -67,6 +67,8 @@ const {
         await driver.findElement(By.className("phone_number")).sendKeys("12345678907")
         driver.findElement(By.className("next")).click()
         await driver.sleep(1000)
+
+        
         driver.findElement(By.className("add")).click()
         await driver.sleep(1000)
 

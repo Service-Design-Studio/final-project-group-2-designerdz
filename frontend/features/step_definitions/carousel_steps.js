@@ -58,7 +58,7 @@ Given("I have filled in my details", async function () {
   await driver.sleep(1000);
 
   const displayNameField = await driver.findElement(
-    By.className("parent_display_name")
+    By.className("display_name")
   );
   displayNameField.sendKeys("Sally Abbot");
   await driver.sleep(1000);
@@ -69,9 +69,8 @@ Given("I have filled in my details", async function () {
 });
 
 Given("I have added a child", async function () {
-  const addChildButton = await driver.findElement(By.className("add"));
-  addChildButton.click();
-  await driver.sleep(1000);
+  await driver.findElement(By.className("add")).click();
+  await driver.sleep(500);
 
   const childName = await driver.findElement(
     By.className("child_display_name")

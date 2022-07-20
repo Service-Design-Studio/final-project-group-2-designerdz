@@ -35,7 +35,7 @@ Before(async function () {
   await driver.sleep(100);
 
   await driver.executeScript(function() {
-      localStorage.clear()
+      localStorage.setItem("user_id", "1");
   });
 
   spec = pactum.spec();
@@ -45,18 +45,20 @@ After(async function () {
   await driver.quit();
 });
 
+
 Given("I am on {string}", async function (page) {
   await driver.get(baseUrl + page);
-  await driver.sleep(1000);
-  driver.executeScript(function () {
-    localStorage.clear();
-  });
+  await driver.sleep(500);
+
+  var actual_url = await driver.getCurrentUrl();
+  actual_url = actual_url.split("/")[3];
+  expect(actual_url).to.equal(page);
 });
 
 When("I click on the next button", async function () {
   const registration_button = await driver.findElement(By.className("next"));
   await registration_button.click();
-  await driver.sleep(1000);
+  await driver.sleep(500);
 });
 
 Then("I should move forward to the {string} page", async function (next) {
@@ -69,7 +71,7 @@ Then("I should move forward to the {string} page", async function (next) {
 When("I click on the back button", async function () {
   const registration_button = await driver.findElement(By.className("back"));
   await registration_button.click();
-  await driver.sleep(1000);
+  await driver.sleep(500);
 });
 
 Then("I should go back to the {string} page", async function (previous) {
@@ -98,7 +100,7 @@ Then("I should move forward to the review page", function () {
 Then("my {string} should be shown", async function (full_name) {
   const fn = await driver.findElement(By.className("review_fn")).getText();
   expect(fn, full_name);
-  await driver.sleep(1000);
+  await driver.sleep(500);
 });
 
 When("I restart the app", function () {
@@ -115,7 +117,7 @@ Then(
 
 Given("I am on the restore page", function () {
   driver.get(baseUrl + "restore");
-  driver.sleep(1000);
+  driver.sleep(500);
 });
 
 When("I submit my {string} and OTP", function (number) {

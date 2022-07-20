@@ -1,11 +1,7 @@
 Feature: User Navigation
-    # TODO: Fix thix
-    As a user filling up the form
-    I want to be informed when the form has errors 
-    So that I know where to make edits and be sure that I have filled up the form correctly
-
-    Background:
-        
+    As a user signing up with DBS
+    I want to be able to fill up the form smoothly
+    So that I am able to have a positive experience signing up
 
     Scenario:  
         Given I am on <page>
@@ -15,7 +11,7 @@ Feature: User Navigation
     Examples:
     | page       | next       |
     | "signup"   | "details"  |
-    | "passport"   | "review"   |
+    | "passport" | "review"   |
     | "review"   | "success"  |
 
     Scenario:

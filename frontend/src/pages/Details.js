@@ -57,6 +57,7 @@ export default function Details() {
   const onSubmit = async (data) => {
     if (userId == "") {
       try {
+        console.log("onSubmit hereeeee")
         const response = await postUserData(data);
         localStorage.setItem("user_id", response.data.id);
       } catch (error) {
