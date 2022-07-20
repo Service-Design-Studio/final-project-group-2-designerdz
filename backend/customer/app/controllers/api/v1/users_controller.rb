@@ -29,6 +29,7 @@ class Api::V1::UsersController < ApplicationController
     if !(User.exists? phone_number: params[:phone_number])
       # if user does not exist, create a new user
       @user = User.new(user_params)
+      ### TO-DO validate form before saving, remove all spaces and default to null
       if @user.save
         render json: @user, status: :created, location: @user
       else

@@ -54,6 +54,6 @@ class ChildrenController < ApplicationController
     # Only allow a list of trusted parameters through.
     def child_params
       params.require(:child).permit(:display_name, :title, :phone_number, :email, :full_name, :passport_number, 
-      :passport_expiry, :nationality, :gender, :dob, :user_id)
+      :passport_expiry, :nationality, :gender, :dob, :user_id, :image_url)
     end
 end
