@@ -18,10 +18,6 @@ const { initDriver } = require("../support/driverUtil");
 const { expect, assert } = require("chai");
 const { setDefaultTimeout } = require("@cucumber/cucumber");
 const pactum = require("pactum");
-<<<<<<< HEAD
-=======
-const axios = require("axios");
->>>>>>> 50bbf117fd4a60e7a691cddb4ba532e5821cdcff
 
 let spec = pactum.spec();
 
@@ -48,26 +44,7 @@ After(function () {
 });
 
 Given("I have filled in my details", async function () {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-  await driver.get(base_url);
-=======
   await driver.get(baseUrl);
->>>>>>> c0b4c4e (edited step definition for local storage to work)
-=======
-  await driver.get(baseUrl);
-=======
-  await driver.get(base_url);
->>>>>>> d334d80 (fix css styling added redirect when no userId)
->>>>>>> c6ab999 (fix css styling added redirect when no userId)
-=======
-  await driver.get(baseUrl);
->>>>>>> c0b4c4e (edited step definition for local storage to work)
-=======
-  await driver.get(baseUrl);
->>>>>>> 50bbf117fd4a60e7a691cddb4ba532e5821cdcff
   await driver.sleep(1000);
   const notACustomerYetButton = await driver.findElement(
     By.className("bg-red-500")
@@ -103,11 +80,24 @@ Given("I have added a child", async function () {
   const nextButton = await driver.findElement(By.className("next"));
   nextButton.click();
   await driver.sleep(1000);
+  assert.equal(await driver.getCurrentUrl(), base_url + "family");
+});
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+  await driver.sleep(1000);
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, base_url + "passport");
+  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
+});
+
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+  await driver.sleep(1000);
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, baseUrl + "passport");
   assert.equal(await driver.getCurrentUrl(), base_url + "family");
 });
 
@@ -119,49 +109,8 @@ When("I navigate to the passport page", async function () {
 
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, base_url + "passport");
-=======
-=======
->>>>>>> c6ab999 (fix css styling added redirect when no userId)
-=======
->>>>>>> c0b4c4e (edited step definition for local storage to work)
-  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
 });
 
-When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-
-  await driver.sleep(1000);
-
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "passport");
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> c0b4c4e (edited step definition for local storage to work)
-=======
-=======
-  assert.equal(await driver.getCurrentUrl(), base_url + "family");
-});
-
-When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-
-  await driver.sleep(1000);
-
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "passport");
->>>>>>> d334d80 (fix css styling added redirect when no userId)
->>>>>>> c6ab999 (fix css styling added redirect when no userId)
-});
-
-=======
-});
-
->>>>>>> c0b4c4e (edited step definition for local storage to work)
-=======
-  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
-});
 
 When("I navigate to the passport page", async function () {
   const nextButton = await driver.findElement(By.className("next"));
@@ -173,7 +122,7 @@ When("I navigate to the passport page", async function () {
   assert.equal(actual_url, baseUrl + "passport");
 });
 
->>>>>>> 50bbf117fd4a60e7a691cddb4ba532e5821cdcff
+
 Then(
   "I should be able to see my child's and my name in the carousel",
   async function () {
