@@ -38,6 +38,14 @@
 10. Install datepicker  `npm install react-datepicker`. This is for the Calendar dates on the Details page. 
 11. Install js-cookie using `npm install js-cookie`. This is for us to validate whether a user is a new user or has an active session. 
 12. Install reactjs-popup using `npm install reactjs-popup`. This will be used for our mobile phone number pop up.
+13. Install Google Cloud Storage library with `pip install google-cloud-storage`. This will be used to upload passport photos into Google Cloud Bucket.
+14. Install Google App Engine with `pip install appengine-python-standard`. This will be used to call the Vision API to convert any images into text.
+15. Install CloudStorage with `pip install cloudstorage`. This is for Google Cloud Storage API methods. 
+
+
+# An easier way to install all dependencies
+You can also install all Javascript dependencies with `npm install` and all Python dependencies with `pip3 install -r requirements.txt` in the main directory.
+
 
 # Development in Local
 
