@@ -39,29 +39,29 @@ export default function Passport() {
   // const storage = new Storage();
   let userId = localStorage.getItem("user_id");
 
+  function checkIncompleteData(familyData) {
+    let compulsory_fields = ["full_name", "passport_number", "nationality"];
+    for (var i = 0; i < familyData.length; i++) {
+      familyData[i]["status"] = true;
+      for (let field of compulsory_fields) {
+        if (
+          familyData[i][field] == undefined ||
+          familyData[i][field] == null ||
+          familyData[i][field] == "" ||
+          familyData[i][field] == " "
+        ) {
+          familyData[i]["status"] = false;
+        }
+      }
+    }
+    return familyData;
+  }
+
   // Creates a client
   const storage = new Storage();
 
   //on first render do GET request
   useEffect(() => {
-    function checkIncompleteData(familyData) {
-      let compulsory_fields = ["full_name", "passport_number", "nationality"];
-      for (var i = 0; i < familyData.length; i++) {
-        familyData[i]["status"] = true;
-        for (let field of compulsory_fields) {
-          if (
-            familyData[i][field] == undefined ||
-            familyData[i][field] == null ||
-            familyData[i][field] == "" ||
-            familyData[i][field] == " "
-          ) {
-            familyData[i]["status"] = false;
-          }
-        }
-      }
-      return familyData;
-    }
-
     async function fetchData() {
       try {
         const response = await getAllChildrenData(userId);
