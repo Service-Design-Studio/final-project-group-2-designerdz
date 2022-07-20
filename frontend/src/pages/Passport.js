@@ -244,9 +244,6 @@ export default function Passport() {
     const data_url = response.url;
     console.log(data_url);
 
-    // get serivce account key from json file
-    // const GOOGLE_APPLICATION_CREDENTIALS = require("../serviceAccountKey.json");
-
     const VISION_URL = "https://vision.googleapis.com/v1/images:annotate";
     const VISION_HEADERS = {
       "Content-Type": "application/json",
@@ -394,12 +391,14 @@ export default function Passport() {
               setDetailsHandler={setDetails}
             />
           </div>
+          {console.log(familyData)}
           <Button
             name="next"
             text={onEdit === true ? "Save" : "Next"}
             bgColor="bg-red-500"
             hoverColor="hover:bg-red-700"
             onClick={onSubmit}
+            familyData={familyData}
           />
         </form>
       </div>

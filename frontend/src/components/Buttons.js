@@ -1,4 +1,16 @@
-function Button({ name, text, bgColor, hoverColor, onClick }) {
+function Button({ name, text, bgColor, hoverColor, onClick, familyData }) {
+  let familyValid = true;
+  if (familyData) {
+    for (let i =0; i<familyData.length; i++) {
+      if (familyData[i].status === false) {
+        familyValid = false;
+      }
+    }
+  }
+  if (familyValid == false) {
+    bgColor = "bg-gray-200" 
+    hoverColor = "bg-gray-300" 
+  }
   return (
     <button
       className={`${name} ${bgColor} ${hoverColor} text-white text-xl font-extrabold mt-4 py-4 px-4 rounded w-full`}
