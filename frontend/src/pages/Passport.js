@@ -35,8 +35,6 @@ export default function Passport() {
 
   let userId = localStorage.getItem("user_id");
 
-  const { Storage } = require("@google-cloud/storage");
-
   // Creates a client
   const storage = new Storage();
 
@@ -227,9 +225,58 @@ export default function Passport() {
     }));
   };
 
-  const onPassportUpload = () => {
-    let filePath = app.storage().ref();
-    uploadFile(filePath, userId);
+  const onPassportUpload = async (data) => {
+    const OBJECT_LOCATION = data.target.files[0];
+    const OBJECT_CONTENT_TYPE = "image/jpg";
+    const BUCKET_NAME = "react-frontend-353408.appspot.com";
+    const OBJECT_NAME = `${userId}_passport_image`;
+    const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
+    const UPLOAD_HEADERS = {
+      "Content-Type": OBJECT_CONTENT_TYPE,
+    };
+    // make post request
+    const response = await fetch(UPLOAD_URL, {
+      method: "POST",
+      headers: UPLOAD_HEADERS,
+      body: OBJECT_LOCATION,
+    });
+    console.log(response);
+    const data_url = response.url;
+    console.log(data_url);
+
+    // get serivce account key from json file
+    // const GOOGLE_APPLICATION_CREDENTIALS = require("../serviceAccountKey.json");
+
+    const VISION_URL = "https://vision.googleapis.com/v1/images:annotate";
+    const VISION_HEADERS = {
+      "Content-Type": "application/json",
+      charset: "utf-8",
+      Authorization: `Bearer ya29.A0AVA9y1veAN9IC5t4iq8BN4gVZIPJHZh5GxGYk6lR0vae7cuLNEozOrWU5_PEgBMlWMRL4BLxDhtxdbF9CvWwqHQhQIDnbCUJAqFmKShD-EnrhGMLzpTusBTxi1hlQimdP9Fh_a9Gv7i-uLQad1H30VEtlWDJYUNnWUtBVEFTQVRBU0ZRRTY1ZHI4bjQ3b3dtUXRnY2Zva19JYkJ1MFpIZw0163`,
+      "Access-Control-Allow-Origin": "*",
+    };
+    // make post request
+    const vision_response = await fetch(VISION_URL, {
+      method: "POST",
+      headers: VISION_HEADERS,
+      body: JSON.stringify({
+        requests: [
+          {
+            image: {
+              source: {
+                imageUri: data_url,
+              },
+            },
+            features: [
+              {
+                type: "DOCUMENT_TEXT_DETECTION",
+                maxResults: 1,
+              },
+            ],
+          },
+        ],
+      }),
+    });
+    console.log(vision_response);
   };
 
   return (
