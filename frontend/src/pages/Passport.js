@@ -46,8 +46,18 @@ export default function Passport() {
 
   
 
-
-
+  function checkIncompleteData(familyData) {
+    let compulsory_fields = ["full_name", "passport_number", "nationality"]
+    for (var i=0; i < familyData.length; i++) {
+      familyData[i]["status"] = true
+      for (let field of compulsory_fields) {
+        if (familyData[i][field] == undefined || familyData[i][field] == null || familyData[i][field] == "" || familyData[i][field] == " ") {
+          familyData[i]["status"] = false;
+        }
+      }
+    }
+    return familyData;
+  }
 
 
   //on first render do GET request
@@ -63,20 +73,6 @@ export default function Passport() {
       setSelectedIndex(location.state.index);
     } catch (error) {
       // console.error(error);
-    }
-
-    function checkIncompleteData(familyData) {
-      let compulsory_fields = ["full_name", "passport_number", "nationality"]
-      console.log(familyData.length)
-      for (var i=0; i < familyData.length; i++) {
-        familyData[i]["status"] = true
-        for (let field of compulsory_fields) {
-          if (familyData[i][field] == undefined || familyData[i][field] == null || familyData[i][field] == "" || familyData[i][field] == " ") {
-            familyData[i]["status"] = false;
-          }
-        }
-      }
-      return familyData;
     }
 
     async function fetchData() {
@@ -155,6 +151,11 @@ export default function Passport() {
       navigate("/details");
     }
   };
+
+  const onChange = () => {
+    setFamilyData(checkIncompleteData(familyData))
+    console.log("CHANGING")
+  }
 
   const onUserSelected = async (index) => {
     let data = getValues();
@@ -291,7 +292,7 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
+        <form onSubmit={handleSubmit(onSubmit)} onChange={onChange} className="mx-8">
           {isFamily === true ? (
             <Carousel
               nameArr={familyData}
