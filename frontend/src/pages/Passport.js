@@ -29,6 +29,7 @@ export default function Passport() {
     register,
     handleSubmit,
     getValues,
+    trigger,
     formState: { isValid, errors },
   } = useForm();
   let userId = localStorage.getItem("user_id");
@@ -112,9 +113,8 @@ export default function Passport() {
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
     data["gender"] = details.gender;
-    console.log("data: " + JSON.stringify(data));
-
     // check if form is valid
+
     if (isValid) {
       if (selectedIndex === 0) {
         data["url"] = "review"; //only parent database have url field
@@ -221,6 +221,11 @@ export default function Passport() {
     }));
   };
 
+  const onPassportUpload = async (data) => {
+    const file = data.target.files[0];
+    console.log(file);
+  };
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -249,7 +254,9 @@ export default function Passport() {
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
               placeholder="Passport"
-              {...register("Passport", {})}
+              name="passport_img"
+              onInput={onPassportUpload}
+              {...register("passport_img", {})}
             />
           </div>
 
