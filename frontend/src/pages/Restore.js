@@ -10,9 +10,36 @@ export default function Restore() {
   } = useForm();
   const navigate = useNavigate();
   const onSubmit = async (data) => {
-    const response = await getUserDataPhoneNumber(data.phone_number);
-    localStorage.setItem("user_id", response.data[0].id);
-    navigate("/review");
+    try {
+      const response = await getUserDataPhoneNumber(data.phone_number);
+      let userData = response.data[0];
+      localStorage.setItem("user_id", userData.id);
+      console.log(userData.url);
+      switch (userData.url) {
+        case "details":
+          navigate("details");
+          break;
+        case "family":
+          navigate("family");
+          break;
+        case "child":
+          navigate("child");
+          break;
+        case "passport":
+          navigate("passport");
+          break;
+        case "review":
+          navigate("review");
+          break;
+        default:
+      }
+    } catch (error) {
+      console.log(error);
+      alert(
+        "user does not exist, click on 'not a customer to start a new registration!' "
+      );
+    }
+    // navigate("/review");
   };
   console.log(errors);
   return (
