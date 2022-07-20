@@ -29,14 +29,19 @@ export default function Passport() {
     handleSubmit,
     getValues,
     trigger,
-    formState: { isValid, errors },
-  } = useForm();
+    formState: { isValid, isValidating,isSubmitSuccessful,errors },
+  } = useForm({ 
+    mode: 'onChange',
+    defaultValues: 
+    { full_name: "",
+      nationality: "",
+      passport_number: "",
+  } });
   
   // const storage = new Storage();
 
   let userId = localStorage.getItem("user_id");
   let isFamily = localStorage.getItem("is_family") === "true";
-  console.log(userId == null);
 
   
 
@@ -102,7 +107,6 @@ export default function Passport() {
         dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
       });
-
       reset({
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
@@ -118,7 +122,6 @@ export default function Passport() {
     data["dob"] = details.dob;
     data["gender"] = details.gender;
     // check if form is valid
-    
     if (isValid) {
       if (selectedIndex === 0) {
         try {
@@ -142,7 +145,8 @@ export default function Passport() {
         navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
       }
     };
-  }
+    }
+
   const onBackBtnSelected = () => {
     if (isFamily) {
       navigate("/family");
@@ -173,8 +177,6 @@ export default function Passport() {
           memberData["status"] = false;
         }
       }
-      console.log(memberData)
-      console.log("MEMBER")
       return memberData;
     };
 
