@@ -12,7 +12,7 @@ import {
   getAllChildrenData,
   patchChildData,
 } from "../services/axiosRequests.js";
-import { uploadFile } from "../services/uploadPassportImage.js";
+
 
 export default function Passport() {
   const navigate = useNavigate();
