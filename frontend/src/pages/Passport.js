@@ -27,6 +27,7 @@ export default function Passport() {
     getValues,
     formState: { errors },
   } = useForm();
+  
   let userId = localStorage.getItem("user_id");
   let isFamily = localStorage.getItem("is_family") === "true";
 

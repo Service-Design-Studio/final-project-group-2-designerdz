@@ -9,9 +9,6 @@ import requests
 
 
 
-
-
-
 def detect_text_uri(uri):
     """Detects text in the file located in Google Cloud Storage or on the Web.
     """
