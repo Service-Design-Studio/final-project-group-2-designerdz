@@ -154,6 +154,11 @@ export default function Passport() {
     }
   };
 
+  const onChange = () => {
+    setFamilyData(checkIncompleteData(familyData));
+    console.log("CHANGING");
+  };
+
   const onUserSelected = async (index) => {
     let data = getValues();
     data["passport_expiry"] = details.passport_expiry;
@@ -290,7 +295,11 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          onChange={onChange}
+          className="mx-8"
+        >
           {isFamily === true ? (
             <Carousel
               nameArr={familyData}
