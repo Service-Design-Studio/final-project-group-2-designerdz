@@ -23,13 +23,14 @@ export default function Passport() {
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
+
   const {
     reset,
     register,
     handleSubmit,
     getValues,
     trigger,
-    formState: { isValid, isValidating,isSubmitSuccessful,errors },
+    formState: { isValid,errors },
   } = useForm({ 
     mode: 'onChange',
     defaultValues: 
@@ -221,7 +222,6 @@ export default function Passport() {
       gender: "FEMALE",
     }));
   };
-
   
   const onPassportUpload = async (data) => {
     const OBJECT_LOCATION = data.target.files[0]
@@ -241,9 +241,6 @@ export default function Passport() {
     console.log(response)
     const data_url = response.url
     console.log(data_url)
-
-    // get serivce account key from json file
-    // const GOOGLE_APPLICATION_CREDENTIALS = require("../serviceAccountKey.json");
 
     const VISION_URL = "https://vision.googleapis.com/v1/images:annotate"
     const VISION_HEADERS = {
@@ -274,8 +271,6 @@ export default function Passport() {
       }),
     });
     console.log(vision_response)
-
-
 
   }
 
@@ -397,12 +392,14 @@ export default function Passport() {
               setDetailsHandler={setDetails}
             />
           </div>
+          {console.log(familyData)}
           <Button
             name="next"
             text={onEdit === true ? "Save" : "Next"}
             bgColor="bg-red-500"
             hoverColor="hover:bg-red-700"
             onClick={onSubmit}
+            familyData={familyData}
           />
         </form>
       </div>
