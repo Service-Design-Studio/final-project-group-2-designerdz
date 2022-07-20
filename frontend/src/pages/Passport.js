@@ -34,12 +34,6 @@ export default function Passport() {
   let userId = localStorage.getItem("user_id");
   let isFamily = localStorage.getItem("is_family") === "true";
 
-  const {Storage} = require('@google-cloud/storage');
-
-// Creates a client
-  const storage = new Storage();
-
-
 
 
   //on first render do GET request
@@ -181,11 +175,6 @@ export default function Passport() {
       ))};
 
 
-  const onPassportUpload =() => {
-    let filePath= app.storage().ref()
-    uploadFile(filePath,userId)
-  }
-
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -214,7 +203,6 @@ export default function Passport() {
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
               placeholder="Passport"
-              onInput={onPassportUpload}
               {...register("Passport", {})}
             />
           </div>
