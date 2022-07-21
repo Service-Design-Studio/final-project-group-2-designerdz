@@ -1,57 +1,14 @@
-// const {
-//   Given,
-//   When,
-//   Then,
-//   Before,
-//   AfterAll,
-//   After,
-// } = require("@cucumber/cucumber");
-// const {
-//   Builder,
-//   By,
-//   Capabilities,
-//   Key,
-//   Button,
-//   ChromiumWebDriver,
-// } = require("selenium-webdriver");
-// const { initDriver } = require("../support/driverUtil");
+// const { Given, When, Then } = require("@cucumber/cucumber");
+// const { By } = require("selenium-webdriver");
 // const { expect, assert } = require("chai");
-// const { setDefaultTimeout } = require("@cucumber/cucumber");
-// const pactum = require("pactum");
-
-// let spec = pactum.spec();
-
-// // let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
-// let baseUrl = "http://localhost:3001/";
-
-// setDefaultTimeout(60 * 1000);
-
-// let driver;
-
-// Before(async function () {
-//   driver = initDriver();
-
-//   await driver.get(baseUrl);
-//   await driver.sleep(100);
-
-//   await driver.executeScript(function () {
-//     localStorage.setItem("user_id", "0");
-//   });
-
-//   spec = pactum.spec();
-// });
-
-// After(async function () {
-//   await driver.quit();
-// });
 
 // Given("I am on {string}", async function (page) {
 //   await driver.get(baseUrl + page);
 //   await driver.sleep(500);
 
-//   var actual_url = await driver.getCurrentUrl();
-//   actual_url = actual_url.split("/")[3];
-//   expect(actual_url).to.equal(page);
+//   var actualUrl = await driver.getCurrentUrl();
+//   actualUrl = actualUrl.split("/")[3];
+//   expect(actualUrl).to.equal(page);
 // });
 
 // When("I click on the next button", async function () {
@@ -61,10 +18,10 @@
 // });
 
 // Then("I should move forward to the {string} page", async function (next) {
-//   var expected_url = next;
-//   var actual_url = await driver.getCurrentUrl();
-//   actual_url = actual_url.split("/")[3];
-//   expect(actual_url).to.equal(expected_url);
+//   var expectedUrl = next;
+//   var actualUrl = await driver.getCurrentUrl();
+//   actualUrl = actualUrl.split("/")[3];
+//   expect(actualUrl).to.equal(expectedUrl);
 // });
 
 // When("I click on the back button", async function () {
@@ -74,10 +31,10 @@
 // });
 
 // Then("I should go back to the {string} page", async function (previous) {
-//   var expected_url = previous;
-//   var actual_url = await driver.getCurrentUrl();
-//   actual_url = actual_url.split("/")[3];
-//   expect(actual_url).to.equal(expected_url);
+//   var expectedUrl = previous;
+//   var actualUrl = await driver.getCurrentUrl();
+//   actualUrl = actualUrl.split("/")[3];
+//   expect(actualUrl).to.equal(expectedUrl);
 // });
 
 // Given("I am on the passport page", function () {
@@ -88,17 +45,17 @@
 //   driver.get(baseUrl + "passport");
 // });
 
-// Given("I have filled in my {string}", function (full_name) {
-//   driver.findElement(By.className("full_name")).sendKeys(full_name);
+// Given("I have filled in my {string}", function (fullName) {
+//   driver.findElement(By.className("full_name")).sendKeys(fullName);
 // });
 
 // Then("I should move forward to the review page", function () {
 //   driver.get(baseUrl + "review");
 // });
 
-// Then("my {string} should be shown", async function (full_name) {
+// Then("my {string} should be shown", async function (fullName) {
 //   const fn = await driver.findElement(By.className("review_fn")).getText();
-//   expect(fn, full_name);
+//   expect(fn, fullName);
 //   await driver.sleep(500);
 // });
 

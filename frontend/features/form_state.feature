@@ -13,4 +13,4 @@
 #         | previous   | page       |
 #         | "details"  | "passport" |
 #         # FIXME: 
-#         # | "passport" | "review"   |
+#         # | "passport" | "review"   |image.png

@@ -1,51 +1,6 @@
-const {
-  Given,
-  When,
-  Then,
-  Before,
-  AfterAll,
-  After,
-} = require("@cucumber/cucumber");
-const {
-  Builder,
-  By,
-  Capabilities,
-  Key,
-  Button,
-  ChromiumWebDriver,
-} = require("selenium-webdriver");
-const { initDriver } = require("../support/driverUtil");
-const { expect, assert, AssertionError } = require("chai");
-const { setDefaultTimeout } = require("@cucumber/cucumber");
-const pactum = require("pactum");
-const axios = require("axios");
-
-let spec = pactum.spec();
-
-// let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
-let baseUrl = "http://localhost:3001/";
-
-setDefaultTimeout(60 * 1000);
-
-let user_number;
-
-let driver;
-
-Before(async function () {
-  driver = initDriver();
-  await driver.get(baseUrl);
-  await driver.sleep(1000);
-  await driver.executeScript(function () {
-    localStorage.clear();
-  });
-
-  user_number = Math.floor(Math.random() * 10000);
-  spec = pactum.spec();
-});
-
-After(async function () {
-  await driver.quit();
-});
+const { Given, When, Then } = require("@cucumber/cucumber");
+const { By } = require("selenium-webdriver");
+const { assert } = require("chai");
 
 Given("I make a GET request to {string}", function (url) {
   spec.get(url);
@@ -77,7 +32,7 @@ Given(
     await driver.findElement(By.className("display_name")).sendKeys("Yi Ma");
     await driver
       .findElement(By.className("phone_number"))
-      .sendKeys(user_number);
+      .sendKeys(parentNumber);
     await driver
       .findElement(By.className("email"))
       .sendKeys("dayima@gmail.com");
@@ -138,7 +93,7 @@ Then(
         await driver
           .findElement(By.className("phone_number"))
           .getAttribute("value"),
-        user_number
+        parentNumber
       );
       assert.equal(
         await driver.findElement(By.className("email")).getAttribute("value"),

@@ -1,51 +1,6 @@
-const {
-  Given,
-  When,
-  Then,
-  Before,
-  AfterAll,
-  After,
-} = require("@cucumber/cucumber");
-const {
-  Builder,
-  By,
-  Capabilities,
-  Key,
-  Button,
-  ChromiumWebDriver,
-} = require("selenium-webdriver");
-const { initDriver } = require("../support/driverUtil");
-const { expect, assert } = require("chai");
-const { setDefaultTimeout } = require("@cucumber/cucumber");
-const pactum = require("pactum");
-const axios = require("axios");
-
-let spec = pactum.spec();
-
-// let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
-let baseUrl = "http://localhost:3001/";
-
-setDefaultTimeout(60 * 1000);
-
-let parent_number;
-let driver;
-
-Before(async function () {
-  driver = initDriver();
-  driver = initDriver();
-  await driver.get(baseUrl);
-  await driver.sleep(1000);
-  await driver.executeScript(function () {
-    localStorage.clear();
-  });
-  parent_number = Math.floor(Math.random() * 10000);
-
-  spec = pactum.spec();
-});
-
-After(function () {
-  driver.quit();
-});
+const { Given, When, Then } = require("@cucumber/cucumber");
+const { By } = require("selenium-webdriver");
+const { assert } = require("chai");
 
 Given("I have filled in my details", async function () {
   await driver.get(baseUrl);
@@ -60,9 +15,7 @@ Given("I have filled in my details", async function () {
   await driver
     .findElement(By.className("display_name"))
     .sendKeys("Sally Abbot");
-  await driver
-    .findElement(By.className("phone_number"))
-    .sendKeys(parent_number);
+  await driver.findElement(By.className("phone_number")).sendKeys(parentNumber);
   await driver.sleep(1000);
 
   await driver.findElement(By.className("next")).click();
@@ -86,9 +39,8 @@ Given("I have added a child", async function () {
 When("I navigate to the passport page", async function () {
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
-
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "passport");
+  var actualUrl = await driver.getCurrentUrl();
+  assert.equal(actualUrl, baseUrl + "passport");
 });
 
 Then(
