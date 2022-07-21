@@ -34,8 +34,8 @@ Before(async function () {
   await driver.get(baseUrl);
   await driver.sleep(100);
 
-  await driver.executeScript(function() {
-      localStorage.setItem("user_id", "0");
+  await driver.executeScript(function () {
+    localStorage.setItem("user_id", "0");
   });
 
   spec = pactum.spec();
@@ -44,7 +44,6 @@ Before(async function () {
 After(async function () {
   await driver.quit();
 });
-
 
 Given("I am on {string}", async function (page) {
   await driver.get(baseUrl + page);

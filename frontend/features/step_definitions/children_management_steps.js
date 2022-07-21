@@ -55,8 +55,12 @@ Given("I have successfully added a child", async function () {
   familyButton.click();
   await driver.sleep(500);
 
-  await driver.findElement(By.className("display_name")).sendKeys("John Doe Doe");
-  await driver.findElement(By.className("phone_number")).sendKeys(Math.floor(Math.random() * 10000));
+  await driver
+    .findElement(By.className("display_name"))
+    .sendKeys("John Doe Doe");
+  await driver
+    .findElement(By.className("phone_number"))
+    .sendKeys(Math.floor(Math.random() * 10000));
   await driver.sleep(500);
 
   await driver.findElement(By.className("next")).click();
@@ -69,7 +73,9 @@ Given("I have successfully added a child", async function () {
   await driver.findElement(By.className("add")).click();
   await driver.sleep(500);
 
-  await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
+  await driver
+    .findElement(By.className("display_name"))
+    .sendKeys("Salah Abbot");
 
   const autofillCheckbox = await driver.findElement(By.className("autofill"));
 
@@ -103,9 +109,7 @@ When("I edit my child name", async function () {
   edit_button.click();
   await driver.sleep(500);
 
-  const childName2 = await driver.findElement(
-    By.className("display_name")
-  );
+  const childName2 = await driver.findElement(By.className("display_name"));
   childName2.sendKeys(" Edited");
 
   const nextButton2 = await driver.findElement(By.className("next"));

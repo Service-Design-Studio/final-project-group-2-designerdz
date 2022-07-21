@@ -58,7 +58,6 @@ export default function Passport() {
   }
 
   // Creates a client
-  const storage = new Storage();
 
   //on first render do GET request
   useEffect(() => {

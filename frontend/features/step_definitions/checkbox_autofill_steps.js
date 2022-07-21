@@ -59,10 +59,14 @@ Given("that I have saved my details", async function () {
 
   await driver.findElement(By.className("family-next")).click();
   await driver.sleep(1000);
-  
-  await driver.findElement(By.className("display_name")).sendKeys("Sally Abbot");
+
+  await driver
+    .findElement(By.className("display_name"))
+    .sendKeys("Sally Abbot");
   await driver.findElement(By.className("email")).sendKeys("sally@gmail.com");
-  await driver.findElement(By.className("phone_number")).sendKeys(parent_number);
+  await driver
+    .findElement(By.className("phone_number"))
+    .sendKeys(parent_number);
   await driver.sleep(1000);
 
   assert.equal(await driver.getCurrentUrl(), baseUrl + "details");
@@ -81,8 +85,10 @@ Given("I add a new child", async function () {
 
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, baseUrl + "child");
-  
-  await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
+
+  await driver
+    .findElement(By.className("display_name"))
+    .sendKeys("Salah Abbot");
 });
 
 When("I check the autofill checkbox", async function () {
@@ -97,14 +103,18 @@ When("I check the autofill checkbox", async function () {
 });
 
 Then("I should see my child details autofilled", async function () {
-  var childNumberValue = await driver.findElement(By.className("phone_number")).getAttribute("value");
+  var childNumberValue = await driver
+    .findElement(By.className("phone_number"))
+    .getAttribute("value");
   assert.equal(childNumberValue, parent_number);
 
-  var childEmailValue = await driver.findElement(By.className("email")).getAttribute("value");
+  var childEmailValue = await driver
+    .findElement(By.className("email"))
+    .getAttribute("value");
   assert.equal(childEmailValue, "sally@gmail.com");
 });
 
-When("I move to the review page", async function() {
+When("I move to the review page", async function () {
   // Move to family page
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
@@ -120,7 +130,9 @@ When("I move to the review page", async function() {
   assert.equal(actual_url, baseUrl + "passport");
 
   await driver.findElement(By.className("full_name")).sendKeys("Sally Abbot");
-  await driver.findElement(By.className("passport_number")).sendKeys("E32521921");
+  await driver
+    .findElement(By.className("passport_number"))
+    .sendKeys("E32521921");
   await driver.findElement(By.className("nationality")).sendKeys("American");
   await driver.findElement(By.className("female")).click();
   await driver.sleep(500);
@@ -129,7 +141,9 @@ When("I move to the review page", async function() {
   await driver.sleep(500);
 
   await driver.findElement(By.className("full_name")).sendKeys("Sarah Abbot");
-  await driver.findElement(By.className("passport_number")).sendKeys("E34152315");
+  await driver
+    .findElement(By.className("passport_number"))
+    .sendKeys("E34152315");
   await driver.findElement(By.className("nationality")).sendKeys("American");
   await driver.findElement(By.className("female")).click();
   await driver.sleep(500);
@@ -146,21 +160,25 @@ When("I move to the review page", async function() {
   assert.equal(actual_url, baseUrl + "review");
 });
 
-When("I click on my child icon", async function() {
+When("I click on my child icon", async function () {
   await driver.findElement(By.id("user_1")).click();
   await driver.sleep(500);
 });
 
-Then("I should be able to see that my child details are the same as mine", async function() {
-  var childNumberValue = await driver.findElement(By.className("phone_number")).getAttribute("value");
-  // FIXME: 
-  // assert.equal(childNumberValue, parent_number);
+Then(
+  "I should be able to see that my child details are the same as mine",
+  async function () {
+    var childNumberValue = await driver
+      .findElement(By.className("phone_number"))
+      .getText();
+    assert.equal(childNumberValue, parent_number);
 
-  var childEmailValue = await driver.findElement(By.className("email")).getAttribute("value");
-  // FIXME: 
-  // assert.equal(childEmailValue, "sally@gmail.com");
-});
-
+    var childEmailValue = await driver
+      .findElement(By.className("email"))
+      .getText();
+    assert.equal(childEmailValue, "sally@gmail.com");
+  }
+);
 
 When("I uncheck the autofill checkbox", async function () {
   const autofillCheckbox = await driver.findElement(By.className("autofill"));
@@ -173,17 +191,22 @@ When("I uncheck the autofill checkbox", async function () {
   assert.equal(checked, false);
 });
 
-When("I edit my child contact details", async function() {
+When("I edit my child contact details", async function () {
   await driver.findElement(By.className("phone_number")).sendKeys(child_number);
   await driver.findElement(By.className("email")).sendKeys("sarah@gmail.com");
 });
 
-Then("I should be able to see that my child details are different", async function() {
-  var childNumberValue = await driver.findElement(By.className("phone_number")).getAttribute("value");
-  // FIXME: 
-  // assert.equal(childNumberValue, child_number);
+Then(
+  "I should be able to see that my child details are different",
+  async function () {
+    var childNumberValue = await driver
+      .findElement(By.className("phone_number"))
+      .getText();
+    assert.equal(childNumberValue, child_number);
 
-  var childEmailValue = await driver.findElement(By.className("email")).getAttribute("value");
-  // FIXME: 
-  // assert.equal(childEmailValue, "sarah@gmail.com");
-});
+    var childEmailValue = await driver
+      .findElement(By.className("email"))
+      .getText();
+    assert.equal(childEmailValue, "sarah@gmail.com");
+  }
+);

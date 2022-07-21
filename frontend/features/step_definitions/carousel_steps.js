@@ -18,6 +18,7 @@ const { initDriver } = require("../support/driverUtil");
 const { expect, assert } = require("chai");
 const { setDefaultTimeout } = require("@cucumber/cucumber");
 const pactum = require("pactum");
+const axios = require("axios");
 
 let spec = pactum.spec();
 
@@ -49,11 +50,6 @@ After(function () {
 Given("I have filled in my details", async function () {
   await driver.get(baseUrl);
   await driver.sleep(1000);
-  const notACustomerYetButton = await driver.findElement(
-    By.className("bg-red-500")
-  );
-  notACustomerYetButton.click();
-  await driver.sleep(1000);
 
   await driver.findElement(By.className("bg-red-500")).click();
   await driver.sleep(1000);
@@ -71,30 +67,11 @@ Given("I have filled in my details", async function () {
 
   await driver.findElement(By.className("next")).click();
   await driver.sleep(1000);
-  assert.equal(await driver.getCurrentUrl(), base_url + "family");
 });
 
-When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-  await driver.sleep(1000);
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "passport");
-  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
-});
-
-When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-  await driver.sleep(1000);
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "passport");
-  assert.equal(await driver.getCurrentUrl(), base_url + "family");
-});
-
-When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
+Given("I have added a child", async function () {
+  await driver.findElement(By.className("add")).click();
+  await driver.sleep(500);
 
   await driver
     .findElement(By.className("display_name"))
@@ -103,8 +80,7 @@ When("I navigate to the passport page", async function () {
   await driver.findElement(By.className("next")).click();
   await driver.sleep(1000);
 
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "passport");
+  assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
 });
 
 When("I navigate to the passport page", async function () {

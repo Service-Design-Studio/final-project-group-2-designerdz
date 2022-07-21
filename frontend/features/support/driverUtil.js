@@ -16,7 +16,7 @@ exports.initDriver = () => {
     .forBrowser("chrome")
     .setChromeOptions(options)
     .build();
-  // driver.manage().window().setRect({width: width, height: height});
+  driver.manage().window().setRect({ width: width, height: height });
   return driver;
 };
 

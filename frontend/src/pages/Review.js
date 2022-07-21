@@ -124,11 +124,11 @@ export default function Review() {
             {details === undefined ? "" : details.display_name}
           </p>
           <p>Phone Number:</p>
-          <p className="phone_number text-right">
+          <p id="phone_no" className="phone_number text-right">
             {details === undefined ? "" : details.phone_number}
           </p>
           <p>Email</p>
-          <p className="email text-right">
+          <p id="email" className="email text-right">
             {details === undefined ? "" : details.email}
           </p>
         </div>
