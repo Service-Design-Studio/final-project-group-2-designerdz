@@ -63,7 +63,7 @@ Then('response should have a status {int}', async function (code) {
   await spec.response().should.have.status(code);
 });
 
-Given("that I have filled up {string} page and have navigated to {string}", async function(previous, page) {
+Given("that I have filled up {string} page and have navigated to {string}", async function(page1, page2) {
   await driver.get(baseUrl + "signup");
   await driver.sleep(500);
 
@@ -79,11 +79,16 @@ Given("that I have filled up {string} page and have navigated to {string}", asyn
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
 
-  if (page == "previous") {
+  if (page2 == "review") {
     await driver.findElement(By.className("full_name")).sendKeys("Da Yi Ma");
     await driver.findElement(By.className("passport_number")).sendKeys("E32136512");
     await driver.findElement(By.className("nationality")).sendKeys("China");
-    await driver.findElement(By.className("female")).click();
+    await driver.findElement(By.className("male")).click();
+
+    // TODO: remove
+    await driver.findElement(By.className("next")).click();
+    await driver.sleep(500); 
+    await driver.findElement(By.className("full_name")).sendKeys("");
     await driver.sleep(500);
 
     // Move to review page
@@ -91,25 +96,35 @@ Given("that I have filled up {string} page and have navigated to {string}", asyn
     await driver.sleep(500); 
   }
 
-  assert.equal(await driver.getCurrentUrl(), baseUrl + page);
+  assert.equal(await driver.getCurrentUrl(), baseUrl + page2);
 });
 
 When("I navigate back to the {string} page", async function(previous) {
-  const registration_button = await driver.findElement(By.className("back"));
-  await registration_button.click();
+  const back_button = await driver.findElement(By.className("back"));
+  await back_button.click();
   await driver.sleep(500);
 
   assert.equal(await driver.getCurrentUrl(), baseUrl + previous);
 });
 
-Then("the fields I have filled up in {string} page should remain", async function(previous) {
-  if (previous == "details") {
+When("I navigate back to {string}", async function(page) {
+  const next_button = await driver.findElement(By.className("next"));
+  await next_button.click();
+  await driver.sleep(500);
+
+  assert.equal(await driver.getCurrentUrl(), baseUrl + page);
+});
+
+Then("the fields I have filled up in {string} should remain", async function(page) {
+  if (page == "details") {
     assert.equal(await driver.findElement(By.className("display_name")).getAttribute("value"), "Yi Ma");
     assert.equal(await driver.findElement(By.className("phone_number")).getAttribute("value"), user_number);
     assert.equal(await driver.findElement(By.className("email")).getAttribute("value"), "dayima@gmail.com");
-  } else if (previous == "passport") {
+  } else if (page == "passport") {
     assert.equal(await driver.findElement(By.className("full_name")).getAttribute("value"), "Da Yi Ma");
     assert.equal(await driver.findElement(By.className("passport_number")).getAttribute("value"), "E32136512");
     assert.equal(await driver.findElement(By.className("nationalty")).getAttribute("value"), "China");
   }
 });
+
+

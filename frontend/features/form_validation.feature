@@ -20,7 +20,7 @@
 #         | "child"    | "next" | "Display Name,Phone Number"             | "display_name,phone_number"             | "family"   |
 #         | "passport" | "next" | "Full Name,Passport Number,Nationality" | "full_name,passport_number,nationality" | "review"   |
 
-    # Scenario: Carousel Pop-up For Incomplete Family Member Details
-    #     Given I am on passport page, have at least one child and have not completed the fields on the current page
-    #     When I click on another family member
-    #     Then I should see an icon on the carousel of the family member I just navigated away from  
+#     Scenario: Carousel Pop-up For Incomplete Family Member Details
+#         Given I am on passport page, have at least one child and have not completed the fields on the current page
+#         When I click on another family member
+#         Then I should see an icon on the carousel of the family member I just navigated away from  
