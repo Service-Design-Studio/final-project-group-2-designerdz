@@ -14,43 +14,57 @@ export default function Review() {
   const [details, setDetails] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
+  const [isFamily, setIsFamily] = useState(false);
   let userData;
   let userId = localStorage.getItem("user_id");
-  let isFamily = localStorage.getItem("is_family") === "true";
 
   useEffect(() => {
-    async function fetchData() {
-      if (isFamily) {
-        if (familyData.length === 0) {
-          try {
-            const response = await getAllChildrenData(userId);
-            userData = response.data;
-            setFamilyData(userData);
-            setDetails(userData[selectedIndex]); //details for current selected user
-          } catch (error) {
-            console.log(error.response);
+
+    function checkIncompleteData(familyData) {
+      let compulsory_fields = ["full_name", "passport_number", "nationality"];
+      console.log(familyData.length);
+      for (var i = 0; i < familyData.length; i++) {
+        familyData[i]["status"] = true;
+        for (let field of compulsory_fields) {
+          if (
+            familyData[i][field] == undefined ||
+            familyData[i][field] == null ||
+            familyData[i][field] == "" ||
+            familyData[i][field] == " "
+          ) {
+            familyData[i]["status"] = false;
           }
         }
-      } else {
+      }
+      return familyData;
+    }
+
+    async function fetchData() {
+      if (familyData.length === 0) {
+        console.log("If statement");
         try {
-          const response = await getUserDataId(userId);
-          console.log(response)
-          userData = response.data[0];
+          const response = await getAllChildrenData(userId);
+          let updatedFamilyData = checkIncompleteData(response.data);
+          userData = updatedFamilyData[0];
           setDetails(userData);
+          setFamilyData(updatedFamilyData);
         } catch (error) {
           console.log(error);
         }
+      } else if (familyData.length > 1) {
+        console.log("family data here");
+        //this means family registration
+        setIsFamily(true);
       }
     }
     fetchData();
-    
-  }, []);
+  }, [familyData]);
 
   const submitData = () => {
     navigate("/success");
   };
 
-  const onClickSelected = (index) => {
+  const onUserSelected = (index) => {
     setSelectedIndex(index);
     setDetails(familyData[index]);
   };
@@ -58,14 +72,22 @@ export default function Review() {
   const onEditDetails = () => {
     if (selectedIndex > 0) {
       navigate("/child", {
-        state: { onEdit: true, child_id: familyData[selectedIndex].id, phone_number: familyData[0].phone_number, email: familyData[0].email  },
+        state: {
+          onEdit: true,
+          child_id: familyData[selectedIndex].id,
+          phone_number: familyData[0].phone_number,
+          email: familyData[0].email,
+        },
       });
     } else {
       navigate("/details", { state: { onEdit: true } });
     }
   };
 
-  
+  const onEditPassport = () => {
+    navigate("/passport", { state: { onEdit: true, index: selectedIndex } });
+  };
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -79,7 +101,7 @@ export default function Review() {
         {isFamily === true ? (
           <Carousel
             nameArr={familyData}
-            onClickSelected={onClickSelected}
+            onClickSelected={onUserSelected}
             selectedIndex={selectedIndex}
           />
         ) : null}
@@ -108,9 +130,10 @@ export default function Review() {
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
-            <EditButton
+            <EditButton onClick={onEditPassport} />
+            {/* <EditButton
               onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
-            />
+            /> */}
           </b>
         </div>
 
@@ -125,7 +148,12 @@ export default function Review() {
           </p>
           <p>Passport Expiry:</p>
           <p className="text-right">
-            {details === undefined ? "" : new Date(details.passport_expiry).toLocaleDateString('en-us', {year:"numeric", month:"short"})}
+            {details === undefined
+              ? ""
+              : new Date(details.passport_expiry).toLocaleDateString("en-us", {
+                  year: "numeric",
+                  month: "short",
+                })}
           </p>
           <p>Nationality:</p>
           <p className="text-right">
@@ -137,7 +165,13 @@ export default function Review() {
           </p>
           <p>Date of Birth:</p>
           <p className="text-right">
-            {details === undefined ? "" : new Date(details.dob).toLocaleDateString('en-us', {year:"numeric", month:"short", day:"numeric"})}
+            {details === undefined
+              ? ""
+              : new Date(details.dob).toLocaleDateString("en-us", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
           </p>
         </div>
         <Button

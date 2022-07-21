@@ -18,7 +18,6 @@ const { initDriver } = require("../support/driverUtil");
 const { expect, assert } = require("chai");
 const { setDefaultTimeout } = require("@cucumber/cucumber");
 const pactum = require("pactum");
-const axios = require("axios");
 
 let spec = pactum.spec();
 
@@ -81,9 +80,37 @@ Given("I have added a child", async function () {
   const nextButton = await driver.findElement(By.className("next"));
   nextButton.click();
   await driver.sleep(1000);
+  assert.equal(await driver.getCurrentUrl(), base_url + "family");
+});
 
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+  await driver.sleep(1000);
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, base_url + "passport");
   assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
 });
+
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+  await driver.sleep(1000);
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, baseUrl + "passport");
+  assert.equal(await driver.getCurrentUrl(), base_url + "family");
+});
+
+When("I navigate to the passport page", async function () {
+  const nextButton = await driver.findElement(By.className("next"));
+  nextButton.click();
+
+  await driver.sleep(1000);
+
+  var actual_url = await driver.getCurrentUrl();
+  assert.equal(actual_url, base_url + "passport");
+});
+
 
 When("I navigate to the passport page", async function () {
   const nextButton = await driver.findElement(By.className("next"));
@@ -94,6 +121,7 @@ When("I navigate to the passport page", async function () {
   var actual_url = await driver.getCurrentUrl();
   assert.equal(actual_url, baseUrl + "passport");
 });
+
 
 Then(
   "I should be able to see my child's and my name in the carousel",

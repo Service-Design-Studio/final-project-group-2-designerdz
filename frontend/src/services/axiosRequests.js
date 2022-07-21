@@ -9,13 +9,13 @@ import {
 //get data using phoneNumber (for resumption or signup process)
 // /api/v1/users?phone_number=${phoneNumber}
 export function getUserDataPhoneNumber(phoneNumber) {
-  return axios.get(USER_API, {params: {"phone_number": phoneNumber}});
+  return axios.get(USER_API, { params: { phone_number: phoneNumber } });
 }
 
 //get data using id
 // /api/v1/users?id=${id}
 export function getUserDataId(userId) {
-  return axios.get(USER_API, {params: {"id": userId}});
+  return axios.get(USER_API, { params: { id: userId } });
 }
 
 //post new entry
@@ -37,7 +37,7 @@ export function getChildData(childId) {
 
 //get all children of a parent using user id
 export function getAllChildrenData(parentId) {
-  return axios.get(CHILDREN_API, {params: { "id": parentId}});
+  return axios.get(CHILDREN_API, { params: { id: parentId } });
 }
 
 //create new child entry using parent id

@@ -13,41 +13,72 @@ import {
   patchChildData,
 } from "../services/axiosRequests.js";
 
-
 export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [details, setDetails] = useState({dob: new Date(), passport_expiry: new Date()});
+  const [details, setDetails] = useState({
+    dob: new Date(),
+    passport_expiry: new Date(),
+  });
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [familyData, setFamilyData] = useState([]); 
+  const [familyData, setFamilyData] = useState([]);
+
   const {
     reset,
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
-  } = useForm();
+    trigger,
+    formState: { isValid,errors },
+  } = useForm({ 
+    mode: 'onChange',
+    defaultValues: 
+    { full_name: "",
+      nationality: "",
+      passport_number: "",
+  } });
   
+  // const storage = new Storage();
 
-  
   let userId = localStorage.getItem("user_id");
   let isFamily = localStorage.getItem("is_family") === "true";
 
+  
+
+  function checkIncompleteData(familyData) {
+    let compulsory_fields = ["full_name", "passport_number", "nationality"]
+    for (var i=0; i < familyData.length; i++) {
+      familyData[i]["status"] = true
+      for (let field of compulsory_fields) {
+        if (familyData[i][field] == undefined || familyData[i][field] == null || familyData[i][field] == "" || familyData[i][field] == " ") {
+          familyData[i]["status"] = false;
+        }
+      }
+    }
+    return familyData;
+  }
 
 
   //on first render do GET request
   useEffect(() => {
+    //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
+    if (userId == null) {
+      navigate("/", { state: { pop_up: true } }); //testing to see if it works
+      alert("Enter phone number at landing page!"); //TODO: remember to remove
+    }
+
     try {
       setOnEdit(location.state.onEdit);
+      setSelectedIndex(location.state.index);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
 
     async function fetchData() {
       try {
         const response = await getAllChildrenData(userId);
-        setFamilyData(response.data);
+        setFamilyData(checkIncompleteData(response.data));
       } catch (error) {
         console.log(error.response);
       }
@@ -58,6 +89,9 @@ export default function Passport() {
 
     if (familyData.length === 0) {
       fetchData();
+    } else if (familyData.length > 1) {
+      // this means family registration
+      isFamily = true
     }
 
     if (familyData[selectedIndex] !== undefined) {
@@ -70,7 +104,6 @@ export default function Passport() {
         dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
       });
-
       reset({
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
@@ -79,35 +112,37 @@ export default function Passport() {
     }
   }, [selectedIndex, familyData]);
 
-
   //to post the data
   const onSubmit = async (data) => {
     data = getValues();
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
     data["gender"] = details.gender;
-    if (selectedIndex === 0) {
-      try {
-        await patchUserData(data, userId);
-      } catch (error) {
-        alert(error);
-        console.log(error.response);
+    // check if form is valid
+    if (isValid) {
+      if (selectedIndex === 0) {
+        try {
+          await patchUserData(data, userId);
+        } catch (error) {
+          alert(error);
+          console.log(error.response);
+        }
+      } else {
+        try {
+          await patchChildData(data, familyData[selectedIndex].id);
+        } catch (error) {
+          console.log(error.response);
+        }
       }
-    } else {
-      try {
-        await patchChildData(data, familyData[selectedIndex].id);
-      } catch (error) {
-        console.log(error.response);
-      }
-    }
 
-    if (onEdit === true) {
-      navigate("/review");
-      setOnEdit(false);
-    } else {
-      navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+      if (onEdit === true) {
+        navigate("/review");
+        setOnEdit(false);
+      } else {
+        navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+      }
+    };
     }
-  };
 
   const onBackBtnSelected = () => {
     if (isFamily) {
@@ -117,7 +152,12 @@ export default function Passport() {
     }
   };
 
-  const onClickSelected = async (index) => {
+  const onChange = () => {
+    setFamilyData(checkIncompleteData(familyData))
+    console.log("CHANGING")
+  }
+
+  const onUserSelected = async (index) => {
     let data = getValues();
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
@@ -129,6 +169,14 @@ export default function Passport() {
       for (const key in memberData) {
         if (data[key] != undefined) {
           memberData[key] = data[key];
+        }
+      }
+      let compulsory_fields = ["full_name", "passport_number", "nationality"]
+      memberData["status"] = true;
+      for (const field of compulsory_fields) {
+        if (memberData[field] == undefined || memberData[field] == null || memberData[field] == "" || memberData[field] == " ") {
+          console.log("Setting to false")
+          memberData["status"] = false;
         }
       }
       return memberData;
@@ -163,18 +211,73 @@ export default function Passport() {
   };
 
   const toggleGenderToMale = () => {
-    setDetails(prevState => ({
+    setDetails((prevState) => ({
       ...prevState,
-      "gender": "MALE"}
-  ))};
+      gender: "MALE",
+    }));
+  };
 
   const toggleGenderToFemale = () => {
-    setDetails(prevState => ({
-          ...prevState,
-          "gender": "FEMALE"}
-      ))};
+    setDetails((prevState) => ({
+      ...prevState,
+      gender: "FEMALE",
+    }));
+  };
+  
+  const onPassportUpload = async (data) => {
+    const OBJECT_LOCATION = data.target.files[0]
+    const OBJECT_CONTENT_TYPE = "image/jpg"
+    const BUCKET_NAME = "react-frontend-353408.appspot.com"
+    const OBJECT_NAME = `${userId}_passport_image`
+    const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`
+    const UPLOAD_HEADERS = {
+      "Content-Type": OBJECT_CONTENT_TYPE,
+    }
+    // make post request
+    const response = await fetch(UPLOAD_URL, {
+      method: "POST",
+      headers: UPLOAD_HEADERS,
+      body: OBJECT_LOCATION,
+    });
+    console.log(response)
+    const data_url = response.url
+    console.log(data_url)
+
+    const VISION_URL = "https://vision.googleapis.com/v1/images:annotate"
+    const VISION_HEADERS = {
+      "Content-Type": "application/json", "charset": "utf-8",
+      "Authorization": `Bearer ya29.A0AVA9y1veAN9IC5t4iq8BN4gVZIPJHZh5GxGYk6lR0vae7cuLNEozOrWU5_PEgBMlWMRL4BLxDhtxdbF9CvWwqHQhQIDnbCUJAqFmKShD-EnrhGMLzpTusBTxi1hlQimdP9Fh_a9Gv7i-uLQad1H30VEtlWDJYUNnWUtBVEFTQVRBU0ZRRTY1ZHI4bjQ3b3dtUXRnY2Zva19JYkJ1MFpIZw0163`,
+      "Access-Control-Allow-Origin": "*",
+    }
+    // make post request
+    const vision_response = await fetch(VISION_URL, {
+      method: "POST",
+      headers: VISION_HEADERS,
+      body: JSON.stringify({
+        requests: [
+          {
+            image: {
+              source: {
+                imageUri: data_url,
+              },
+            },
+            features: [
+              {
+                type: "DOCUMENT_TEXT_DETECTION",
+                maxResults: 1,
+              },
+            ],
+          },
+        ],
+      }),
+    });
+    console.log(vision_response)
+
+  }
 
 
+
+ 
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -189,11 +292,11 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        <form onSubmit={handleSubmit(onSubmit)} className="mx-8">
+        <form onSubmit={handleSubmit(onSubmit)} onChange={onChange} className="mx-8">
           {isFamily === true ? (
             <Carousel
-              nameArr={familyData} //TODO: replace with familyData
-              onClickSelected={onClickSelected}
+              nameArr={familyData}
+              onClickSelected={onUserSelected}
               selectedIndex={selectedIndex}
             />
           ) : null}
@@ -203,7 +306,9 @@ export default function Passport() {
               className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
               type="file"
               placeholder="Passport"
-              {...register("Passport", {})}
+              name="passport_img"
+              onInput={onPassportUpload}
+              {...register("passport_img", {})}
             />
           </div>
 
@@ -211,21 +316,31 @@ export default function Passport() {
             name="full_name"
             text="Full Name"
             type="text"
-            onFill={register("full_name", {})}
+            onFill={register("full_name", {
+              required: "Full Name is Required",
+            })}
           />
+          {errors.full_name && (
+            <p className="text-red-500">{errors.full_name.message}</p>
+          )}
 
           <FormFill
             name="passport_number"
             text="Passport Number"
             type="text"
-            onFill={register("passport_number", {})}
+            onFill={register("passport_number", {
+              required: "Passport Number is Required",
+            })}
           />
+          {errors.passport_number && (
+            <p className="text-red-500">{errors.passport_number.message}</p>
+          )}
 
           <div className="mb-3">
             <label className="block font-medium">Passport Expiry (MM/YY)</label>
             <div>
               <Calendar
-              calendarType = "passport_expiry"
+                calendarType="passport_expiry"
                 curDate={details.passport_expiry}
                 setDetailsHandler={setDetails}
               />
@@ -236,8 +351,13 @@ export default function Passport() {
             text="Nationality"
             name="nationality"
             type="text"
-            onFill={register("nationality", {})}
+            onFill={register("nationality", {
+              required: "Nationality is Required",
+            })}
           />
+          {errors.nationality && (
+            <p className="text-red-500">{errors.nationality.message}</p>
+          )}
 
           <div className="mb-3">
             <label className="block font-medium">Gender</label>
@@ -268,17 +388,19 @@ export default function Passport() {
               Date of Birth (DD/MM/YYYY)
             </label>
             <Calendar
-              calendarType = "dob"
-                curDate={details.dob}
-                setDetailsHandler={setDetails}
-              />
+              calendarType="dob"
+              curDate={details.dob}
+              setDetailsHandler={setDetails}
+            />
           </div>
+          {console.log(familyData)}
           <Button
             name="next"
             text={onEdit === true ? "Save" : "Next"}
             bgColor="bg-red-500"
             hoverColor="hover:bg-red-700"
             onClick={onSubmit}
+            familyData={familyData}
           />
         </form>
       </div>

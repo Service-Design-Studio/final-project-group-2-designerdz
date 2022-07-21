@@ -11,6 +11,7 @@ export default function Carousel({ nameArr, onClickSelected, selectedIndex }) {
             name={member.display_name}
             index={currentIndex}
             key={currentIndex} //need find better alt for key
+            status = {member.status}
           />
         ) : (
           <UserCardNotSelected
@@ -19,6 +20,7 @@ export default function Carousel({ nameArr, onClickSelected, selectedIndex }) {
             name={member.display_name}
             index={currentIndex}
             key={currentIndex} //need find better alt for key
+            status = {member.status}
           />
         );
       })}
