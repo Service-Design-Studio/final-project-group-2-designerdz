@@ -1,46 +1,6 @@
-const {
-  Given,
-  When,
-  Then,
-  Before,
-  AfterAll,
-  After,
-} = require("@cucumber/cucumber");
-const {
-  Builder,
-  By,
-  Capabilities,
-  Key,
-  Button,
-  ChromiumWebDriver,
-} = require("selenium-webdriver");
-const { initDriver } = require("../support/driverUtil");
+const { Given, When, Then } = require("@cucumber/cucumber");
+const { By } = require("selenium-webdriver");
 const { expect, assert } = require("chai");
-const { setDefaultTimeout } = require("@cucumber/cucumber");
-const pactum = require("pactum");
-
-let spec = pactum.spec();
-
-// let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
-let baseUrl = "http://localhost:3001/";
-
-setDefaultTimeout(60 * 1000);
-
-let driver;
-
-Before(async function () {
-  driver = initDriver();
-  await driver.get(baseUrl);
-  await driver.sleep(500);
-  await driver.executeScript(function () {
-    localStorage.clear();
-  });
-  spec = pactum.spec();
-});
-
-After(async function () {
-  await driver.quit();
-});
 
 Given("I have successfully added a child", async function () {
   await driver.get(baseUrl);
@@ -66,9 +26,9 @@ Given("I have successfully added a child", async function () {
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
 
-  var actual_url = await driver.getCurrentUrl();
-  actual_url = actual_url.split("/")[3];
-  expect(actual_url).to.equal("family");
+  var actualUrl = await driver.getCurrentUrl();
+  actualUrl = actualUrl.split("/")[3];
+  expect(actualUrl).to.equal("family");
 
   await driver.findElement(By.className("add")).click();
   await driver.sleep(500);
@@ -89,14 +49,14 @@ Given("I have successfully added a child", async function () {
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
 
-  var actual_url = await driver.getCurrentUrl();
-  actual_url = actual_url.split("/")[3];
-  expect(actual_url).to.equal("family");
+  var actualUrl = await driver.getCurrentUrl();
+  actualUrl = actualUrl.split("/")[3];
+  expect(actualUrl).to.equal("family");
 });
 
 When("I am on the family page", async function () {
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "family");
+  var actualUrl = await driver.getCurrentUrl();
+  assert.equal(actualUrl, baseUrl + "family");
 });
 
 Then("I should see my child on the family page", async function () {

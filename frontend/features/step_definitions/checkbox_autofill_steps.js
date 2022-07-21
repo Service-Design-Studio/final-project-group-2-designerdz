@@ -1,52 +1,6 @@
-const {
-  Given,
-  When,
-  Then,
-  Before,
-  AfterAll,
-  After,
-} = require("@cucumber/cucumber");
-const {
-  Builder,
-  By,
-  Capabilities,
-  Key,
-  Button,
-  ChromiumWebDriver,
-} = require("selenium-webdriver");
-const { initDriver } = require("../support/driverUtil");
-const { expect, assert, AssertionError } = require("chai");
-const { setDefaultTimeout } = require("@cucumber/cucumber");
-const pactum = require("pactum");
-const axios = require("axios");
-
-let spec = pactum.spec();
-
-// let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
-let baseUrl = "http://localhost:3001/";
-
-setDefaultTimeout(60 * 1000);
-
-let parent_number;
-let child_number;
-
-let driver;
-
-Before(async function () {
-  driver = initDriver();
-  await driver.get(baseUrl);
-  await driver.sleep(1000);
-  await driver.executeScript(function () {
-    localStorage.clear();
-  });
-  parent_number = Math.floor(Math.random() * 10000);
-  child_number = Math.floor(Math.random() * 10000);
-  spec = pactum.spec();
-});
-
-After(async function () {
-  await driver.quit();
-});
+const { Given, When, Then } = require("@cucumber/cucumber");
+const { By } = require("selenium-webdriver");
+const { assert } = require("chai");
 
 Given("that I have saved my details", async function () {
   await driver.get(baseUrl);
@@ -64,9 +18,7 @@ Given("that I have saved my details", async function () {
     .findElement(By.className("display_name"))
     .sendKeys("Sally Abbot");
   await driver.findElement(By.className("email")).sendKeys("sally@gmail.com");
-  await driver
-    .findElement(By.className("phone_number"))
-    .sendKeys(parent_number);
+  await driver.findElement(By.className("phone_number")).sendKeys(parentNumber);
   await driver.sleep(1000);
 
   assert.equal(await driver.getCurrentUrl(), baseUrl + "details");
@@ -83,8 +35,8 @@ Given("I add a new child", async function () {
   await driver.findElement(By.className("add")).click();
   await driver.sleep(1000);
 
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "child");
+  var actualUrl = await driver.getCurrentUrl();
+  assert.equal(actualUrl, baseUrl + "child");
 
   await driver
     .findElement(By.className("display_name"))
@@ -106,7 +58,7 @@ Then("I should see my child details autofilled", async function () {
   var childNumberValue = await driver
     .findElement(By.className("phone_number"))
     .getAttribute("value");
-  assert.equal(childNumberValue, parent_number);
+  assert.equal(childNumberValue, parentNumber);
 
   var childEmailValue = await driver
     .findElement(By.className("email"))
@@ -119,15 +71,15 @@ When("I move to the review page", async function () {
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
 
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "family");
+  var actualUrl = await driver.getCurrentUrl();
+  assert.equal(actualUrl, baseUrl + "family");
 
   // Move to passport page
   await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
 
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "passport");
+  var actualUrl = await driver.getCurrentUrl();
+  assert.equal(actualUrl, baseUrl + "passport");
 
   await driver.findElement(By.className("full_name")).sendKeys("Sally Abbot");
   await driver
@@ -156,8 +108,8 @@ When("I move to the review page", async function () {
   await driver.findElement(By.className("next")).click();
   await driver.sleep(1000);
 
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "review");
+  var actualUrl = await driver.getCurrentUrl();
+  assert.equal(actualUrl, baseUrl + "review");
 });
 
 When("I click on my child icon", async function () {
@@ -171,7 +123,7 @@ Then(
     var childNumberValue = await driver
       .findElement(By.className("phone_number"))
       .getText();
-    assert.equal(childNumberValue, parent_number);
+    assert.equal(childNumberValue, parentNumber);
 
     var childEmailValue = await driver
       .findElement(By.className("email"))
@@ -192,7 +144,7 @@ When("I uncheck the autofill checkbox", async function () {
 });
 
 When("I edit my child contact details", async function () {
-  await driver.findElement(By.className("phone_number")).sendKeys(child_number);
+  await driver.findElement(By.className("phone_number")).sendKeys(childNumber);
   await driver.findElement(By.className("email")).sendKeys("sarah@gmail.com");
 });
 
@@ -202,7 +154,7 @@ Then(
     var childNumberValue = await driver
       .findElement(By.className("phone_number"))
       .getText();
-    assert.equal(childNumberValue, child_number);
+    assert.equal(childNumberValue, childNumber);
 
     var childEmailValue = await driver
       .findElement(By.className("email"))
