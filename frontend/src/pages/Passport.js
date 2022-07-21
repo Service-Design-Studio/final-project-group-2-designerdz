@@ -86,12 +86,6 @@ export default function Passport() {
       console.error(error);
     }
 
-    // if (familyData.length === 0) {
-    //   fetchData();
-    // } else if (familyData.length > 1) {
-    //   // this means family registration
-    //   isFamily = true;
-    // }
     if (familyData.length === 0) {
       fetchData();
     }
