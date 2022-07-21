@@ -12,7 +12,7 @@ Feature: Saving of progress
     
     Examples:
         | page    |  url                                                             |
-        | "details"  | "https://dbs-service-qz6esvmepq-as.a.run.app/api/v1/users"    |
+        | "details"  | "http://localhost:3000/api/v1/users"    |
 
     Scenario:
         Given I am on <page>
