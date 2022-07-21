@@ -75,6 +75,8 @@ export default function Details() {
 
     data["is_family"] = isFamily.toString(); //convert to string for json
 
+    //TODO: fix bug, if new user click next but user exist, navigate back to landing page,
+    //then pop up enter phone number, will redirect to passport, but phone number is empty field??? NEED TO CHECK
     if (isFamily) {
       data["url"] = "family"; //will be redirected to /family on resumption
     } else {
