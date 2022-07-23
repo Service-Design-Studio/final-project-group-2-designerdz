@@ -138,7 +138,6 @@ export default function Passport() {
         return;
       }
     };
-    }
     let data = getValues();
 
     if (selectedIndex === 0) {
