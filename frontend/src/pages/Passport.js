@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { Button, BackButton } from "../components/Buttons.js";
+import { useForm, FormProvider } from "react-hook-form";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
@@ -24,48 +24,43 @@ export default function Passport() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
   const [isFamily, setIsFamily] = useState(false);
+  const methods = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange",
+    defaultValues: {
+      full_name: "",
+      nationality: "",
+      passport_number: "",
+      passport_expiry: new Date(),
+      dob: new Date(),
+    },
+  });
   const {
     reset,
-    register,
     handleSubmit,
+    register,
     getValues,
-    trigger,
-    formState: { isValid, isValidating, isSubmitSuccessful, errors },
-  } = useForm({
-    mode: "onChange",
-    defaultValues: { full_name: "", nationality: "", passport_number: "" },
-  });
-
-  // const storage = new Storage();
+    formState: { isValid, errors },
+  } = methods;
   let userId = localStorage.getItem("user_id");
 
-  function checkIncompleteData(familyData) {
-    let compulsory_fields = ["full_name", "passport_number", "nationality"];
-    for (var i = 0; i < familyData.length; i++) {
-      familyData[i]["status"] = true;
-      for (let field of compulsory_fields) {
-        if (
-          familyData[i][field] == undefined ||
-          familyData[i][field] == null ||
-          familyData[i][field] == "" ||
-          familyData[i][field] == " "
-        ) {
-          familyData[i]["status"] = false;
-        }
-      }
+  //to update the status of family members when isValid value changes (every keystroke)
+  if (familyData.length > 0) {
+    let copyFamilyData = familyData.slice();
+    //if there is change in isValid value from before, will trigger infinite rerender if no if condition
+    if (copyFamilyData[selectedIndex].status != isValid) {
+      copyFamilyData[selectedIndex].status = isValid;
+      setFamilyData(copyFamilyData);
     }
-    return familyData;
   }
 
-  // Creates a client
-
-  //on first render do GET request
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await getAllChildrenData(userId);
-        setFamilyData(checkIncompleteData(response.data));
-        setIsFamily(response.data[0].is_family === "true"); //convert from string to boolean
+        let userData = checkIncompleteData(response.data); //check status of each famiy member
+        setFamilyData(userData);
+        setIsFamily(userData[0].is_family === "true"); //convert from string to boolean
       } catch (error) {
         console.log(error.response);
       }
@@ -74,7 +69,6 @@ export default function Passport() {
     //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
     if (userId == null) {
       navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
-      alert("Enter phone number at landing page!"); //TODO: remember to remove
     }
 
     //check if user coming from redirect page and which user it selected
@@ -103,42 +97,72 @@ export default function Passport() {
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
+        passport_expiry: familyData[selectedIndex].passport_expiry,
+        dob: familyData[selectedIndex].dob,
+        gender: familyData[selectedIndex].gender,
       });
     }
   }, [selectedIndex, familyData]);
 
-  //to post the data
-  const onSubmit = async (data) => {
-    data = getValues();
-    data["passport_expiry"] = details.passport_expiry;
-    data["dob"] = details.dob;
-    data["gender"] = details.gender;
-    // check if form is valid
-    if (isValid) {
-      if (selectedIndex === 0) {
-        data["url"] = "review"; //only parent database have url field
-        try {
-          await patchUserData(data, userId);
-        } catch (error) {
-          alert(error);
-          console.log(error.response);
-        }
-      } else {
-        try {
-          await patchChildData(data, familyData[selectedIndex].id);
-        } catch (error) {
-          console.log(error.response);
-        }
-      }
-
-      if (onEdit === true) {
-        navigate("/review");
-        setOnEdit(false);
-      } else {
-        navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+  const checkIncompleteData = (familyData) => {
+    // const compulsoryFields = [
+    //   "full_name",
+    //   "passport_number",
+    //   "nationality",
+    //   "passport_expiry",
+    //   "dob",
+    //   "gender",
+    // ];
+    for (var i = 0; i < familyData.length; i++) {
+      familyData[i]["status"] = true;
+      //check if any of the compulsory fields in passport details are null or empty
+      if (
+        Object.values(familyData[i]).slice(5, 11).includes(null) ||
+        Object.values(familyData[i]).slice(5, 11).includes("")
+      ) {
+        // console.log(familyData[i]);
+        familyData[i]["status"] = false;
       }
     }
+    return familyData;
   };
+
+  //must remember to check if all members including currently selected family member data is valid
+  const onSubmit = async () => {
+    //TODO: can check other family member status + current member status from isValid
+    console.log("inside onSubmit");
+    for (var i = 0; i < familyData.length; i++) {
+      console.log(familyData[i].status);
+      if (familyData[i].status === false) {
+        alert("Please fill in all the compulsory fields");
+        return;
+      }
+    }
+    let data = getValues();
+
+    if (selectedIndex === 0) {
+      data["url"] = "review"; //only parent database have url field
+      try {
+        await patchUserData(data, userId);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        await patchChildData(data, familyData[selectedIndex].id);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (onEdit === true) {
+      navigate("/review");
+      setOnEdit(false);
+    } else {
+      navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+    }
+  };
+
   const onBackBtnSelected = () => {
     if (isFamily) {
       navigate("/family");
@@ -147,16 +171,12 @@ export default function Passport() {
     }
   };
 
-  const onChange = () => {
-    setFamilyData(checkIncompleteData(familyData));
-    console.log("CHANGING");
-  };
-
+  //TODO: when user click to other user, need update familyMember data the status of current user
   const onUserSelected = async (index) => {
     let data = getValues();
-    data["passport_expiry"] = details.passport_expiry;
-    data["dob"] = details.dob;
-    data["gender"] = details.gender;
+    console.log("onUserSelected");
+    console.log(data);
+    console.log(isValid);
     let copyFamilyData = familyData.slice();
 
     const updateFamilyData = (memberData, data) => {
@@ -165,22 +185,9 @@ export default function Passport() {
           memberData[key] = data[key];
         }
       }
-      let compulsory_fields = ["full_name", "passport_number", "nationality"];
-      memberData["status"] = true;
-      for (const field of compulsory_fields) {
-        if (
-          memberData[field] == undefined ||
-          memberData[field] == null ||
-          memberData[field] == "" ||
-          memberData[field] == " "
-        ) {
-          console.log("Setting to false");
-          memberData["status"] = false;
-        }
-      }
+      memberData["status"] = isValid; //check if need not
       return memberData;
     };
-
     //indicating parent
     if (selectedIndex === 0) {
       try {
@@ -237,119 +244,120 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          onChange={onChange}
-          className="mx-8"
-        >
-          {isFamily === true ? (
-            <Carousel
-              nameArr={familyData}
-              onClickSelected={onUserSelected}
-              selectedIndex={selectedIndex}
-            />
-          ) : null}
-          <div>
-            <label className="block font-medium">Upload Passport</label>
-            <input
-              className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
-              type="file"
-              placeholder="Passport"
-              {...register("Passport", {})}
-            />
-          </div>
-
-          <FormFill
-            name="full_name"
-            text="Full Name"
-            type="text"
-            onFill={register("full_name", {
-              required: "Full Name is Required",
-            })}
-          />
-          {errors.full_name && (
-            <p className="text-red-500">{errors.full_name.message}</p>
-          )}
-
-          <FormFill
-            name="passport_number"
-            text="Passport Number"
-            type="text"
-            onFill={register("passport_number", {
-              required: "Passport Number is Required",
-            })}
-          />
-          {errors.passport_number && (
-            <p className="text-red-500">{errors.passport_number.message}</p>
-          )}
-
-          <div className="mb-3">
-            <label className="block font-medium">Passport Expiry (MM/YY)</label>
+        <FormProvider {...methods}>
+          <form className="mx-8" onSubmit={handleSubmit(onSubmit)}>
+            {isFamily === true ? (
+              <Carousel
+                nameArr={familyData}
+                onClickSelected={onUserSelected}
+                selectedIndex={selectedIndex}
+              />
+            ) : null}
             <div>
+              <label className="block font-medium">Upload Passport</label>
+              <input
+                className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
+                type="file"
+                placeholder="Passport"
+                {...register("Passport", {})}
+              />
+            </div>
+            <FormFill
+              name="full_name"
+              text="Full Name"
+              type="text"
+              onFill={register("full_name", {
+                required: "Full Name is Required",
+                pattern: {
+                  value: /^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/,
+                  message: "invalid full name",
+                },
+              })}
+            />
+            {errors.full_name && (
+              <p className="text-red-500">{errors.full_name?.message}</p>
+            )}
+            <FormFill
+              name="passport_number"
+              text="Passport Number"
+              type="text"
+              onFill={register("passport_number", {
+                required: "Passport Number is Required",
+              })}
+            />
+            {errors.passport_number && (
+              <p className="text-red-500">{errors.passport_number?.message}</p>
+            )}
+            <div className="mb-3">
+              <label className="block font-medium">
+                Passport Expiry (MM/YY)
+              </label>
               <Calendar
                 calendarType="passport_expiry"
-                curDate={details.passport_expiry}
+                defaultDate={details.passport_expiry}
                 setDetailsHandler={setDetails}
               />
             </div>
-          </div>
-
-          <FormFill
-            text="Nationality"
-            name="nationality"
-            type="text"
-            onFill={register("nationality", {
-              required: "Nationality is Required",
-            })}
-          />
-          {errors.nationality && (
-            <p className="text-red-500">{errors.nationality.message}</p>
-          )}
-
-          <div className="mb-3">
-            <label className="block font-medium">Gender</label>
-            <div className="flex justify-around">
-              <button
-                type="button"
-                className={`male ${
-                  details.gender == "MALE" ? "bg-red-200" : "bg-gray-100"
-                } w-1/2 h-10 rounded-md m-1`}
-                onClick={toggleGenderToMale}
-              >
-                MALE
-              </button>
-              <button
-                type="button"
-                className={`female ${
-                  details.gender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
-                } w-1/2 h-10 rounded-md m-1`}
-                onClick={toggleGenderToFemale}
-              >
-                FEMALE
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <label className="block font-medium">
-              Date of Birth (DD/MM/YYYY)
-            </label>
-            <Calendar
-              calendarType="dob"
-              curDate={details.dob}
-              setDetailsHandler={setDetails}
+            <FormFill
+              text="Nationality"
+              name="nationality"
+              type="text"
+              onFill={register("nationality", {
+                required: "Nationality is Required",
+              })}
             />
-          </div>
-          {console.log(familyData)}
-          <Button
-            name="next"
-            text={onEdit === true ? "Save" : "Next"}
-            bgColor="bg-red-500"
-            hoverColor="hover:bg-red-700"
-            onClick={onSubmit}
-            familyData={familyData}
-          />
-        </form>
+            {errors.nationality && (
+              <p className="text-red-500">{errors.nationality?.message}</p>
+            )}
+            <div className="mb-3">
+              <label className="block font-medium">Gender</label>
+              <div className="flex justify-around">
+                <button
+                  type="button"
+                  className={`male ${
+                    details.gender == "MALE" ? "bg-red-200" : "bg-gray-100"
+                  } w-1/2 h-10 rounded-md m-1`}
+                  onClick={toggleGenderToMale}
+                  {...register("gender", { required: "Gender is required" })}
+                >
+                  MALE
+                </button>
+                <button
+                  type="button"
+                  className={`female ${
+                    details.gender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
+                  } w-1/2 h-10 rounded-md m-1`}
+                  onClick={toggleGenderToFemale}
+                  {...register("gender", { required: "Gender is required" })}
+                >
+                  FEMALE
+                </button>
+              </div>
+              {errors.gender && (
+                <p className="text-red-500">{errors.gender?.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block font-medium">
+                Date of Birth (DD/MM/YYYY)
+              </label>
+              <Calendar
+                calendarType="dob"
+                defaultDate={details.dob}
+                setDetailsHandler={setDetails}
+              />
+            </div>
+            <Button
+              name="next"
+              text={onEdit === true ? "Save" : "Next"}
+              bgColor="bg-red-500"
+              hoverColor="hover:bg-red-700"
+              onClick={onSubmit}
+              familyData={familyData}
+            />
+          </form>
+        </FormProvider>
       </div>
     </div>
   );

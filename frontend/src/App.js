@@ -11,7 +11,6 @@ import ChildDetails from "./pages/ChildDetails";
 import Admin from "./pages/admin/Admin.js";
 
 export default function App() {
-  const loggedIn = false;
   return (
     <BrowserRouter>
       <Routes>
