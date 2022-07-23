@@ -14,7 +14,6 @@ const {
     Button,
     ChromiumWebDriver,
   } = require("selenium-webdriver");
-  const { initDriver } = require("../support/driverUtil");
   const { expect, assert } = require("chai");
   const { setDefaultTimeout } = require("@cucumber/cucumber");
   const pactum = require("pactum");
@@ -25,29 +24,12 @@ const {
 
   setDefaultTimeout(60 * 1000);
 
-  let driver;
-
   // make a random number
   let random1 = Math.floor(Math.random() * 10000);
   let random2 = Math.floor(Math.random() * 10000);
   let random3 = Math.floor(Math.random() * 10000);
+  let random4 = Math.floor(Math.random() * 10000);
 
-  Before(async function () {
-    driver = initDriver();
-
-    await driver.get(base_url);
-    await driver.sleep(100);
-
-    await driver.executeScript(function() {
-        localStorage.clear()
-    });
-
-    spec = pactum.spec();
-  });
-
-  After(async function () {
-    await driver.quit();
-  });
 
   Given('I am on {string} and I have not filled in any fields', async function (page) {
       await driver.get(base_url)
@@ -136,7 +118,7 @@ const {
           checkbox.click();
           await driver.sleep(1000);
         } 
-        await form_field.sendKeys("123456789")
+        await form_field.sendKeys(random4)
       }
     }
   });

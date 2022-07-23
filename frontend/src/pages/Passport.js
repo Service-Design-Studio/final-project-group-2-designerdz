@@ -134,7 +134,7 @@ export default function Passport() {
     for (var i = 0; i < familyData.length; i++) {
       console.log(familyData[i].status);
       if (familyData[i].status === false) {
-        alert("Please fill in all the compulsory fields");
+        // alert("Please fill in all the compulsory fields");
         return;
       }
     };
@@ -372,7 +372,7 @@ export default function Passport() {
                     details.gender == "MALE" ? "bg-red-200" : "bg-gray-100"
                   } w-1/2 h-10 rounded-md m-1`}
                   onClick={toggleGenderToMale}
-                  {...register("gender", { required: "Gender is required" })}
+                  {...register("gender", { required: "Gender is Required" })}
                 >
                   MALE
                 </button>
@@ -382,7 +382,7 @@ export default function Passport() {
                     details.gender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
                   } w-1/2 h-10 rounded-md m-1`}
                   onClick={toggleGenderToFemale}
-                  {...register("gender", { required: "Gender is required" })}
+                  {...register("gender", { required: "Gender is Required" })}
                 >
                   FEMALE
                 </button>
