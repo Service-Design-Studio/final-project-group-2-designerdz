@@ -80,6 +80,6 @@ class Vision
     end
 end
 
-vision = Vision.new
-vision.extract_data("australian_ps.jpg")
+# vision = Vision.new
+# vision.extract_data("passport.jpg")
 
