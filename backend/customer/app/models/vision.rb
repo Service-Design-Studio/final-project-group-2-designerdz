@@ -12,7 +12,7 @@ class Vision
     def extract_data(image_name)
         path = File.expand_path(File.dirname(__FILE__))
 
-        # credentials not needed if working on cloud environment
+        ### credentials not needed if working on cloud environment
         storage = Google::Cloud::Storage.new(
             project_id: "dbs-backend-1",
             credentials: "#{path}/dbs-backend-1-af6872211c29.json"
@@ -25,6 +25,8 @@ class Vision
             config.credentials = "#{path}/key.json"
         end
 
+        ### END of authenticating to GCP
+
         text = []
         response = client.text_detection(image: file.signed_url)
         response.responses.each do |res|
@@ -34,10 +36,8 @@ class Vision
         end
 
         #puts text[0]
+        # output returns the data extracted from the image in an array
         output = text[0].split("\n")
-
-        # TODO: if index not found, output value to nil
-
 
         nameIndex = output.index{|s| s =~ /Name/}
         passportIndex = output.index{|s| s =~ /DOCUMENT/}
@@ -50,13 +50,12 @@ class Vision
 
         # handling full name for australian passport by hardcoding because names is separated by new line
         if nameIndex == nil
-            output_hash[:name] = ""
+            output_hash["fullname"] = ""
         else
             output_hash["fullname"] = output[nameIndex+1] + " " + output[nameIndex+2]
         end
 
-        
-
+        # updating the hashmap for the remaining fields
         checkIndexArr = [passportIndex, nationalityIndex, genderIndex, expiryIndex, birthIndex]
         output_hash_keys = ["passport_number", "nationality", "gender", "passport_expiry", "dob"]
 
@@ -64,6 +63,7 @@ class Vision
             if item == nil
                 output_hash[output_hash_keys[index]] = ""
             else
+                # assuming that the value of the hash keys are always the next item in the array
                 output_hash[output_hash_keys[index]] = "#{output[item+1]}"
             end
         }
@@ -80,6 +80,6 @@ class Vision
     end
 end
 
-# vision = Vision.new
-# vision.extract_data("passport.jpg")
+vision = Vision.new
+vision.extract_data("australian_ps.jpg")
 
