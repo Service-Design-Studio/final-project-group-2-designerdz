@@ -152,13 +152,11 @@ When("I click on my child icon", async function() {
 });
 
 Then("I should be able to see that my child details are the same as mine", async function() {
-  var childNumberValue = await driver.findElement(By.className("phone_number")).getAttribute("value");
-  // FIXME: 
-  // assert.equal(childNumberValue, parent_number);
+  var childNumberValue = await driver.findElement(By.className("phone_number")).getText();
+  assert.equal(childNumberValue, parent_number);
 
-  var childEmailValue = await driver.findElement(By.className("email")).getAttribute("value");
-  // FIXME: 
-  // assert.equal(childEmailValue, "sally@gmail.com");
+  var childEmailValue = await driver.findElement(By.className("email")).getText();
+  assert.equal(childEmailValue, "sally@gmail.com");
 });
 
 
@@ -179,11 +177,9 @@ When("I edit my child contact details", async function() {
 });
 
 Then("I should be able to see that my child details are different", async function() {
-  var childNumberValue = await driver.findElement(By.className("phone_number")).getAttribute("value");
-  // FIXME: 
-  // assert.equal(childNumberValue, child_number);
+  var childNumberValue = await driver.findElement(By.className("phone_number")).getText();
+  assert.equal(childNumberValue, child_number);
 
-  var childEmailValue = await driver.findElement(By.className("email")).getAttribute("value");
-  // FIXME: 
-  // assert.equal(childEmailValue, "sarah@gmail.com");
+  var childEmailValue = await driver.findElement(By.className("email")).getText();
+  assert.equal(childEmailValue, "sarah@gmail.com");
 });
