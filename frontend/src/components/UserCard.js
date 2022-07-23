@@ -6,7 +6,11 @@ function UserCardSelected({ id, name, onClick, index, status }) {
       id={`${id}`}
       className="grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
     >
-      {status ? null : <p id ={`incomplete_${index}`} className="text-red-600">i</p>}
+      {status ? null : (
+        <p id={`incomplete_${index}`} className="text-red-600">
+          i
+        </p>
+      )}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-12 w-12"
@@ -31,7 +35,11 @@ function UserCardNotSelected({ id, name, onClick, index, status }) {
       id={`${id}`}
       className="grid grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
     >
-            {status ? null : <p id ={`incomplete_${index}`} className="text-red-600">i</p>}
+      {status ? null : (
+        <p id={`incomplete_${index}`} className="text-red-600">
+          i
+        </p>
+      )}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-12 w-12"
