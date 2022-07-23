@@ -1,41 +1,31 @@
-Feature: Edit on review page
-As a user on the review page of the registration process
-I want to be able to ensure my information entered so far is accurate
-So that I can complete my registration process with the correct information entered
-    
-    Background: Filling up of necessary information
-        Given I have filled up the neccesary information before 
+# Feature: Review page
+#     As a parent who has completed the sign up process
+#     I want to be able to review and correct any misfilled information
+#     So that I do not have to navigate the process of filling up again
 
-    Scenario: Summary of information provided thus far on review page
-        When I am on the review page
-        Then I should see all <entered_information> of <field> I have entered
+#     Background:
+#         Given that I have filled all me and my child's details
+#         And that I am on the review page
 
-        Examples:
-        | entered_information | shown_information | field |
+#     Scenario: Reviewing all of my family details
+#         When I click on my icon
+#         Then I should be able to see that my information is correct
+#         When I click on my child icon
+#         Then I should be able to see that my child information is correct
 
+#     Scenario: Redirect to respective pages on click of edit button on review page
+#         When I click on my child icon
+#         And I click on the <edit> button 
+#         Then I should be on <page>
 
-    Scenario: Redirect to respective pages on click of edit button on review page
-        When I am on "review" page and I want to edit my <details>
-        And I click on <button> button
-        Then i should be on <next_page> page
+#         # TODO: Fix this button id
+#         Examples:
+#         | button | next_page  |
+#         | "edit" | "details"  |
+#         | "edit" | "passport" |
 
-        Examples:
-        |       details       | button | next_page  |
-        | "Basic Information" | "edit" | "details"  |
-        | "Passport Details"  | "edit" | "passport" |
-
-
-    Scenario: Updating of correct information at relevant pages after clicking edit button
-        And I click on "edit" button
-        And I am on <page>
-        And I have updated my <details> on the relevant pages
-        When I click on "next" button //TODO: check what the name of the button, should be "next" I think
-        Then I should be on "review" page
-        And I should see my information updated <details> as well
-
-        Examples:
-        |    page    | details |
-        | "details"  | 
-        | "passport" |
-
-
+#     Scenario: Editing my child misfilled information
+#         When I click on my child icon
+#         And I see that my child information is misfilled
+#         And I correct my child information
+#         Then I should be able to see that my child information is correct

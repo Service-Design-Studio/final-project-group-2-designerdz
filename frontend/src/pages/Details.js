@@ -14,7 +14,7 @@ import {
 export default function Details() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [details, setDetails] = useState({});
+  const [isFamily, setIsFamily] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
   const {
     reset,
@@ -23,22 +23,28 @@ export default function Details() {
     formState: { errors },
   } = useForm();
   let userData;
-  let isFamily = localStorage.getItem("is_family") === "true";
   let userId = localStorage.getItem("user_id") || "";
 
   //on first render do GET request
   useEffect(() => {
     try {
-      setOnEdit(location.state.onEdit);
+      setOnEdit(location.state.on_edit);
+      setIsFamily(location.state.is_family);
     } catch (error) {
       console.error(error);
     }
 
     async function fetchData() {
       try {
+        
         const response = await getUserDataId(userId);
         userData = response.data[0];
-        setDetails(userData);
+        if (location.state == undefined) {
+          //location.state.is_family take precedence over is_family data from db
+          //if location.state is undefined, then it means that user is redirected from landing page/review page
+          //if not user cannot switch from family to single user signup and vice versa
+          setIsFamily(userData.is_family === "true");
+        }
         reset({
           display_name: userData.display_name,
           title: userData.title,
@@ -54,8 +60,23 @@ export default function Details() {
 
   //post request to database backend
   const onSubmit = async (data) => {
-    //update isFamily
-    data["is_family"] = isFamily;
+    const navigateNextPage = () => {
+      if (onEdit === true) {
+        navigate("/review");
+        setOnEdit(false);
+      } else {
+        if (isFamily === true) {
+          navigate("/family");
+        } else {
+          navigate("/passport");
+        }
+      }
+    };
+
+    data["is_family"] = isFamily.toString(); //convert to string for json
+
+    //TODO: fix bug, if new user click next but user exist, navigate back to landing page,
+    //then pop up enter phone number, will redirect to passport, but phone number is empty field??? NEED TO CHECK
     if (isFamily) {
       data["url"] = "family"; //will be redirected to /family on resumption
     } else {
@@ -66,25 +87,20 @@ export default function Details() {
         //update path
         const response = await postUserData(data);
         localStorage.setItem("user_id", response.data.id);
+        navigateNextPage();
       } catch (error) {
+        if (error.response.status === 422) {
+          navigate("/");
+          alert("User already exist!");
+        }
         console.log(error.response);
       }
     } else {
       try {
-        patchUserData(data, userId);
+        await patchUserData(data, userId);
+        navigateNextPage();
       } catch (error) {
         console.log(error.response);
-      }
-    }
-
-    if (onEdit === true) {
-      navigate("/review");
-      setOnEdit(false);
-    } else {
-      if (isFamily === true) {
-        navigate("/family");
-      } else {
-        navigate("/passport");
       }
     }
   };

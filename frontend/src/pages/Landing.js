@@ -8,11 +8,10 @@ export default function Landing() {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
-  // const [showPopup, setShowPopup] = useState(false);
-  let showPopup = false;
 
   useEffect(() => {
     try {
+      console.log(location.state.pop_up);
       setOpen(location.state.pop_up);
     } catch (error) {
       console.log(error);
@@ -42,18 +41,13 @@ export default function Landing() {
           onClick={() => alert("Sorry we are not DBS!")}
         />
       </div>
-      <button className="button">
+      <button onClick={() => setOpen(true)} className="button">
         <a>
-          Left registration midway?
+          Left registration midway? &nbsp;
           <span className="underline">Continue where you left.</span>
         </a>
       </button>
-      <Popup
-        open={open}
-        closeOnDocumentClick
-        onClose={closeModal}
-        // trigger
-      >
+      <Popup open={open} closeOnDocumentClick onClose={closeModal}>
         <div className="fixed top-2/4 left-0 right-0">
           <div className="w-8/12 m-auto">
             <Restore />

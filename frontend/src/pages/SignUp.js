@@ -10,13 +10,13 @@ export default function Landing() {
   const navigate = useNavigate();
 
   function onClickSingle() {
-    localStorage.setItem("is_family", false);
-    navigate("/details");
+    // localStorage.setItem("is_family", false);
+    navigate("/details", { state: { is_family: false } });
   }
 
   function onClickFamily() {
-    localStorage.setItem("is_family", true); //to know whether is multi-user registration throughout the process
-    navigate("/details");
+    // localStorage.setItem("is_family", true); //to know whether is multi-user registration throughout the process
+    navigate("/details", { state: { is_family: true } });
   }
 
   return (

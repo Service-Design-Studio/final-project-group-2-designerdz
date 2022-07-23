@@ -23,35 +23,33 @@ export default function Passport() {
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
-
+  const [isFamily, setIsFamily] = useState(false);
   const {
     reset,
     register,
     handleSubmit,
     getValues,
     trigger,
-    formState: { isValid,errors },
-  } = useForm({ 
-    mode: 'onChange',
-    defaultValues: 
-    { full_name: "",
-      nationality: "",
-      passport_number: "",
-  } });
-  
+    formState: { isValid, isValidating, isSubmitSuccessful, errors },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: { full_name: "", nationality: "", passport_number: "" },
+  });
+
   // const storage = new Storage();
-
   let userId = localStorage.getItem("user_id");
-  let isFamily = localStorage.getItem("is_family") === "true";
-
-  
 
   function checkIncompleteData(familyData) {
-    let compulsory_fields = ["full_name", "passport_number", "nationality"]
-    for (var i=0; i < familyData.length; i++) {
-      familyData[i]["status"] = true
+    let compulsory_fields = ["full_name", "passport_number", "nationality"];
+    for (var i = 0; i < familyData.length; i++) {
+      familyData[i]["status"] = true;
       for (let field of compulsory_fields) {
-        if (familyData[i][field] == undefined || familyData[i][field] == null || familyData[i][field] == "" || familyData[i][field] == " ") {
+        if (
+          familyData[i][field] == undefined ||
+          familyData[i][field] == null ||
+          familyData[i][field] == "" ||
+          familyData[i][field] == " "
+        ) {
           familyData[i]["status"] = false;
         }
       }
@@ -59,39 +57,36 @@ export default function Passport() {
     return familyData;
   }
 
+  // Creates a client
 
   //on first render do GET request
   useEffect(() => {
-    //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
-    if (userId == null) {
-      navigate("/", { state: { pop_up: true } }); //testing to see if it works
-      alert("Enter phone number at landing page!"); //TODO: remember to remove
-    }
-
-    try {
-      setOnEdit(location.state.onEdit);
-      setSelectedIndex(location.state.index);
-    } catch (error) {
-      // console.error(error);
-    }
-
     async function fetchData() {
       try {
         const response = await getAllChildrenData(userId);
         setFamilyData(checkIncompleteData(response.data));
+        setIsFamily(response.data[0].is_family === "true"); //convert from string to boolean
       } catch (error) {
         console.log(error.response);
       }
     }
 
-    
+    //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
+    if (userId == null) {
+      navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
+      alert("Enter phone number at landing page!"); //TODO: remember to remove
+    }
 
+    //check if user coming from redirect page and which user it selected
+    try {
+      setOnEdit(location.state.on_edit);
+      setSelectedIndex(location.state.index);
+    } catch (error) {
+      console.error(error);
+    }
 
     if (familyData.length === 0) {
       fetchData();
-    } else if (familyData.length > 1) {
-      // this means family registration
-      isFamily = true
     }
 
     if (familyData[selectedIndex] !== undefined) {
@@ -121,6 +116,7 @@ export default function Passport() {
     // check if form is valid
     if (isValid) {
       if (selectedIndex === 0) {
+        data["url"] = "review"; //only parent database have url field
         try {
           await patchUserData(data, userId);
         } catch (error) {
@@ -153,16 +149,15 @@ export default function Passport() {
   };
 
   const onChange = () => {
-    setFamilyData(checkIncompleteData(familyData))
-    console.log("CHANGING")
-  }
+    setFamilyData(checkIncompleteData(familyData));
+    console.log("CHANGING");
+  };
 
   const onUserSelected = async (index) => {
     let data = getValues();
     data["passport_expiry"] = details.passport_expiry;
     data["dob"] = details.dob;
     data["gender"] = details.gender;
-    // console.log(data)
     let copyFamilyData = familyData.slice();
 
     const updateFamilyData = (memberData, data) => {
@@ -292,7 +287,11 @@ export default function Passport() {
       />
 
       <div className="absolute left-0 right-0 top-36 items-center ">
-        <form onSubmit={handleSubmit(onSubmit)} onChange={onChange} className="mx-8">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          onChange={onChange}
+          className="mx-8"
+        >
           {isFamily === true ? (
             <Carousel
               nameArr={familyData}
@@ -364,7 +363,7 @@ export default function Passport() {
             <div className="flex justify-around">
               <button
                 type="button"
-                className={`${
+                className={`male ${
                   details.gender == "MALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
                 onClick={toggleGenderToMale}
@@ -373,7 +372,7 @@ export default function Passport() {
               </button>
               <button
                 type="button"
-                className={`${
+                className={`female ${
                   details.gender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
                 } w-1/2 h-10 rounded-md m-1`}
                 onClick={toggleGenderToFemale}

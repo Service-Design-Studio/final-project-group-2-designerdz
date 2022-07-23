@@ -11,6 +11,7 @@ import {
   getAllChildrenData,
   getUserDataId,
   deleteChildData,
+  patchUserData,
 } from "../services/axiosRequests.js";
 
 export default function Family() {
@@ -71,6 +72,13 @@ export default function Family() {
         email: details.email,
       },
     });
+  }
+
+  function onNextClick() {
+    let copyDetails = { ...details };
+    copyDetails["url"] = "passport";
+    patchUserData(copyDetails, userId);
+    navigate("/passport");
   }
 
   return (
@@ -138,7 +146,7 @@ export default function Family() {
           text="Next"
           bgColor="bg-red-500"
           hoverColor="hover:bg-red-700"
-          onClick={() => navigate("/passport")}
+          onClick={onNextClick}
         />
       </div>
     </div>
