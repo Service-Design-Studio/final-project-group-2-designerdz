@@ -137,7 +137,7 @@ export default function Passport() {
         alert("Please fill in all the compulsory fields");
         return;
       }
-    };
+    }
     let data = getValues();
 
     if (selectedIndex === 0) {
@@ -229,32 +229,33 @@ export default function Passport() {
       gender: "FEMALE",
     }));
   };
-  
+
   const onPassportUpload = async (data) => {
-    const OBJECT_LOCATION = data.target.files[0]
-    const OBJECT_CONTENT_TYPE = "image/jpg"
-    const BUCKET_NAME = "react-frontend-353408.appspot.com"
-    const OBJECT_NAME = `${userId}_passport_image`
-    const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`
+    const OBJECT_LOCATION = data.target.files[0];
+    const OBJECT_CONTENT_TYPE = "image/jpg";
+    const BUCKET_NAME = "react-frontend-353408.appspot.com";
+    const OBJECT_NAME = `${userId}_passport_image`;
+    const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
     const UPLOAD_HEADERS = {
       "Content-Type": OBJECT_CONTENT_TYPE,
-    }
+    };
     // make post request
     const response = await fetch(UPLOAD_URL, {
       method: "POST",
       headers: UPLOAD_HEADERS,
       body: OBJECT_LOCATION,
     });
-    console.log(response)
-    const data_url = response.url
-    console.log(data_url)
+    console.log(response);
+    const data_url = response.url;
+    console.log(data_url);
 
-    const VISION_URL = "https://vision.googleapis.com/v1/images:annotate"
+    const VISION_URL = "https://vision.googleapis.com/v1/images:annotate";
     const VISION_HEADERS = {
-      "Content-Type": "application/json", "charset": "utf-8",
-      "Authorization": `Bearer ya29.A0AVA9y1veAN9IC5t4iq8BN4gVZIPJHZh5GxGYk6lR0vae7cuLNEozOrWU5_PEgBMlWMRL4BLxDhtxdbF9CvWwqHQhQIDnbCUJAqFmKShD-EnrhGMLzpTusBTxi1hlQimdP9Fh_a9Gv7i-uLQad1H30VEtlWDJYUNnWUtBVEFTQVRBU0ZRRTY1ZHI4bjQ3b3dtUXRnY2Zva19JYkJ1MFpIZw0163`,
+      "Content-Type": "application/json",
+      charset: "utf-8",
+      Authorization: `Bearer ya29.A0AVA9y1veAN9IC5t4iq8BN4gVZIPJHZh5GxGYk6lR0vae7cuLNEozOrWU5_PEgBMlWMRL4BLxDhtxdbF9CvWwqHQhQIDnbCUJAqFmKShD-EnrhGMLzpTusBTxi1hlQimdP9Fh_a9Gv7i-uLQad1H30VEtlWDJYUNnWUtBVEFTQVRBU0ZRRTY1ZHI4bjQ3b3dtUXRnY2Zva19JYkJ1MFpIZw0163`,
       "Access-Control-Allow-Origin": "*",
-    }
+    };
     // make post request
     const vision_response = await fetch(VISION_URL, {
       method: "POST",
@@ -277,13 +278,9 @@ export default function Passport() {
         ],
       }),
     });
-    console.log(vision_response)
+    console.log(vision_response);
+  };
 
-  }
-
-
-
- 
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -337,6 +334,10 @@ export default function Passport() {
               type="text"
               onFill={register("passport_number", {
                 required: "Passport Number is Required",
+                pattern: {
+                  value: /^(?!^0+$)[a-zA-Z0-9]{3,20}$/,
+                  message: "Invalid Passport Number",
+                },
               })}
             />
             {errors.passport_number && (
@@ -358,6 +359,10 @@ export default function Passport() {
               type="text"
               onFill={register("nationality", {
                 required: "Nationality is Required",
+                pattern: {
+                  value: /^[^-\s][a-zA-Z_\s-]+$/,
+                  message: "Nationality should only contain text!",
+                },
               })}
             />
             {errors.nationality && (
