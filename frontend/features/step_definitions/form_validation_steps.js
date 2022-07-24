@@ -101,9 +101,26 @@ const {
   });
 
   When('I fill up {string}', async function (string) {
-    let form_fields = string.split(",");    
+    let form_fields = string.split(",");  
+    let custom_fields = ["passport_expiry","gender","dob"]   
     for (let i = 0; i < form_fields.length; i++) {
-      let form_field = await driver.findElement(By.className(form_fields[i]));
+      let form_string = form_fields[i]
+      if (custom_fields.includes(form_string)) {
+        if (form_string == "passport_expiry") {
+          let passport_expiry_input = await driver.findElement(By.xpath("//input[@placeholder='Select Date']"))
+          // send a value of "09/2022"
+          await passport_expiry_input.sendKeys("09/2022")
+          await driver.sleep(1000)
+        } else if (form_string == "dob") {
+          let dob_input = await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']"))
+          await dob_input.sendKeys("14/07/2015")
+          await driver.sleep(1000)
+        } else if (form_string == "gender") {
+          await driver.findElement(By.className("female")).click()
+          await driver.sleep(1000)
+        }
+      } else {
+      let form_field = await driver.findElement(By.className(form_string));
       let form_field_type = await form_field.getAttribute("type");
       if (form_field_type == "text") {
         await form_field.sendKeys("test");
@@ -120,6 +137,7 @@ const {
         } 
         await form_field.sendKeys(random4)
       }
+    }
     }
   });
 
