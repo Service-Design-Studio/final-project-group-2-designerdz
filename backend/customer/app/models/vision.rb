@@ -76,7 +76,7 @@ class Vision
         #                 "dob" => "#{output[birthIndex+1]}"
         # }
 
-        puts output_hash.to_json
+        return output_hash.to_json
     end
 end
 
