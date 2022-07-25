@@ -1,37 +1,9 @@
-// const { Given, When, Then, Before, After } = require("@cucumber/cucumber");
-// const {
-//   Builder,
-//   By,
-//   Capabilities,
-//   Key,
-//   Button,
-//   ChromiumWebDriver,
-// } = require("selenium-webdriver");
-// const { initDriver } = require("../support/driverUtil");
+// const { Given, When, Then } = require("@cucumber/cucumber");
+// const { By } = require("selenium-webdriver");
 // const { expect, assert } = require("chai");
-// const { setDefaultTimeout } = require("@cucumber/cucumber");
-// const pactum = require("pactum");
-
-// let spec = pactum.spec();
-
-// // let base_url = "https://react-frontend-353408.as.r.appspot.com/";
-// let base_url = "http://localhost:3001/";
-
-// setDefaultTimeout(60 * 1000);
-
-// let driver;
-
-// Before(function () {
-//   driver = initDriver();
-//   spec = pactum.spec();
-// });
-
-// After(async function () {
-//   await driver.quit();
-// });
 
 // Given("I have filled up the necessary information before", async function () {
-//   await driver.get(base_url);
+//   await driver.get(baseUrl);
 //   await driver.sleep(1000);
 //   const notACustomerYetButton = await driver.findElement(
 //     By.className("bg-red-500")
@@ -57,13 +29,13 @@
 //   parentPhone.sendKeys("999999999");
 //   await driver.sleep(1000);
 
-//   assert.equal(await driver.getCurrentUrl(), base_url + "details");
+//   assert.equal(await driver.getCurrentUrl(), baseUrl + "details");
 
 //   const nextButton = await driver.findElement(By.className("next"));
 //   await nextButton.click();
 //   await driver.sleep(1000);
 
-//   assert.equal(await driver.getCurrentUrl(), base_url + "family");
+//   assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
 // });
 
 // //Scenario: Summary of information provided thus far on review page

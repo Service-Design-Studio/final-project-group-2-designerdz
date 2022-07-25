@@ -1,137 +1,61 @@
-const {
-  Given,
-  When,
-  Then,
-  Before,
-  AfterAll,
-  After,
-} = require("@cucumber/cucumber");
-const {
-  Builder,
-  By,
-  Capabilities,
-  Key,
-  Button,
-  ChromiumWebDriver,
-} = require("selenium-webdriver");
-const { initDriver } = require("../support/driverUtil");
-const { expect, assert } = require("chai");
-const { setDefaultTimeout } = require("@cucumber/cucumber");
-const pactum = require("pactum");
-
-let spec = pactum.spec();
-
-// let baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
-let baseUrl = "http://localhost:3001/";
-
-setDefaultTimeout(60 * 1000);
-
-let driver;
-
-Before(async function () {
-  driver = initDriver();
-  driver = initDriver();
-  await driver.get(baseUrl);
-  await driver.sleep(1000);
-  await driver.executeScript(function () {
-    localStorage.clear();
-  });
-  spec = pactum.spec();
-});
-
-After(function () {
-  driver.quit();
-});
+const { Given, When, Then } = require("@cucumber/cucumber");
+const { By } = require("selenium-webdriver");
+const { assert } = require("chai");
 
 Given("I have filled in my details", async function () {
   await driver.get(baseUrl);
   await driver.sleep(1000);
-  const notACustomerYetButton = await driver.findElement(
-    By.className("bg-red-500")
-  );
-  notACustomerYetButton.click();
+
+  await driver.findElement(By.className("bg-red-500")).click();
   await driver.sleep(1000);
 
-  const familyButton = await driver.findElement(By.className("family-next"));
-  familyButton.click();
+  await driver.findElement(By.className("family-next")).click();
   await driver.sleep(1000);
 
-  const displayNameField = await driver.findElement(
-    By.className("parent_display_name")
-  );
-  displayNameField.sendKeys("Sally Abbot");
+  await driver
+    .findElement(By.className("display_name"))
+    .sendKeys("Sally Abbot");
+  await driver.findElement(By.className("phone_number")).sendKeys(parentNumber);
   await driver.sleep(1000);
 
-  const detailsNextButton = await driver.findElement(By.className("next"));
-  detailsNextButton.click();
+  await driver.findElement(By.className("next")).click();
   await driver.sleep(1000);
 });
 
 Given("I have added a child", async function () {
-  const addChildButton = await driver.findElement(By.className("add"));
-  addChildButton.click();
+  await driver.findElement(By.className("add")).click();
+  await driver.sleep(500);
+
+  await driver
+    .findElement(By.className("display_name"))
+    .sendKeys("Salah Abbot");
+
+  await driver.findElement(By.className("next")).click();
   await driver.sleep(1000);
 
-  const childName = await driver.findElement(
-    By.className("child_display_name")
-  );
-  childName.sendKeys("Salah Abbot");
-
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-  await driver.sleep(1000);
-  assert.equal(await driver.getCurrentUrl(), base_url + "family");
-});
-
-When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-  await driver.sleep(1000);
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "passport");
   assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
 });
 
 When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-  await driver.sleep(1000);
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "passport");
-  assert.equal(await driver.getCurrentUrl(), base_url + "family");
+  await driver.findElement(By.className("next")).click();
+  await driver.sleep(500);
+  var actualUrl = await driver.getCurrentUrl();
+  assert.equal(actualUrl, baseUrl + "passport");
 });
-
-When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-
-  await driver.sleep(1000);
-
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, base_url + "passport");
-});
-
-
-When("I navigate to the passport page", async function () {
-  const nextButton = await driver.findElement(By.className("next"));
-  nextButton.click();
-
-  await driver.sleep(1000);
-
-  var actual_url = await driver.getCurrentUrl();
-  assert.equal(actual_url, baseUrl + "passport");
-});
-
 
 Then(
   "I should be able to see my child's and my name in the carousel",
   async function () {
     var parentNameButton = await driver.findElement(By.id("user_0"));
-    var parentName = await parentNameButton.findElement(By.css("p")).getText();
+    var parentName = await parentNameButton
+      .findElement(By.className("user_0"))
+      .getText();
     assert.equal(parentName, "Sally Abbot");
 
     var childNameButton = await driver.findElement(By.id("user_1"));
-    var childName = await childNameButton.findElement(By.css("p")).getText();
+    var childName = await childNameButton
+      .findElement(By.className("user_1"))
+      .getText();
     assert.equal(childName, "Salah Abbot");
   }
 );
@@ -185,6 +109,6 @@ Then("my child icon should be selected", async function () {
   const childIcon2 = await driver.findElement(By.id("user_1"));
   assert.equal(
     await childIcon2.getAttribute("class"),
-    "grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2"
+    "grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
   );
 });
