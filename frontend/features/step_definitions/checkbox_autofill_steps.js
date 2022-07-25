@@ -117,6 +117,11 @@ When("I click on my child icon", async function () {
   await driver.sleep(500);
 });
 
+When("I click on my icon", async function() {
+  await driver.findElement(By.id("user_0")).click();
+  await driver.sleep(500);
+});
+
 Then(
   "I should be able to see that my child details are the same as mine",
   async function () {
