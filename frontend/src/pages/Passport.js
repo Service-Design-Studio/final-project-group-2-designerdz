@@ -13,18 +13,15 @@ import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
-import LoadingStatus from "../components/LoadingStatus";
 import {
   patchUserData,
   getAllChildrenData,
   patchChildData,
-  getPassportData,
 } from "../services/axiosRequests.js";
 
 export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [passportFile, setPassportFile] = useState();
   const [details, setDetails] = useState({
     dob: new Date(),
     passport_expiry: new Date(),
@@ -33,7 +30,6 @@ export default function Passport() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
   const [isFamily, setIsFamily] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const methods = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -41,9 +37,8 @@ export default function Passport() {
       full_name: "",
       nationality: "",
       passport_number: "",
-      passport_expiry: null,
-      dob: null,
-      // gender: "MALE",
+      passport_expiry: new Date(),
+      dob: new Date(),
     },
   });
   const {
@@ -67,7 +62,6 @@ export default function Passport() {
     }
   }
 
-  //TODO: see if you can get away with details,setDetails useState for sprint 4 is can one JYYYY
   useEffect(() => {
     async function fetchData() {
       try {
@@ -111,10 +105,9 @@ export default function Passport() {
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
-        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
-        dob: new Date(familyData[selectedIndex].dob),
+        passport_expiry: familyData[selectedIndex].passport_expiry,
+        dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
-        Passport: "",
       });
     }
   }, [selectedIndex, familyData]);
@@ -153,10 +146,6 @@ export default function Passport() {
   //TODO: when user click to other user, need update familyMember data the status of current user
   const onUserSelected = async (index) => {
     let data = getValues();
-    data["image_url"] =
-      "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
-        details.image_url
-      );
     console.log("onUserSelected");
     console.log(data);
     console.log(isValid);
@@ -197,35 +186,27 @@ export default function Passport() {
     }
     setFamilyData(copyFamilyData);
     setSelectedIndex(index);
-    setPassportFile();
-    // reset({
-    //   passport_expiry: null,
-    //   dob: null,
-    // });
   };
 
-  // const toggleGenderToMale = () => {
-  //   setDetails((prevState) => ({
-  //     ...prevState,
-  //     gender: "MALE",
-  //   }));
-  // };
+  const toggleGenderToMale = () => {
+    setDetails((prevState) => ({
+      ...prevState,
+      gender: "MALE",
+    }));
+  };
 
-  // const toggleGenderToFemale = () => {
-  //   setDetails((prevState) => ({
-  //     ...prevState,
-  //     gender: "FEMALE",
-  //   }));
-  // };
+  const toggleGenderToFemale = () => {
+    setDetails((prevState) => ({
+      ...prevState,
+      gender: "FEMALE",
+    }));
+  };
 
   const onPassportUpload = async (data) => {
-    setIsLoading(true);
-    console.log("DATA BELOW");
-    console.log(data.target);
     const OBJECT_LOCATION = data.target.files[0];
-    const OBJECT_CONTENT_TYPE = "image/jpeg";
-    const BUCKET_NAME = "dbs-backend-1-ruby";
-    const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
+    const OBJECT_CONTENT_TYPE = "image/jpg";
+    const BUCKET_NAME = "react-frontend-353408.appspot.com";
+    const OBJECT_NAME = `${userId}_passport_image`;
     const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
     const UPLOAD_HEADERS = {
       "Content-Type": OBJECT_CONTENT_TYPE,
@@ -357,11 +338,10 @@ export default function Passport() {
             <div>
               <label className="block font-medium">Upload Passport</label>
               <input
-                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
+                className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
                 placeholder="Passport"
                 {...register("Passport", {})}
-                onInput={onPassportUpload}
               />
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
@@ -404,7 +384,7 @@ export default function Passport() {
             )}
             <div className="mb-3">
               <label className="block font-medium">
-                Passport Expiry (MM/YYYY)
+                Passport Expiry (MM/YY)
               </label>
               <Calendar
                 calendarType="passport_expiry"
@@ -428,39 +408,28 @@ export default function Passport() {
               <p className="text-red-500">{errors.nationality?.message}</p>
             )}
             <div className="mb-3">
-              <label className="bflock font-medium">Gender</label>
+              <label className="block font-medium">Gender</label>
               <div className="flex justify-around">
-                <Controller
-                  render={({ field }) => (
-                    <ToggleButtonGroup
-                      exclusive
-                      aria-label="text alignment"
-                      onChange={(newGender) => {
-                        field.onChange(newGender);
-                      }}
-                      value={field.value}
-                      color="error"
-                    >
-                      <ToggleButton
-                        className="w-24"
-                        aria-label="left aligned"
-                        value="MALE"
-                        key="MALE"
-                      >
-                        Male
-                      </ToggleButton>
-                      <ToggleButton
-                        className="w-24"
-                        value="FEMALE"
-                        key="FEMALE"
-                      >
-                        Female
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                  )}
-                  name="gender"
-                  control={control}
-                />
+                <button
+                  type="button"
+                  className={`male ${
+                    details.gender == "MALE" ? "bg-red-200" : "bg-gray-100"
+                  } w-1/2 h-10 rounded-md m-1`}
+                  onClick={toggleGenderToMale}
+                  {...register("gender", { required: "Gender is required" })}
+                >
+                  MALE
+                </button>
+                <button
+                  type="button"
+                  className={`female ${
+                    details.gender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
+                  } w-1/2 h-10 rounded-md m-1`}
+                  onClick={toggleGenderToFemale}
+                  {...register("gender", { required: "Gender is required" })}
+                >
+                  FEMALE
+                </button>
               </div>
               {errors.gender && (
                 <p className="text-red-500">{errors.gender?.message}</p>

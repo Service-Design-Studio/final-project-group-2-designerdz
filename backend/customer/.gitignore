@@ -35,5 +35,6 @@
 /dbpassword
 
 # ignore service account keys and GCP related stuff
+dbs-backend-1-af6872211c29.json
 dbs-backend-1-af6872211c29.json:Zone.Identifier
 /app/test.rb

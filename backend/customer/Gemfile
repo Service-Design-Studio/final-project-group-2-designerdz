@@ -53,4 +53,3 @@ group :production do
 end
 
 gem "google-cloud-storage", "~> 1.37"
-gem "google-cloud-vision", "~> 1.2.0"
