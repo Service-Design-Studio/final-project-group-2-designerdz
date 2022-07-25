@@ -1,17 +1,30 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button, BackButton } from "../components/Buttons.js";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, Controller } from "react-hook-form";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
+import { blue, yellow, red } from "@mui/material/colors";
 import {
   patchUserData,
   getAllChildrenData,
   patchChildData,
+  getPassportData,
 } from "../services/axiosRequests.js";
+import axios from "axios";
+
+const theme = createTheme({
+  palette: {
+    primary: blue,
+    secondary: yellow,
+  },
+});
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -33,6 +46,7 @@ export default function Passport() {
       passport_number: "",
       passport_expiry: new Date(),
       dob: new Date(),
+      // gender: "MALE",
     },
   });
   const {
@@ -40,6 +54,7 @@ export default function Passport() {
     handleSubmit,
     register,
     getValues,
+    control,
     formState: { isValid, errors },
   } = methods;
   let userId = localStorage.getItem("user_id");
@@ -131,6 +146,10 @@ export default function Passport() {
   const onSubmit = async () => {
     //TODO: can check other family member status + current member status from isValid
     console.log("inside onSubmit");
+    let data = getValues();
+    // data["gender"] = details.gender;
+
+    console.log(data);
     for (var i = 0; i < familyData.length; i++) {
       console.log(familyData[i].status);
       if (familyData[i].status === false) {
@@ -138,7 +157,6 @@ export default function Passport() {
         return;
       }
     }
-    let data = getValues();
 
     if (selectedIndex === 0) {
       data["url"] = "review"; //only parent database have url field
@@ -174,6 +192,7 @@ export default function Passport() {
   //TODO: when user click to other user, need update familyMember data the status of current user
   const onUserSelected = async (index) => {
     let data = getValues();
+    // data["gender"] = details.gender;
     console.log("onUserSelected");
     console.log(data);
     console.log(isValid);
@@ -239,46 +258,18 @@ export default function Passport() {
     const UPLOAD_HEADERS = {
       "Content-Type": OBJECT_CONTENT_TYPE,
     };
-    // make post request
+
+    // upload to bucket
     const response = await fetch(UPLOAD_URL, {
       method: "POST",
       headers: UPLOAD_HEADERS,
       body: OBJECT_LOCATION,
     });
-    console.log(response);
-    const data_url = response.url;
-    console.log(data_url);
 
-    const VISION_URL = "https://vision.googleapis.com/v1/images:annotate";
-    const VISION_HEADERS = {
-      "Content-Type": "application/json",
-      charset: "utf-8",
-      Authorization: `Bearer ya29.A0AVA9y1veAN9IC5t4iq8BN4gVZIPJHZh5GxGYk6lR0vae7cuLNEozOrWU5_PEgBMlWMRL4BLxDhtxdbF9CvWwqHQhQIDnbCUJAqFmKShD-EnrhGMLzpTusBTxi1hlQimdP9Fh_a9Gv7i-uLQad1H30VEtlWDJYUNnWUtBVEFTQVRBU0ZRRTY1ZHI4bjQ3b3dtUXRnY2Zva19JYkJ1MFpIZw0163`,
-      "Access-Control-Allow-Origin": "*",
-    };
-    // make post request
-    const vision_response = await fetch(VISION_URL, {
-      method: "POST",
-      headers: VISION_HEADERS,
-      body: JSON.stringify({
-        requests: [
-          {
-            image: {
-              source: {
-                imageUri: data_url,
-              },
-            },
-            features: [
-              {
-                type: "DOCUMENT_TEXT_DETECTION",
-                maxResults: 1,
-              },
-            ],
-          },
-        ],
-      }),
-    });
-    console.log(vision_response);
+    // send image name to backend API
+    const passportResponse = await getPassportData(OBJECT_NAME);
+    console.log(response);
+    console.log(passportResponse);
   };
 
   return (
@@ -311,6 +302,7 @@ export default function Passport() {
                 type="file"
                 placeholder="Passport"
                 {...register("Passport", {})}
+                onChange={onPassportUpload}
               />
             </div>
             <FormFill
@@ -369,29 +361,32 @@ export default function Passport() {
               <p className="text-red-500">{errors.nationality?.message}</p>
             )}
             <div className="mb-3">
-              <label className="block font-medium">Gender</label>
-              <div className="flex justify-around">
-                <button
-                  type="button"
-                  className={`male ${
-                    details.gender == "MALE" ? "bg-red-200" : "bg-gray-100"
-                  } w-1/2 h-10 rounded-md m-1`}
-                  onClick={toggleGenderToMale}
-                  {...register("gender", { required: "Gender is required" })}
-                >
-                  MALE
-                </button>
-                <button
-                  type="button"
-                  className={`female ${
-                    details.gender == "FEMALE" ? "bg-red-200" : "bg-gray-100"
-                  } w-1/2 h-10 rounded-md m-1`}
-                  onClick={toggleGenderToFemale}
-                  {...register("gender", { required: "Gender is required" })}
-                >
-                  FEMALE
-                </button>
-              </div>
+              <label className="bflock font-medium">Gender</label>
+              <ThemeProvider theme={theme}>
+                <div className="flex justify-around">
+                  <Controller
+                    render={({ field }) => (
+                      <ToggleButtonGroup
+                        exclusive
+                        aria-label="text alignment"
+                        // onChange={field.onChange}
+                        onChange={(newGender) => {
+                          field.onChange(newGender);
+                        }}
+                      >
+                        <ToggleButton value="MALE" key="MALE" color="secondary">
+                          Male
+                        </ToggleButton>
+                        <ToggleButton value="FEMALE" key="FEMALE">
+                          Female
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                    )}
+                    name="gender"
+                    control={control}
+                  />
+                </div>
+              </ThemeProvider>
               {errors.gender && (
                 <p className="text-red-500">{errors.gender?.message}</p>
               )}
