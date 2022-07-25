@@ -214,7 +214,7 @@ export default function ChildDetails() {
           <FormFill
             type="email"
             text="Email Address (Optional)"
-            name="child_email"
+            name="email"
             onFill={register("email", {})}
             autofill={autofill}
           />

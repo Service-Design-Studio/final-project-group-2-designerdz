@@ -10,9 +10,36 @@ export default function Restore() {
   } = useForm();
   const navigate = useNavigate();
   const onSubmit = async (data) => {
-    const response = await getUserDataPhoneNumber(data.phone_number);
-    localStorage.setItem("user_id", response.data[0].id);
-    navigate("/review");
+    try {
+      const response = await getUserDataPhoneNumber(data.phone_number);
+      let userData = response.data[0];
+      localStorage.setItem("user_id", userData.id);
+      console.log(userData.url);
+      switch (userData.url) {
+        case "details":
+          navigate("details");
+          break;
+        case "family":
+          navigate("family");
+          break;
+        case "child":
+          navigate("child");
+          break;
+        case "passport":
+          navigate("passport");
+          break;
+        case "review":
+          navigate("review");
+          break;
+        default:
+          navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      alert(
+        "user does not exist, click on 'not a customer to start a new registration!' "
+      );
+    }
   };
   console.log(errors);
   return (
@@ -20,6 +47,9 @@ export default function Restore() {
       className="flex flex-col justify-around bg-gray-300 mx-0 my-auto px-2 py-4 rounded-lg h-64"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <a className="text-center">
+        Enter your phone number below to continue where you left off!
+      </a>
       <input
         className="mobile_no border border-solid border-red-400 rounded w-max mx-auto"
         type="number"

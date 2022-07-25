@@ -19,7 +19,6 @@ export default function Review() {
   let userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-
     function checkIncompleteData(familyData) {
       let compulsory_fields = ["full_name", "passport_number", "nationality"];
       console.log(familyData.length);
@@ -57,6 +56,13 @@ export default function Review() {
         setIsFamily(true);
       }
     }
+
+    //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
+    if (userId == null) {
+      navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
+      alert("Enter phone number at landing page!"); //TODO: remember to remove
+    }
+
     fetchData();
   }, [familyData]);
 
@@ -80,12 +86,12 @@ export default function Review() {
         },
       });
     } else {
-      navigate("/details", { state: { onEdit: true } });
+      navigate("/details", { state: { on_edit: true } });
     }
   };
 
   const onEditPassport = () => {
-    navigate("/passport", { state: { onEdit: true, index: selectedIndex } });
+    navigate("/passport", { state: { on_edit: true, index: selectedIndex } });
   };
 
   return (
@@ -118,11 +124,11 @@ export default function Review() {
             {details === undefined ? "" : details.display_name}
           </p>
           <p>Phone Number:</p>
-          <p className="text-right">
+          <p id="phone_no" className="phone_number text-right">
             {details === undefined ? "" : details.phone_number}
           </p>
           <p>Email</p>
-          <p className="text-right">
+          <p id="email" className="email text-right">
             {details === undefined ? "" : details.email}
           </p>
         </div>
