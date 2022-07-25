@@ -287,8 +287,27 @@ export default function Passport() {
     }
 
     // send image name to backend API
-    const passportResponse = await getPassportData(OBJECT_NAME + ".jpg");
+    const passportResponse = await getPassportData(OBJECT_NAME);
     console.log(passportResponse);
+
+    // iterate through passportResponse and update setDetails
+    setDetails((prevState) => ({
+      ...prevState,
+      full_name: passportResponse.full_name,
+      passport_number: passportResponse.passport_number,
+      nationality: passportResponse.nationality,
+      passport_expiry: passportResponse.passport_expiry, //TODO: process to correct format date
+      dob: passportResponse.dob, //TODO: process to correct format date
+      gender: passportResponse.gender == "M" ? "MALE" : "FEMALE",
+    }));
+    reset({
+      full_name: passportResponse.full_name,
+      passport_number: passportResponse.passport_number,
+      nationality: passportResponse.nationality,
+      passport_expiry: passportResponse.passport_expiry,
+      dob: passportResponse.dob,
+      gender: passportResponse.gender,
+    });
   };
 
   return (
@@ -390,7 +409,7 @@ export default function Passport() {
             )}
             <div className="mb-3">
               <label className="block font-medium">
-                Passport Expiry (MM/YY)
+                Passport Expiry (MM/YYYY)
               </label>
               <Calendar
                 calendarType="passport_expiry"
