@@ -61,6 +61,13 @@ class Api::V1::UsersController < ApplicationController
     render json: @users
   end
 
+  def extract
+    image = params[:image_name] 
+    @vision = Vision.new
+    @output = @vision.extract_data("#{image}")
+    render json: @output
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -70,6 +77,6 @@ class Api::V1::UsersController < ApplicationController
     # Assigns a list of allowable attributes through.
     def user_params
       params.require(:user).permit(:display_name, :title, :phone_number, :email, :full_name, :passport_number, 
-      :passport_expiry, :nationality, :gender, :dob, :is_family, :url, :image_url)
+      :passport_expiry, :nationality, :gender, :dob, :is_family, :url, :image_name)
     end
 end
