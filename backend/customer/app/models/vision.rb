@@ -62,11 +62,25 @@ class Vision
         checkIndexArr = [passportIndex, nationalityIndex, genderIndex, expiryIndex, birthIndex]
         output_hash_keys = ["passport_number", "nationality", "gender", "passport_expiry", "dob"]
 
+
+        #TODO, change passport_expiry to mm/yyyy
+        #TODO, change dob to dd/mm/yyyy
+
         checkIndexArr.each_with_index {|item, index|
             if item == nil
                 output_hash[output_hash_keys[index]] = ""
             else
                 # assuming that the value of the hash keys are always the next item in the array
+                # ensure that item is not nil before changing value
+                if (item == expiryIndex)
+                    output[item+1] = change_expiry(output[item+1])
+                    puts output[item+1]
+
+                elsif (item == birthIndex)
+                    output[item+1] = change_dob(output[item+1])
+                    puts output[item+1]
+
+                end
                 output_hash[output_hash_keys[index]] = "#{output[item+1]}"
             end
         }
@@ -81,8 +95,31 @@ class Vision
 
         return output_hash.to_json
     end
+
+    def change_expiry arg
+        month_hash = {"JAN" => "01", "FEB" => "02", "MAR" => "03", "APR" => "04", 
+        "MAY" => "05", "JUN" => "06", "JUL" => "07", "AUG" => "08", "SEP" => "09", 
+        "OCT" => "10", "NOV" => "11", "DEC" => "12"}
+
+        temp = arg.split(" ")
+        temp[1] = month_hash[temp[1]]
+        return (temp[1] + "/" + temp[2])
+
+    end
+
+    def change_dob arg
+        month_hash = {"JAN" => "01", "FEB" => "02", "MAR" => "03", "APR" => "04", 
+        "MAY" => "05", "JUN" => "06", "JUL" => "07", "AUG" => "08", "SEP" => "09", 
+        "OCT" => "10", "NOV" => "11", "DEC" => "12"}
+
+        temp = arg.split(" ")
+        temp[1] = month_hash[temp[1]]
+        return (temp[0] + "/" + temp[1] + "/" + temp[2])
+
+
+    end
 end
 
-# vision = Vision.new
-# vision.extract_data("passport_image_99_1658744619528")
+vision = Vision.new
+vision.extract_data("passport_image_99_1658744619528")
 
