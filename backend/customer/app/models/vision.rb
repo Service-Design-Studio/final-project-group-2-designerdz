@@ -53,9 +53,9 @@ class Vision
 
         # handling full name for australian passport by hardcoding because names is separated by new line
         if nameIndex == nil
-            output_hash["fullname"] = ""
+            output_hash["full_name"] = ""
         else
-            output_hash["fullname"] = output[nameIndex+1] + " " + output[nameIndex+2]
+            output_hash["full_name"] = output[nameIndex+1] + " " + output[nameIndex+2]
         end
 
         # updating the hashmap for the remaining fields
