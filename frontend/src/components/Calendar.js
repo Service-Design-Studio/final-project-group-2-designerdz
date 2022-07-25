@@ -14,6 +14,7 @@ export default function Calendar({
 
   const handleDateChange = (date, name) => {
     console.log(name);
+    console.log(date);
     setDetailsHandler((prevState) => ({
       ...prevState,
       [name]: date,
@@ -44,6 +45,7 @@ export default function Calendar({
                 selected={
                   defaultDate == undefined ? null : new Date(defaultDate)
                 }
+                value={field.value}
               />
             )}
           />

@@ -73,11 +73,11 @@ class Vision
                 # assuming that the value of the hash keys are always the next item in the array
                 # ensure that item is not nil before changing value
                 if (item == expiryIndex)
-                    output[item+1] = change_expiry(output[item+1])
+                    # output[item+1] = change_expiry(output[item+1])
                     puts output[item+1]
 
                 elsif (item == birthIndex)
-                    output[item+1] = change_dob(output[item+1])
+                    # output[item+1] = change_dob(output[item+1])
                     puts output[item+1]
 
                 end

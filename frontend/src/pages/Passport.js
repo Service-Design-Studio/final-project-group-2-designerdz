@@ -4,26 +4,18 @@ import { Button, BackButton } from "../components/Buttons.js";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextDesc from "../components/TextDesc.js";
 import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
-import { blue, yellow, red } from "@mui/material/colors";
+import LoadingStatus from "../components/LoadingStatus";
 import {
   patchUserData,
   getAllChildrenData,
   patchChildData,
   getPassportData,
 } from "../services/axiosRequests.js";
-
-const theme = createTheme({
-  palette: {
-    primary: blue,
-    secondary: yellow,
-  },
-});
 
 export default function Passport() {
   const navigate = useNavigate();
@@ -45,8 +37,8 @@ export default function Passport() {
       full_name: "",
       nationality: "",
       passport_number: "",
-      passport_expiry: new Date(),
-      dob: new Date(),
+      passport_expiry: null,
+      dob: null,
       // gender: "MALE",
     },
   });
@@ -70,6 +62,7 @@ export default function Passport() {
     }
   }
 
+  //TODO: see if you can get away with details,setDetails useState for sprint 4 is can one JYYYY
   useEffect(() => {
     async function fetchData() {
       try {
@@ -113,9 +106,10 @@ export default function Passport() {
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
-        passport_expiry: familyData[selectedIndex].passport_expiry,
-        dob: familyData[selectedIndex].dob,
+        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
+        dob: new Date(familyData[selectedIndex].dob),
         gender: familyData[selectedIndex].gender,
+        Passport: "",
       });
     }
   }, [selectedIndex, familyData]);
@@ -143,45 +137,6 @@ export default function Passport() {
     return familyData;
   };
 
-  //must remember to check if all members including currently selected family member data is valid
-  const onSubmit = async () => {
-    //TODO: can check other family member status + current member status from isValid
-    console.log("inside onSubmit");
-    let data = getValues();
-    // data["gender"] = details.gender;
-
-    console.log(data);
-    for (var i = 0; i < familyData.length; i++) {
-      console.log(familyData[i].status);
-      if (familyData[i].status === false) {
-        alert("Please fill in all the compulsory fields");
-        return;
-      }
-    }
-
-    if (selectedIndex === 0) {
-      data["url"] = "review"; //only parent database have url field
-      try {
-        await patchUserData(data, userId);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        await patchChildData(data, familyData[selectedIndex].id);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    if (onEdit === true) {
-      navigate("/review");
-      setOnEdit(false);
-    } else {
-      navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
-    }
-  };
-
   const onBackBtnSelected = () => {
     if (isFamily) {
       navigate("/family");
@@ -193,7 +148,10 @@ export default function Passport() {
   //TODO: when user click to other user, need update familyMember data the status of current user
   const onUserSelected = async (index) => {
     let data = getValues();
-    // data["gender"] = details.gender;
+    data["image_url"] =
+      "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
+        details.image_url
+      );
     console.log("onUserSelected");
     console.log(data);
     console.log(isValid);
@@ -234,25 +192,26 @@ export default function Passport() {
     }
     setFamilyData(copyFamilyData);
     setSelectedIndex(index);
-  };
-
-  const toggleGenderToMale = () => {
-    setDetails((prevState) => ({
-      ...prevState,
-      gender: "MALE",
-    }));
-  };
-
-  const toggleGenderToFemale = () => {
-    setDetails((prevState) => ({
-      ...prevState,
-      gender: "FEMALE",
-    }));
-  };
-
-  const deletePassportFile = () => {
     setPassportFile();
+    // reset({
+    //   passport_expiry: null,
+    //   dob: null,
+    // });
   };
+
+  // const toggleGenderToMale = () => {
+  //   setDetails((prevState) => ({
+  //     ...prevState,
+  //     gender: "MALE",
+  //   }));
+  // };
+
+  // const toggleGenderToFemale = () => {
+  //   setDetails((prevState) => ({
+  //     ...prevState,
+  //     gender: "FEMALE",
+  //   }));
+  // };
 
   const onPassportUpload = async (data) => {
     setIsLoading(true);
@@ -266,8 +225,7 @@ export default function Passport() {
     const UPLOAD_HEADERS = {
       "Content-Type": OBJECT_CONTENT_TYPE,
     };
-    // console.log(OBJECT_LOCATION);
-    // upload to bucket
+    //upload image to cloud storage
     try {
       const response = await fetch(UPLOAD_URL, {
         method: "POST",
@@ -286,28 +244,80 @@ export default function Passport() {
       console.log(error);
     }
 
-    // send image name to backend API
-    const passportResponse = await getPassportData(OBJECT_NAME);
-    console.log(passportResponse);
+    //get autofill details and setDetails according to data
+    try {
+      // send image name to backend API
+      const passportResponse = await getPassportData(OBJECT_NAME);
+      const ocrData = passportResponse.data;
+      console.log(new Date(ocrData.passport_expiry));
+      console.log(ocrData.dob);
+      // iterate through passportResponse and update setDetails
+      setDetails((prevState) => ({
+        ...prevState,
+        full_name: ocrData.full_name,
+        passport_number: ocrData.passport_number,
+        nationality: ocrData.nationality,
+        passport_expiry: new Date(ocrData.passport_expiry), //TODO: process to correct format date
+        dob: new Date(ocrData.dob), //TODO: process to correct format date
+        gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
+        image_url: OBJECT_NAME,
+      }));
+      reset({
+        full_name: ocrData.full_name,
+        passport_number: ocrData.passport_number,
+        nationality: ocrData.nationality,
+        passport_expiry: ocrData.passport_expiry,
+        dob: ocrData.dob,
+        gender: ocrData.gender,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    // iterate through passportResponse and update setDetails
-    setDetails((prevState) => ({
-      ...prevState,
-      full_name: passportResponse.full_name,
-      passport_number: passportResponse.passport_number,
-      nationality: passportResponse.nationality,
-      passport_expiry: passportResponse.passport_expiry, //TODO: process to correct format date
-      dob: passportResponse.dob, //TODO: process to correct format date
-      gender: passportResponse.gender == "M" ? "MALE" : "FEMALE",
-    }));
+  const deletePassportFile = () => {
+    setPassportFile(); //to remove image preview
+    //reset image name field under upload passport
     reset({
-      full_name: passportResponse.full_name,
-      passport_number: passportResponse.passport_number,
-      nationality: passportResponse.nationality,
-      passport_expiry: passportResponse.passport_expiry,
-      dob: passportResponse.dob,
-      gender: passportResponse.gender,
+      Passport: "",
     });
+  };
+
+  //must remember to check if all members including currently selected family member data is valid
+  const onSubmit = async () => {
+    //TODO: can check other family member status + current member status from isValid
+    console.log("inside onSubmit");
+    let data = getValues();
+
+    for (var i = 0; i < familyData.length; i++) {
+      console.log(familyData[i].status);
+      if (familyData[i].status === false) {
+        alert("Please fill in all the compulsory fields");
+        return;
+      }
+    }
+
+    if (selectedIndex === 0) {
+      data["url"] = "review"; //only parent database have url field
+      try {
+        await patchUserData(data, userId);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        await patchChildData(data, familyData[selectedIndex].id);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (onEdit === true) {
+      navigate("/review");
+      setOnEdit(false);
+    } else {
+      navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
+    }
   };
 
   return (
@@ -336,7 +346,6 @@ export default function Passport() {
             <div>
               <label className="block font-medium">Upload Passport</label>
               <input
-                // id="file-upload-button"
                 className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
                 placeholder="Passport"
@@ -345,6 +354,7 @@ export default function Passport() {
               />
               <div>
                 <button
+                  type="button"
                   className={`btn_delete ${
                     passportFile == undefined ? "hidden" : null
                   }`}
@@ -352,28 +362,7 @@ export default function Passport() {
                 >
                   delete
                 </button>
-                <div
-                  role="status"
-                  className={`status_loading ${!isLoading ? "hidden" : null}`}
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="currentFill"
-                    />
-                  </svg>
-                  <span class="sr-only">Loading...</span>
-                </div>
+                <LoadingStatus isLoading={isLoading} />
                 <img className="img_passport" src={passportFile} />
               </div>
             </div>
@@ -434,31 +423,39 @@ export default function Passport() {
             )}
             <div className="mb-3">
               <label className="bflock font-medium">Gender</label>
-              <ThemeProvider theme={theme}>
-                <div className="flex justify-around">
-                  <Controller
-                    render={({ field }) => (
-                      <ToggleButtonGroup
-                        exclusive
-                        aria-label="text alignment"
-                        // onChange={field.onChange}
-                        onChange={(newGender) => {
-                          field.onChange(newGender);
-                        }}
+              <div className="flex justify-around">
+                <Controller
+                  render={({ field }) => (
+                    <ToggleButtonGroup
+                      exclusive
+                      aria-label="text alignment"
+                      onChange={(newGender) => {
+                        field.onChange(newGender);
+                      }}
+                      value={field.value}
+                      color="error"
+                    >
+                      <ToggleButton
+                        className="w-24"
+                        aria-label="left aligned"
+                        value="MALE"
+                        key="MALE"
                       >
-                        <ToggleButton value="MALE" key="MALE" color="secondary">
-                          Male
-                        </ToggleButton>
-                        <ToggleButton value="FEMALE" key="FEMALE">
-                          Female
-                        </ToggleButton>
-                      </ToggleButtonGroup>
-                    )}
-                    name="gender"
-                    control={control}
-                  />
-                </div>
-              </ThemeProvider>
+                        Male
+                      </ToggleButton>
+                      <ToggleButton
+                        className="w-24"
+                        value="FEMALE"
+                        key="FEMALE"
+                      >
+                        Female
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                  )}
+                  name="gender"
+                  control={control}
+                />
+              </div>
               {errors.gender && (
                 <p className="text-red-500">{errors.gender?.message}</p>
               )}
