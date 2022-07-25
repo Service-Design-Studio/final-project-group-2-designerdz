@@ -4,6 +4,7 @@ import {
   CHILD_API,
   CHILDREN_API,
   DELETE_ALL_API,
+  OCR_API,
 } from "../utilities/constants.js";
 
 //get data using phoneNumber (for resumption or signup process)
@@ -63,6 +64,12 @@ export function deleteAllData() {
   return axios.delete(DELETE_ALL_API);
 }
 
+//get passport data from backend
+// /api/v1/ocr/?image_name=${imageName}
+export function getPassportData(imageName) {
+  return axios.get(OCR_API, { params: { image_name: imageName } });
+}
+
 export default {
   getUserDataPhoneNumber,
   getUserDataId,
@@ -74,4 +81,5 @@ export default {
   patchChildData,
   deleteChildData,
   deleteAllData,
+  getPassportData,
 };
