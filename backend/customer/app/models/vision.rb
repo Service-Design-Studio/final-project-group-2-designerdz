@@ -11,6 +11,7 @@ class Vision
 
     def extract_data(image_name)
         path = File.expand_path(File.dirname(__FILE__))
+        puts path
 
         ### credentials not needed if working on cloud environment
         storage = Google::Cloud::Storage.new(
@@ -28,7 +29,9 @@ class Vision
         ### END of authenticating to GCP
 
         text = []
-        response = client.text_detection(image: file.signed_url)
+        response = client.text_detection(image: 'https://storage.googleapis.com/dbs-backend-1-ruby/' + image_name)
+    
+      
         response.responses.each do |res|
             res.text_annotations.each do |annotation|
                 text << annotation.description
@@ -81,5 +84,5 @@ class Vision
 end
 
 # vision = Vision.new
-# vision.extract_data("passport.jpg")
+# vision.extract_data("passport_image_99_1658744619528")
 
