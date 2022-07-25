@@ -61,3 +61,16 @@ Then("my {string} should be shown", async function (fullName) {
   expect(fn, fullName);
   await driver.sleep(500);
 });
+
+//TODO: remove enventually
+// When("I restart the app", function () {
+//   driver.close();
+//   let driver = initDriver();
+// });
+
+// Then(
+//   "I should be redirected back to {string} where I left off",
+//   async function (page) {
+//     expect(driver.getCurrentUrl, baseUrl + page);
+//   }
+// );

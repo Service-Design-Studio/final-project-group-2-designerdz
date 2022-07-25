@@ -120,13 +120,13 @@ export default function Review() {
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Basic Information</b>
           <b className="text-xl text-right">
-            <EditButton name="basic_edit" onClick={onEditDetails} />
+            <EditButton onClick={onEditDetails} />
           </b>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <p>Display Name:</p>
-          <p className="display_name text-right">
+          <p className="text-right">
             {details === undefined ? "" : details.display_name}
           </p>
           <p>Phone Number:</p>
@@ -142,7 +142,7 @@ export default function Review() {
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
-            <EditButton name="passport_edit" onClick={onEditPassport} />
+            <EditButton onClick={onEditPassport} />
             {/* <EditButton
               onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
             /> */}
@@ -155,11 +155,11 @@ export default function Review() {
             {details === undefined ? "" : details.full_name}
           </p>
           <p>Passport Number:</p>
-          <p className="review_pn text-right">
+          <p className="text-right">
             {details === undefined ? "" : details.passport_number}
           </p>
           <p>Passport Expiry:</p>
-          <p className="review_pe text-right">
+          <p className="text-right">
             {details === undefined
               ? ""
               : new Date(details.passport_expiry).toLocaleDateString("en-us", {
@@ -168,15 +168,15 @@ export default function Review() {
                 })}
           </p>
           <p>Nationality:</p>
-          <p className="review_nationality text-right">
+          <p className="text-right">
             {details === undefined ? "" : details.nationality}
           </p>
           <p>Gender:</p>
-          <p className="review_gender text-right">
+          <p className="text-right">
             {details === undefined ? "" : details.gender}
           </p>
           <p>Date of Birth:</p>
-          <p className="reivew_dob text-right">
+          <p className="text-right">
             {details === undefined
               ? ""
               : new Date(details.dob).toLocaleDateString("en-us", {
