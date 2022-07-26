@@ -1,35 +1,6 @@
-const {
-  Given,
-  When,
-  Then,
-  Before,
-  AfterAll,
-  After,
-} = require("@cucumber/cucumber");
-const {
-  Builder,
-  By,
-  Capabilities,
-  Key,
-  Button,
-  ChromiumWebDriver,
-} = require("selenium-webdriver");
-const { expect, assert } = require("chai");
-const { setDefaultTimeout } = require("@cucumber/cucumber");
-const pactum = require("pactum");
-
-let spec = pactum.spec();
-
-let base_url = "http://localhost:3001/";
-
-setDefaultTimeout(60 * 1000);
-
-// make a random number
-let random1 = Math.floor(Math.random() * 10000);
-let random2 = Math.floor(Math.random() * 10000);
-let random3 = Math.floor(Math.random() * 10000);
-let random4 = Math.floor(Math.random() * 10000);
-
+const { Given, When, Then } = require("@cucumber/cucumber");
+const { By } = require("selenium-webdriver");
+const { assert } = require("chai");
 
 Given('I am on {string} and I have not filled in any fields', async function (page) {
     await driver.get(base_url)
@@ -65,30 +36,30 @@ Given('I am on {string} and I have not filled in any fields', async function (pa
     }
     if (page == "passport") {
       const goToDetailsButton = await driver.findElement(By.className("next"))
-      goToDetailsButton.click()
-      await driver.sleep(1000)
+      goToDetailsButton.click();
+      await driver.sleep(1000);
 
-      await driver.findElement(By.className("display_name")).sendKeys("John")
-      await driver.findElement(By.className("phone_number")).sendKeys(random2)
+      await driver.findElement(By.className("display_name")).sendKeys("John");
+      await driver.findElement(By.className("phone_number")).sendKeys(random2);
 
-      const goToPassportButton = await driver.findElement(By.className("next"))
-      goToPassportButton.click()
-      await driver.sleep(1000)
+      const goToPassportButton = await driver.findElement(By.className("next"));
+      goToPassportButton.click();
+      await driver.sleep(1000);
     }
 
-    expect(await driver.getCurrentUrl()).to.equal(base_url + page)
+    expect(await driver.getCurrentUrl()).to.equal(base_url + page);
   }
 );
 
 When('I click on {string}', async function (button) {
-  const nextButton = await driver.findElement(By.className(button))
+  const nextButton = await driver.findElement(By.className(button));
   nextButton.click()
   await driver.sleep(1000);
 });
 
-Then('I should be on {string}', async function (page) {
-  expect(await driver.getCurrentUrl()).to.equal(base_url + page);
-});
+// Then('I should be on {string}', async function (page) {
+//   expect(await driver.getCurrentUrl()).to.equal(base_url + page);
+// });
 
 Then('I should see {string}', async function (errors) {
   let error_elements = await driver.findElements(By.className("text-red-500"));
