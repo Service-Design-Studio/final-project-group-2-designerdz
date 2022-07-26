@@ -11,8 +11,7 @@
 #     Examples:
 #     | page       | next       |
 #     | "signup"   | "details"  |
-#     # FIXME: 
-#     # | "passport" | "review"   |
+#     | "passport" | "review"   |
 #     | "review"   | "success"  |
 
 #     Scenario:
