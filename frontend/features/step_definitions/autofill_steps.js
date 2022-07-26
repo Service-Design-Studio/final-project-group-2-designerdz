@@ -10,12 +10,20 @@ Then("my information should be auto-filled", async function() {
     var passportNumber = await driver.findElement(By.className("passport_number")).getText();
     assert.equal(passportNumber, "");
 
-    // TODO: How to get passport expiry
+    let passportExpiry = await driver.findElement(By.xpath("//input[@placeholder='Select Date']").getText();
+    assert.equal(passport_expiry_input, "");
+
+    // TODO: How to get gender?
 
     var nationality = await driver.findElement(By.className("nationality")).getText();
     assert.equal(nationality, "")
 
-    // TODO: How to get gender and DOB?
+    await driver.findElement(By.className("male")).click();
+
+    let dob_input = await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']"))
+    await dob_input.sendKeys("14/07/1980")
+    await driver.sleep(1000)
+
 });
 
 When("I edit my information", async function() {

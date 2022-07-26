@@ -100,10 +100,6 @@ When("I move to the review page", async function () {
   await driver.findElement(By.className("female")).click();
   await driver.sleep(500);
 
-  // TODO: Remove
-  await driver.findElement(By.id("user_0")).click();
-  await driver.sleep(500);
-
   // Move to review page
   await driver.findElement(By.className("next")).click();
   await driver.sleep(1000);

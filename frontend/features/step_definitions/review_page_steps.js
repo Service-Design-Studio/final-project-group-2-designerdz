@@ -63,12 +63,18 @@ Given("that I have filled all me and my child's details", async function() {
     .sendKeys("E34152315");
   await driver.findElement(By.className("nationality")).sendKeys("American");
   await driver.findElement(By.className("female")).click();
+
+  let dob_input = await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']"))
+  await dob_input.sendKeys("14/07/1980")
+
+  let passport_expiry_input = await driver.findElement(By.xpath("//input[@placeholder='Select Date']"))
+  await passport_expiry_input.sendKeys("09/2022")
+
+  await driver.sleep(500)
+
+  await driver.findElement(By.className("next")).click();
   await driver.sleep(500);
 
-  // FIXME: add calendar click and gender to pass validation
-  // Move to review page
-  // await driver.findElement(By.className("next")).click();
-  // await driver.sleep(500);
   await driver.get(baseUrl + "review");
   await driver.sleep(500);
 
@@ -99,9 +105,10 @@ Then("I should be able to see that my information is correct", async function() 
   var parentNationalityValue = await driver.findElement(By.className("review_nationality")).getText();
   assert.equal(parentNationalityValue, "American");
 
-  // TODO: Fix this value once done
-  // var parentGenderValue = await driver.findElement(By.className("review_gender")).getText();
-  // assert.equal(parentGenderValue, "female");
+  var parentGenderValue = await driver.findElement(By.className("review_gender")).getText();
+  assert.equal(parentGenderValue, "female");
+
+  var parentPassportExpiry = await driver.findElement(By.className(""))
 
   // TODO: Include calendar clicking
 });
