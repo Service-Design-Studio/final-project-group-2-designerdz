@@ -1,6 +1,10 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Button, BackButton } from "../components/Buttons.js";
+import {
+  Button,
+  BackButton,
+  DeleteImageButton,
+} from "../components/Buttons.js";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -48,6 +52,7 @@ export default function Passport() {
     register,
     getValues,
     control,
+    trigger,
     formState: { isValid, errors },
   } = methods;
   let userId = localStorage.getItem("user_id");
@@ -248,9 +253,8 @@ export default function Passport() {
       // send image name to backend API
       const passportResponse = await getPassportData(OBJECT_NAME);
       const ocrData = passportResponse.data;
-      console.log(new Date(ocrData.passport_expiry));
-      console.log(ocrData.dob);
       // iterate through passportResponse and update setDetails
+      //TODO: sprint 4 investigate possibility of removing this, seems redundant actually
       setDetails((prevState) => ({
         ...prevState,
         full_name: ocrData.full_name,
@@ -278,9 +282,16 @@ export default function Passport() {
   const deletePassportFile = () => {
     setPassportFile(); //to remove image preview
     //reset image name field under upload passport
+    console.log(getValues());
+    const formData = getValues();
+    //TODO: figure out less hacky way of resetting, cos upon delete, form validation fails
     reset({
       Passport: "",
+      passport_expiry: formData.passport_expiry,
+      dob: formData.dob,
+      gender: formData.gender,
     });
+    trigger();
   };
 
   //must remember to check if all members including currently selected family member data is valid
@@ -313,7 +324,7 @@ export default function Passport() {
     }
 
     if (onEdit === true) {
-      navigate("/review");
+      navigate("/review", { state: { index: selectedIndex } });
       setOnEdit(false);
     } else {
       navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
@@ -352,18 +363,13 @@ export default function Passport() {
                 {...register("Passport", {})}
                 onInput={onPassportUpload}
               />
-              <div>
-                <button
-                  type="button"
-                  className={`btn_delete ${
-                    passportFile == undefined ? "hidden" : null
-                  }`}
-                  onClick={deletePassportFile}
-                >
-                  delete
-                </button>
+              <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
                 <img className="img_passport" src={passportFile} />
+                <DeleteImageButton
+                  passportFile={passportFile}
+                  onClick={deletePassportFile}
+                />
               </div>
             </div>
             <FormFill
