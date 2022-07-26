@@ -108,6 +108,11 @@ When("I move to the review page", async function () {
   assert.equal(actualUrl, baseUrl + "review");
 });
 
+When("I click on my icon", async function () {
+  await driver.findElement(By.id("user_0")).click();
+  await driver.sleep(500);
+});
+
 When("I click on my child icon", async function () {
   await driver.findElement(By.id("user_1")).click();
   await driver.sleep(500);

@@ -26,7 +26,7 @@ Given('I am on {string} and I have not filled in any fields', async function (pa
       await driver.sleep(1000);
 
       await driver.findElement(By.className("display_name")).sendKeys("John");
-      await driver.findElement(By.className("phone_number")).sendKeys(random1);
+      await driver.findElement(By.className("phone_number")).sendKeys(parentNumber);
       driver.findElement(By.className("next")).click();
       await driver.sleep(1000);
 
@@ -43,7 +43,7 @@ Given('I am on {string} and I have not filled in any fields', async function (pa
       await driver.sleep(1000);
 
       await driver.findElement(By.className("display_name")).sendKeys("John");
-      await driver.findElement(By.className("phone_number")).sendKeys(random2);
+      await driver.findElement(By.className("phone_number")).sendKeys(parentNumber);
 
       const goToPassportButton = await driver.findElement(By.className("next"));
       goToPassportButton.click();

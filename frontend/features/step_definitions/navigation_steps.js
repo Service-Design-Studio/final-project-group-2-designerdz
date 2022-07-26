@@ -39,25 +39,3 @@ Then("I should go back to the {string} page", async function (previous) {
   actualUrl = actualUrl.split("/")[3];
   expect(actualUrl).to.equal(expectedUrl);
 });
-
-Given("I am on the passport page", function () {
-  driver.get(baseUrl + "passport");
-});
-
-Given("I am on passport", function () {
-  driver.get(baseUrl + "passport");
-});
-
-Given("I have filled in my {string}", function (fullName) {
-  driver.findElement(By.className("full_name")).sendKeys(fullName);
-});
-
-Then("I should move forward to the review page", function () {
-  driver.get(baseUrl + "review");
-});
-
-Then("my {string} should be shown", async function (fullName) {
-  const fn = await driver.findElement(By.className("review_fn")).getText();
-  expect(fn, fullName);
-  await driver.sleep(500);
-});
