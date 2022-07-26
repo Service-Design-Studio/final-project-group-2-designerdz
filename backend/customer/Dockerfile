@@ -8,6 +8,8 @@ COPY . .
 RUN apt-get update 
 RUN gem install bundler && bundler install 
 
+RUN bundle install
+
 ENV RAILS_ENV=production
 
 ARG MASTER_KEY
