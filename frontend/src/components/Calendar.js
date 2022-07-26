@@ -28,7 +28,7 @@ export default function Calendar({
           <Controller
             control={control}
             name="passport_expiry"
-            rules={{ required: "passport expiry is required!" }}
+            rules={{ required: "Passport Expiry is Required" }}
             render={({ field }) => (
               <DatePicker
                 className={
@@ -58,7 +58,7 @@ export default function Calendar({
           <Controller
             control={control}
             name="dob"
-            rules={{ required: "date of birth is required!" }}
+            rules={{ required: "Date of Birth is Required" }}
             render={({ field }) => (
               <DatePicker
                 className={

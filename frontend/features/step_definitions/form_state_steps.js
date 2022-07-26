@@ -49,9 +49,13 @@ Given(
       await driver.findElement(By.className("nationality")).sendKeys("China");
       await driver.findElement(By.className("male")).click();
 
-      await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys("14/07/1980");
+      await driver
+        .findElement(By.xpath("//input[@placeholder='Select Date of Birth']"))
+        .sendKeys("14/07/1980");
 
-      await driver.findElement(By.xpath("//input[@placeholder='Select Date']")).sendKeys("09/2022");
+      await driver
+        .findElement(By.xpath("//input[@placeholder='Select Date']"))
+        .sendKeys("09/2022");
       await driver.sleep(500);
 
       // Move to review page
@@ -114,7 +118,7 @@ Then(
       );
       assert.equal(
         await driver
-          .findElement(By.className("nationalty"))
+          .findElement(By.className("nationality"))
           .getAttribute("value"),
         "China"
       );

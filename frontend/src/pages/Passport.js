@@ -303,7 +303,7 @@ export default function Passport() {
     for (var i = 0; i < familyData.length; i++) {
       console.log(familyData[i].status);
       if (familyData[i].status === false) {
-        alert("Please fill in all the compulsory fields");
+        // alert("Please fill in all the compulsory fields")
         return;
       }
     }
@@ -431,6 +431,7 @@ export default function Passport() {
               <label className="bflock font-medium">Gender</label>
               <div className="flex justify-around">
                 <Controller
+                  rules={{ required: "Gender is Required" }}
                   render={({ field }) => (
                     <ToggleButtonGroup
                       exclusive
