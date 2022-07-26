@@ -127,7 +127,7 @@ export default function Passport() {
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
-        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
+        passport_expiry: familyData[selectedIndex].passport_expiry,
         dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
         Passport: "",
@@ -295,6 +295,7 @@ export default function Passport() {
     //TODO: can check other family member status + current member status from isValid
     console.log("inside onSubmit");
     let data = getValues();
+    console.log(data);
 
     for (var i = 0; i < familyData.length; i++) {
       console.log(familyData[i].status);

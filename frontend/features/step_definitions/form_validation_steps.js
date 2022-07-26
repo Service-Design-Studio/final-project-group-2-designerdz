@@ -74,6 +74,13 @@ When("I click on {string}", async function (button) {
 Then("I should see {string}", async function (errors) {
   let error_elements = await driver.findElements(By.className("text-red-500"));
   let error_array = errors.split(",");
+  let message_array = [];
+  // iterate through error_elements and add .getText()  to message_array
+  for (let i = 0; i < error_elements.length; i++) {
+    message_array.push(await error_elements[i].getText());
+  }
+  expect(message_array).to.equal([]);
+
   if (error_elements.length == 7) {
     error_elements.shift();
   }
