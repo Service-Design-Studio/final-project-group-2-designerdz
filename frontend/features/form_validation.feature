@@ -16,8 +16,8 @@ So that I know where to make edits and be sure that I have filled up the form co
 
         Examples:
         | page       | button | errors                                  | form_fields                             | next_page  |
-        | "details"  | "next" | "Display Name,Phone Number"             | "display_name,phone_number"             | "family"   |
-        | "child"    | "next" | "Display Name,Phone Number"             | "display_name,phone_number"             | "family"   |
+        # | "details"  | "next" | "Display Name,Phone Number"             | "display_name,phone_number"             | "family"   |
+        # | "child"    | "next" | "Display Name,Phone Number"             | "display_name,phone_number"             | "family"   |
         | "passport" | "next" | "Full Name,Passport Number,Passport Expiry,Nationality,Gender,Date of Birth" | "full_name,passport_number,passport_expiry,nationality,gender,dob" | "review"   |
 
     Scenario: Carousel Pop-up For Incomplete Family Member Details

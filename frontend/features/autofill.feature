@@ -14,5 +14,3 @@ Feature: Autofill
         When I edit my information 
         Then my information should be overwritten
         And I should be able to see it in the review page
-
-    
