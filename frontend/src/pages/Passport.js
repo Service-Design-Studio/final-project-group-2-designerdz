@@ -1,6 +1,10 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Button, BackButton } from "../components/Buttons.js";
+import {
+  Button,
+  BackButton,
+  DeleteImageButton,
+} from "../components/Buttons.js";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -9,18 +13,15 @@ import ProgressBar from "../components/ProgressBar";
 import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
-import LoadingStatus from "../components/LoadingStatus";
 import {
   patchUserData,
   getAllChildrenData,
   patchChildData,
-  getPassportData,
 } from "../services/axiosRequests.js";
 
 export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [passportFile, setPassportFile] = useState();
   const [details, setDetails] = useState({
     dob: new Date(),
     passport_expiry: new Date(),
@@ -29,7 +30,6 @@ export default function Passport() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
   const [isFamily, setIsFamily] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const methods = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -37,9 +37,8 @@ export default function Passport() {
       full_name: "",
       nationality: "",
       passport_number: "",
-      passport_expiry: null,
-      dob: null,
-      // gender: "MALE",
+      passport_expiry: new Date(),
+      dob: new Date(),
     },
   });
   const {
@@ -48,6 +47,7 @@ export default function Passport() {
     register,
     getValues,
     control,
+    trigger,
     formState: { isValid, errors },
   } = methods;
   let userId = localStorage.getItem("user_id");
@@ -62,7 +62,6 @@ export default function Passport() {
     }
   }
 
-  //TODO: see if you can get away with details,setDetails useState for sprint 4 is can one JYYYY
   useEffect(() => {
     async function fetchData() {
       try {
@@ -106,10 +105,9 @@ export default function Passport() {
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
-        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
-        dob: new Date(familyData[selectedIndex].dob),
+        passport_expiry: familyData[selectedIndex].passport_expiry,
+        dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
-        Passport: "",
       });
     }
   }, [selectedIndex, familyData]);
@@ -148,10 +146,6 @@ export default function Passport() {
   //TODO: when user click to other user, need update familyMember data the status of current user
   const onUserSelected = async (index) => {
     let data = getValues();
-    data["image_url"] =
-      "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
-        details.image_url
-      );
     console.log("onUserSelected");
     console.log(data);
     console.log(isValid);
@@ -192,35 +186,27 @@ export default function Passport() {
     }
     setFamilyData(copyFamilyData);
     setSelectedIndex(index);
-    setPassportFile();
-    // reset({
-    //   passport_expiry: null,
-    //   dob: null,
-    // });
   };
 
-  // const toggleGenderToMale = () => {
-  //   setDetails((prevState) => ({
-  //     ...prevState,
-  //     gender: "MALE",
-  //   }));
-  // };
+  const toggleGenderToMale = () => {
+    setDetails((prevState) => ({
+      ...prevState,
+      gender: "MALE",
+    }));
+  };
 
-  // const toggleGenderToFemale = () => {
-  //   setDetails((prevState) => ({
-  //     ...prevState,
-  //     gender: "FEMALE",
-  //   }));
-  // };
+  const toggleGenderToFemale = () => {
+    setDetails((prevState) => ({
+      ...prevState,
+      gender: "FEMALE",
+    }));
+  };
 
   const onPassportUpload = async (data) => {
-    setIsLoading(true);
-    console.log("DATA BELOW");
-    console.log(data.target);
     const OBJECT_LOCATION = data.target.files[0];
-    const OBJECT_CONTENT_TYPE = "image/jpeg";
-    const BUCKET_NAME = "dbs-backend-1-ruby";
-    const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
+    const OBJECT_CONTENT_TYPE = "image/jpg";
+    const BUCKET_NAME = "react-frontend-353408.appspot.com";
+    const OBJECT_NAME = `${userId}_passport_image`;
     const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
     const UPLOAD_HEADERS = {
       "Content-Type": OBJECT_CONTENT_TYPE,
@@ -249,9 +235,8 @@ export default function Passport() {
       // send image name to backend API
       const passportResponse = await getPassportData(OBJECT_NAME);
       const ocrData = passportResponse.data;
-      console.log(new Date(ocrData.passport_expiry));
-      console.log(ocrData.dob);
       // iterate through passportResponse and update setDetails
+      //TODO: sprint 4 investigate possibility of removing this, seems redundant actually
       setDetails((prevState) => ({
         ...prevState,
         full_name: ocrData.full_name,
@@ -266,9 +251,9 @@ export default function Passport() {
         full_name: ocrData.full_name,
         passport_number: ocrData.passport_number,
         nationality: ocrData.nationality,
-        passport_expiry: ocrData.passport_expiry,
+        passport_expiry: new Date(ocrData.passport_expiry),
         dob: ocrData.dob,
-        gender: ocrData.gender,
+        gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
       });
     } catch (error) {
       console.log(error);
@@ -278,9 +263,16 @@ export default function Passport() {
   const deletePassportFile = () => {
     setPassportFile(); //to remove image preview
     //reset image name field under upload passport
+    console.log(getValues());
+    const formData = getValues();
+    //TODO: figure out less hacky way of resetting, cos upon delete, form validation fails
     reset({
       Passport: "",
+      passport_expiry: formData.passport_expiry,
+      dob: formData.dob,
+      gender: formData.gender,
     });
+    trigger();
   };
 
   //must remember to check if all members including currently selected family member data is valid
@@ -313,7 +305,7 @@ export default function Passport() {
     }
 
     if (onEdit === true) {
-      navigate("/review");
+      navigate("/review", { state: { index: selectedIndex } });
       setOnEdit(false);
     } else {
       navigate("/review"); //TODO replace with next page route for sprint 3, when expanding to more pages
@@ -346,24 +338,18 @@ export default function Passport() {
             <div>
               <label className="block font-medium">Upload Passport</label>
               <input
-                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
+                className="mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
                 placeholder="Passport"
                 {...register("Passport", {})}
-                onInput={onPassportUpload}
               />
-              <div>
-                <button
-                  type="button"
-                  className={`btn_delete ${
-                    passportFile == undefined ? "hidden" : null
-                  }`}
-                  onClick={deletePassportFile}
-                >
-                  delete
-                </button>
+              <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
                 <img className="img_passport" src={passportFile} />
+                <DeleteImageButton
+                  passportFile={passportFile}
+                  onClick={deletePassportFile}
+                />
               </div>
             </div>
             <FormFill
@@ -398,7 +384,7 @@ export default function Passport() {
             )}
             <div className="mb-3">
               <label className="block font-medium">
-                Passport Expiry (MM/YYYY)
+                Passport Expiry (MM/YY)
               </label>
               <Calendar
                 calendarType="passport_expiry"
@@ -422,7 +408,7 @@ export default function Passport() {
               <p className="text-red-500">{errors.nationality?.message}</p>
             )}
             <div className="mb-3">
-              <label className="bflock font-medium">Gender</label>
+              <label className="block font-medium">Gender</label>
               <div className="flex justify-around">
                 <Controller
                   render={({ field }) => (

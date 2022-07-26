@@ -15,7 +15,6 @@ Rails.application.routes.draw do
   # manually setting the uri routes for get and patch
   #get  'api/v1/users/:phone_number(.:format)', to: 'api/v1/users#retrieve'
   delete 'api/v1/profile/delete', to: 'api/v1/users#destroy'
-  get 'api/v1/ocr/', to: 'api/v1/users#extract'
 
   # Defines the root path route ("/")
   # root "articles#index"

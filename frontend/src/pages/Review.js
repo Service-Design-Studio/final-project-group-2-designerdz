@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ProgressBar from "../components/ProgressBar.js";
 import { Button, BackButton, EditButton } from "../components/Buttons.js";
@@ -11,6 +11,7 @@ import Carousel from "../components/Carousel";
 
 export default function Review() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [details, setDetails] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
@@ -64,6 +65,11 @@ export default function Review() {
     }
 
     fetchData();
+
+    if (location.state != undefined) {
+      console.log(location.state.index);
+      setSelectedIndex(location.state.index);
+    }
   }, [familyData]);
 
   const submitData = () => {
