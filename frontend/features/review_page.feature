@@ -20,9 +20,9 @@
 
 #         # TODO: Fix this button id
 #         Examples:
-#         | button | next_page  |
-#         | "edit" | "details"  |
-#         | "edit" | "passport" |
+#         | edit | page |
+#         | "basic_edit" | "child"  |
+#         | "passport_edit" | "passport" |
 
 #     Scenario: Editing my child misfilled information
 #         When I click on my child icon

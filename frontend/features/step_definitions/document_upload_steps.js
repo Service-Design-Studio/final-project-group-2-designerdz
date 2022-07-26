@@ -3,8 +3,6 @@ const { By } = require("selenium-webdriver");
 const { expect, assert } = require("chai");
 
 Given("I am on passport page", async function () {
-  let random = Math.floor(Math.random() * 10000);
-
   await driver.get(baseUrl);
   await driver.sleep(2000);
 
@@ -19,7 +17,7 @@ Given("I am on passport page", async function () {
   await driver.sleep(1000);
 
   await driver.findElement(By.className("display_name")).sendKeys("John");
-  await driver.findElement(By.className("phone_number")).sendKeys(random);
+  await driver.findElement(By.className("phone_number")).sendKeys(parentNumber);
 
   const goToPassportButton = await driver.findElement(By.className("next"));
   goToPassportButton.click();
@@ -29,7 +27,8 @@ Given("I am on passport page", async function () {
 
 When("I have uploaded a document", async function () {
   const uploadButton = await driver.findElement(By.className("btn_upload"));
-  uploadButton.sendKeys("/Users/yida/Downloads/passport_aussie.jpg");
+  // FIXME: update path
+  // uploadButton.sendKeys("/Users/yida/Downloads/passport_aussie.jpg");
 });
 
 Then("I should see a loading indicator", async function () {
