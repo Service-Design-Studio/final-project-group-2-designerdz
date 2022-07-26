@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_18_100312) do
     t.string "dob"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "image_url"
+    t.string "image_name"
     t.index ["user_id"], name: "index_children_on_user_id"
   end
 
@@ -43,7 +43,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_18_100312) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "url"
-    t.string "image_url"
+    t.string "image_name"
     t.string "is_family"
   end
 

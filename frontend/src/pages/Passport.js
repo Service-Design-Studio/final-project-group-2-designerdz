@@ -106,8 +106,8 @@ export default function Passport() {
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
-        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
-        dob: new Date(familyData[selectedIndex].dob),
+        passport_expiry: familyData[selectedIndex].passport_expiry,
+        dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
         Passport: "",
       });
@@ -234,7 +234,6 @@ export default function Passport() {
       });
       console.log("RESPONSE BELOW");
       console.log(response);
-      setIsLoading(false);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         setPassportFile(reader.result);
@@ -268,8 +267,9 @@ export default function Passport() {
         nationality: ocrData.nationality,
         passport_expiry: ocrData.passport_expiry,
         dob: ocrData.dob,
-        gender: ocrData.gender,
+        gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
       });
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
