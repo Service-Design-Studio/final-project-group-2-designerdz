@@ -109,6 +109,6 @@ Then("my child icon should be selected", async function () {
   const childIcon2 = await driver.findElement(By.id("user_1"));
   assert.equal(
     await childIcon2.getAttribute("class"),
-    "grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
+    "relative grid rounded outline-dashed grid-cols-1 justify-items-center h-24 w-24 p-2 text-sm overflow-hidden"
   );
 });
