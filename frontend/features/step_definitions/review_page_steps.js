@@ -77,7 +77,7 @@ Given("that I have filled all me and my child's details", async function() {
 
 Given("that I am on the review page", async function() {
   assert.equal(await driver.getCurrentUrl(), baseUrl + "review");
-  await driver.sleep(500);
+  await driver.sleep(1000);
 });
 
 Then("I should be able to see that my information is correct", async function() {

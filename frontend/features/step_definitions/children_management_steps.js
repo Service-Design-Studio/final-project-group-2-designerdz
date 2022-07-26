@@ -20,7 +20,7 @@ Given("I have successfully added a child", async function () {
     .sendKeys("John Doe Doe");
   await driver
     .findElement(By.className("phone_number"))
-    .sendKeys(Math.floor(Math.random() * 10000));
+    .sendKeys(parentNumber);
   await driver.sleep(500);
 
   await driver.findElement(By.className("next")).click();

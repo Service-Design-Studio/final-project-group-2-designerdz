@@ -80,24 +80,25 @@ When("I move to the review page", async function () {
 
   var actualUrl = await driver.getCurrentUrl();
   assert.equal(actualUrl, baseUrl + "passport");
-
+  
   await driver.findElement(By.className("full_name")).sendKeys("Sally Abbot");
-  await driver
-    .findElement(By.className("passport_number"))
-    .sendKeys("E32521921");
+  await driver.findElement(By.className("passport_number")).sendKeys("E32521921");
   await driver.findElement(By.className("nationality")).sendKeys("American");
   await driver.findElement(By.className("female")).click();
+  await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys("14/07/1980");
+  await driver.findElement(By.xpath("//input[@placeholder='Select Date']")).sendKeys("09/2024");
   await driver.sleep(500);
 
   await driver.findElement(By.id("user_1")).click();
   await driver.sleep(500);
 
   await driver.findElement(By.className("full_name")).sendKeys("Sarah Abbot");
-  await driver
-    .findElement(By.className("passport_number"))
-    .sendKeys("E34152315");
+  await driver.findElement(By.className("passport_number")).sendKeys("E34152315");
   await driver.findElement(By.className("nationality")).sendKeys("American");
   await driver.findElement(By.className("female")).click();
+  await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys("14/07/2005");
+  await driver.findElement(By.xpath("//input[@placeholder='Select Date']")).sendKeys("09/2030");
+
   await driver.sleep(500);
 
   // Move to review page
@@ -106,18 +107,6 @@ When("I move to the review page", async function () {
 
   var actualUrl = await driver.getCurrentUrl();
   assert.equal(actualUrl, baseUrl + "review");
-});
-
-When("I click on my icon", async function () {
-  await driver.sleep(500);
-  await driver.findElement(By.id("user_0")).click();
-  await driver.sleep(500);
-});
-
-When("I click on my child icon", async function () {
-  await driver.sleep(500);
-  await driver.findElement(By.id("user_1")).click();
-  await driver.sleep(500);
 });
 
 Then(

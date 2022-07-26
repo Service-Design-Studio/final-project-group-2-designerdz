@@ -22,6 +22,18 @@ Given("I have filled in my details", async function () {
   await driver.sleep(1000);
 });
 
+When("I click on my icon", async function () {
+  await driver.sleep(500);
+  await driver.findElement(By.id("user_0")).click();
+  await driver.sleep(500);
+});
+
+When("I click on my child icon", async function () {
+  await driver.sleep(500);
+  await driver.findElement(By.id("user_1")).click();
+  await driver.sleep(500);
+});
+
 Given("I have added a child", async function () {
   await driver.findElement(By.className("add")).click();
   await driver.sleep(500);
