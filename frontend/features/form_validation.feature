@@ -1,7 +1,7 @@
 # Feature: Form Validation
-# As a user filling up the form
-# I want to be informed when the form has errors 
-# So that I know where to make edits and be sure that I have filled up the form correctly
+#     As a user filling up the form
+#     I want to be informed when the form has errors 
+#     So that I know where to make edits and be sure that I have filled up the form correctly
 
 #     Scenario: Prevent moving to next page if compulsory fields are not filled
 #         Given I am on <page> and I have not filled in any fields

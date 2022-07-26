@@ -436,7 +436,7 @@ export default function Passport() {
                       color="error"
                     >
                       <ToggleButton
-                        className="w-24"
+                        className="male w-24"
                         aria-label="left aligned"
                         value="MALE"
                         key="MALE"
@@ -444,7 +444,7 @@ export default function Passport() {
                         Male
                       </ToggleButton>
                       <ToggleButton
-                        className="w-24"
+                        className="female w-24"
                         value="FEMALE"
                         key="FEMALE"
                       >

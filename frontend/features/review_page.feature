@@ -18,7 +18,6 @@
 #         And I click on the <edit> button 
 #         Then I should be on <page>
 
-#         # TODO: Fix this button id
 #         Examples:
 #         | edit | page |
 #         | "basic_edit" | "child"  |
