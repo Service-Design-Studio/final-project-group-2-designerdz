@@ -265,7 +265,7 @@ export default function Passport() {
         full_name: ocrData.full_name,
         passport_number: ocrData.passport_number,
         nationality: ocrData.nationality,
-        passport_expiry: ocrData.passport_expiry,
+        passport_expiry: new Date(ocrData.passport_expiry),
         dob: ocrData.dob,
         gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
       });

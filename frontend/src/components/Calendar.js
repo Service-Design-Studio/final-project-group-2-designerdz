@@ -37,7 +37,7 @@ export default function Calendar({
                 placeholderText="Select Date"
                 showMonthYearPicker
                 dateFormat="MM/yyyy"
-                minDate={new Date()}
+                // minDate={new Date()}
                 onChange={(date) => {
                   field.onChange(date);
                   handleDateChange(date, field.name);
