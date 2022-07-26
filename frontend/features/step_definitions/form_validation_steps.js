@@ -67,7 +67,6 @@ When("I click on {string}", async function (button) {
   nextButton.click();
   await driver.sleep(1000);
 });
-
 // Then('I should be on {string}', async function (page) {
 //   expect(await driver.getCurrentUrl()).to.equal(baseUrl + page);
 // });
@@ -75,7 +74,9 @@ When("I click on {string}", async function (button) {
 Then("I should see {string}", async function (errors) {
   let error_elements = await driver.findElements(By.className("text-red-500"));
   let error_array = errors.split(",");
-  error_elements.shift();
+  if (error_elements.length == 7) {
+    error_elements.shift();
+  }
   expect(error_elements.length).to.equal(error_array.length);
   for (let i = 0; i < error_elements.length; i++) {
     let error_text = await error_elements[i].getText();

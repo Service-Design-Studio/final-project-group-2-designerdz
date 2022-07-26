@@ -28,7 +28,7 @@ Given("I am on passport page", async function () {
 When("I have uploaded a document", async function () {
   const uploadButton = await driver.findElement(By.className("btn_upload"));
   // FIXME: update path
-  // uploadButton.sendKeys("/Users/yida/Downloads/passport_aussie.jpg");
+  uploadButton.sendKeys("/Users/yida/Desktop/passport_aussie.jpg");
 });
 
 Then("I should see a loading indicator", async function () {
