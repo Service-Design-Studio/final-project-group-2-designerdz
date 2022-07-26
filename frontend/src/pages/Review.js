@@ -120,7 +120,7 @@ export default function Review() {
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Basic Information</b>
           <b className="text-xl text-right">
-            <EditButton onClick={onEditDetails} />
+            <EditButton name="basic_edit" onClick={onEditDetails} />
           </b>
         </div>
 
@@ -142,7 +142,7 @@ export default function Review() {
         <div className="grid grid-cols-2 mt-6">
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
-            <EditButton onClick={onEditPassport} />
+            <EditButton name="passport_edit" onClick={onEditPassport} />
             {/* <EditButton
               onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
             /> */}

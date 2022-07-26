@@ -77,6 +77,7 @@ Given("that I have filled all me and my child's details", async function() {
 
 Given("that I am on the review page", async function() {
   assert.equal(await driver.getCurrentUrl(), baseUrl + "review");
+  await driver.sleep(500);
 });
 
 Then("I should be able to see that my information is correct", async function() {
@@ -126,32 +127,28 @@ Then("I should be able to see that my child information is correct", async funct
     .getText();
   assert.equal(childEmailValue, "sally@gmail.com");
 
-  await driver.findElement(By.className("full_name")).sendKeys("Sarah Abbot");
-  await driver.findElement(By.className("passport_number")).sendKeys("E34152315");
-  await driver.findElement(By.className("nationality")).sendKeys("American");
-  await driver.findElement(By.className("female")).click();
-  await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys("14/07/2005");
-  await driver.findElement(By.xpath("//input[@placeholder='Select Date']")).sendKeys("09/2030");
+  var childFNValue = await driver.findElement(By.className("review_fn")).getText();
+  assert.equal(childFNValue, "Sarah Abbot");
 
-  var parentPNValue = await driver.findElement(By.className("review_pn")).getText();
-  assert.equal(parentPNValue, "E32521921");
+  var childPNValue = await driver.findElement(By.className("review_pn")).getText();
+  assert.equal(childPNValue, "E34152315");
 
-  var parentNationalityValue = await driver.findElement(By.className("review_nationality")).getText();
-  assert.equal(parentNationalityValue, "American");
+  var childNationalityValue = await driver.findElement(By.className("review_nationality")).getText();
+  assert.equal(childNationalityValue, "American");
+  
+  var childGenderValue = await driver.findElement(By.className("review_gender")).getText();
+  assert.equal(childGenderValue, "FEMALE");
 
-  var parentGenderValue = await driver.findElement(By.className("review_gender")).getText();
-  assert.equal(parentGenderValue, "FEMALE");
+  var childPassportExpiry = await driver.findElement(By.className("review_pe")).getText();
+  assert.equal(childPassportExpiry, "Sep 2030");
 
-  var parentPassportExpiry = await driver.findElement(By.className("review_pe")).getText();
-  assert.equal(parentPassportExpiry, "Sep 2024");
-
-  var parentDOB = await driver.findElement(By.className("review_dob")).getText();
-  assert.equal(parentDOB, "Jul 14, 1980");
+  var childDOB = await driver.findElement(By.className("review_dob")).getText();
+  assert.equal(childDOB, "Jul 14, 2005");
 });
 
 When("I click on the {string} button", async function(button) {
   await driver.findElement(By.className(button)).click();
-  await driver.sleep(500);  
+  await driver.sleep(1000);  
 });
 
 Then("I should be on {string}", async function(page) {
@@ -177,6 +174,10 @@ When("I correct my child information", async function() {
 });
 
 Then("I should be able to see that my child information has been corrected", async function() {
+  await driver.sleep(500);
+  await driver.findElement(By.id("user_1")).click();
+  await driver.sleep(500);
+
   var childDisplayNameValue = await driver.findElement(By.className("display_name")).getText();
   assert.equal(childDisplayNameValue, "Sarah Abbot");
 
@@ -190,14 +191,22 @@ Then("I should be able to see that my child information has been corrected", asy
     .getText();
   assert.equal(childEmailValue, "sally@gmail.com");
 
-  // FIXME:
-  // var childFNValue = await driver.findElement(By.className("review_fn")).getText();
-  // assert.equal(childFNValue, "Sarah Abbot");
+  var childFNValue = await driver.findElement(By.className("review_fn")).getText();
+  assert.equal(childFNValue, "Sarah Abbot");
 
-  // var childPNValue = await driver.findElement(By.className("review_pn")).getText();
-  // assert.equal(childPNValue, "E34152315");
+  var childPNValue = await driver.findElement(By.className("review_pn")).getText();
+  assert.equal(childPNValue, "E34152315");
 
-  // var childNationalityValue = await driver.findElement(By.className("review_nationality")).getText();
-  // assert.equal(childNationalityValue, "American");
+  var childNationalityValue = await driver.findElement(By.className("review_nationality")).getText();
+  assert.equal(childNationalityValue, "American");
+  
+  var childGenderValue = await driver.findElement(By.className("review_gender")).getText();
+  assert.equal(childGenderValue, "FEMALE");
+
+  var childPassportExpiry = await driver.findElement(By.className("review_pe")).getText();
+  assert.equal(childPassportExpiry, "Sep 2030");
+
+  var childDOB = await driver.findElement(By.className("review_dob")).getText();
+  assert.equal(childDOB, "Jul 14, 2005");
 });
 

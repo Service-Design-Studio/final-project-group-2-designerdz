@@ -42,9 +42,9 @@ function BackButton({ onClick }) {
   );
 }
 
-function EditButton({ onClick }) {
+function EditButton({ name, onClick }) {
   return (
-    <button className="edit" onClick={onClick}>
+    <button className={name} onClick={onClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-8 w-8"

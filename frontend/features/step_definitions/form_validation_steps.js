@@ -1,12 +1,16 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
 const { By } = require("selenium-webdriver");
-const { assert } = require("chai");
+const { expect, assert } = require("chai");
 
-Given('I am on {string} and I have not filled in any fields', async function (page) {
-    await driver.get(base_url)
-    await driver.sleep(2000)
+Given(
+  "I am on {string} and I have not filled in any fields",
+  async function (page) {
+    await driver.get(baseUrl);
+    await driver.sleep(2000);
 
-    const notACustomerYetButton = await driver.findElement(By.className("bg-red-500"))
+    const notACustomerYetButton = await driver.findElement(
+      By.className("bg-red-500")
+    );
     notACustomerYetButton.click();
     await driver.sleep(1000);
 
@@ -26,7 +30,9 @@ Given('I am on {string} and I have not filled in any fields', async function (pa
       await driver.sleep(1000);
 
       await driver.findElement(By.className("display_name")).sendKeys("John");
-      await driver.findElement(By.className("phone_number")).sendKeys(parentNumber);
+      await driver
+        .findElement(By.className("phone_number"))
+        .sendKeys(parentNumber);
       driver.findElement(By.className("next")).click();
       await driver.sleep(1000);
 
@@ -43,14 +49,16 @@ Given('I am on {string} and I have not filled in any fields', async function (pa
       await driver.sleep(1000);
 
       await driver.findElement(By.className("display_name")).sendKeys("John");
-      await driver.findElement(By.className("phone_number")).sendKeys(parentNumber);
+      await driver
+        .findElement(By.className("phone_number"))
+        .sendKeys(parentNumber);
 
       const goToPassportButton = await driver.findElement(By.className("next"));
       goToPassportButton.click();
       await driver.sleep(1000);
     }
 
-    expect(await driver.getCurrentUrl()).to.equal(base_url + page);
+    expect(await driver.getCurrentUrl()).to.equal(baseUrl + page);
   }
 );
 
@@ -61,12 +69,13 @@ When("I click on {string}", async function (button) {
 });
 
 // Then('I should be on {string}', async function (page) {
-//   expect(await driver.getCurrentUrl()).to.equal(base_url + page);
+//   expect(await driver.getCurrentUrl()).to.equal(baseUrl + page);
 // });
 
 Then("I should see {string}", async function (errors) {
   let error_elements = await driver.findElements(By.className("text-red-500"));
   let error_array = errors.split(",");
+  error_elements.shift();
   expect(error_elements.length).to.equal(error_array.length);
   for (let i = 0; i < error_elements.length; i++) {
     let error_text = await error_elements[i].getText();
@@ -113,7 +122,7 @@ When("I fill up {string}", async function (string) {
           checkbox.click();
           await driver.sleep(1000);
         }
-        await form_field.sendKeys(random4);
+        await form_field.sendKeys(childNumber);
       }
     }
   }
@@ -122,7 +131,7 @@ When("I fill up {string}", async function (string) {
 Given(
   "I am on passport page, have at least one child and have not completed the fields on the current page",
   async function () {
-    await driver.get(base_url);
+    await driver.get(baseUrl);
     await driver.sleep(2000);
 
     const notACustomerYetButton = await driver.findElement(
@@ -138,7 +147,9 @@ Given(
     await driver.sleep(1000);
 
     await driver.findElement(By.className("display_name")).sendKeys("John");
-    await driver.findElement(By.className("phone_number")).sendKeys(random3);
+    await driver
+      .findElement(By.className("phone_number"))
+      .sendKeys(parentNumber);
     driver.findElement(By.className("next")).click();
     await driver.sleep(1000);
     driver.findElement(By.className("add")).click();
@@ -153,7 +164,7 @@ Given(
     await driver.findElement(By.className("next")).click();
     await driver.sleep(1000);
 
-    expect(await driver.getCurrentUrl()).to.equal(base_url + "passport");
+    expect(await driver.getCurrentUrl()).to.equal(baseUrl + "passport");
   }
 );
 

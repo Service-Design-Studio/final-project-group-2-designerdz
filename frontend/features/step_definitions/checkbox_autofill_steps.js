@@ -109,11 +109,13 @@ When("I move to the review page", async function () {
 });
 
 When("I click on my icon", async function () {
+  await driver.sleep(500);
   await driver.findElement(By.id("user_0")).click();
   await driver.sleep(500);
 });
 
 When("I click on my child icon", async function () {
+  await driver.sleep(500);
   await driver.findElement(By.id("user_1")).click();
   await driver.sleep(500);
 });
