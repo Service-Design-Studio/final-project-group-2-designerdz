@@ -3,8 +3,8 @@ const { Before, After, setDefaultTimeout } = require("@cucumber/cucumber");
 const pactum = require("pactum");
 const { Builder } = require("selenium-webdriver");
 var chrome = require("selenium-webdriver/chrome");
-var options = new chrome.Options().headless();
-// var options = new chrome.Options();
+// var options = new chrome.Options().headless();
+var options = new chrome.Options();
 require("chromedriver");
 
 const width = 411;
@@ -26,8 +26,8 @@ Before(async function () {
   global.spec = pactum.spec();
   global.baseUrl = "http://localhost:3001/";
   // global.baseUrl = "https://react-frontend-353408.as.r.appspot.com/";
-  global.parentNumber = Math.floor(Math.random() * 10000);
-  global.childNumber = Math.floor(Math.random() * 10000);
+  global.parentNumber = Math.floor(Math.random() * 100000000);
+  global.childNumber = Math.floor(Math.random() * 100000000);
 
   await driver.get(baseUrl);
   await driver.sleep(500);

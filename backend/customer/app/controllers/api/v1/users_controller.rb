@@ -42,16 +42,12 @@ class Api::V1::UsersController < ApplicationController
 
   # PATCH/PUT /api/v1/users/:id ## when users click on next buttons
   def update
-    if !(User.exists? phone_number: params[:phone_number])
       if @user.update(user_params)
         render json: @user
       else
         render json: @user.errors, status: :unprocessable_entity
       end
-    else 
-      render json: { error: "User already exists" }, status: :unprocessable_entity
     end
-  end
 
   # DELETE /api/v1/profie/delete
   def destroy

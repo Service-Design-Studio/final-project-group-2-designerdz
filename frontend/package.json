@@ -29,7 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "cucumber-js  --require features/support/driverUtil.js --require features/step_definitions/**/*.js",
+    "test": "cucumber-js --publish  --require features/support/driverUtil.js --require features/step_definitions/**/*.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

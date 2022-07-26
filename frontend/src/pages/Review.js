@@ -40,11 +40,12 @@ export default function Review() {
     }
 
     async function fetchData() {
+      let updatedFamilyData;
       if (familyData.length === 0) {
         console.log("If statement");
         try {
           const response = await getAllChildrenData(userId);
-          let updatedFamilyData = checkIncompleteData(response.data);
+          updatedFamilyData = checkIncompleteData(response.data);
           userData = updatedFamilyData[0];
           setDetails(userData);
           setFamilyData(updatedFamilyData);
@@ -56,6 +57,11 @@ export default function Review() {
         //this means family registration
         setIsFamily(true);
       }
+
+      if (location.state != undefined) {
+        setSelectedIndex(location.state.index);
+        setDetails(updatedFamilyData[location.state.index]);
+      }
     }
 
     //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
@@ -66,10 +72,12 @@ export default function Review() {
 
     fetchData();
 
-    if (location.state != undefined) {
-      console.log(location.state.index);
-      setSelectedIndex(location.state.index);
-    }
+    // if (location.state != undefined) {
+    //   console.log(location.state.index);
+    //   setSelectedIndex(location.state.index);
+    //   console.log(newData);
+    //   setDetails(newData[location.state.index]);
+    // }
   }, [familyData]);
 
   const submitData = () => {

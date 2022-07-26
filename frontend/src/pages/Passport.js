@@ -74,7 +74,14 @@ export default function Passport() {
         const response = await getAllChildrenData(userId);
         let userData = checkIncompleteData(response.data); //check status of each famiy member
         setFamilyData(userData);
+
         setIsFamily(userData[0].is_family === "true"); //convert from string to boolean
+        console.log("WHOLE USER DATA");
+        console.log(userData[0]);
+        console.log(userData[0].image_name);
+        if (userData[0].image_name != undefined) {
+          setPassportFile(userData[0].image_name);
+        }
       } catch (error) {
         console.log(error.response);
       }
@@ -106,12 +113,21 @@ export default function Passport() {
         passport_expiry: familyData[selectedIndex].passport_expiry,
         dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
+        image_name: familyData[selectedIndex].image_name,
       });
+      if (familyData[selectedIndex].image_name != undefined) {
+        setPassportFile(
+          "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
+            familyData[selectedIndex].image_name
+          )
+        );
+      }
+
       reset({
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
-        passport_expiry: familyData[selectedIndex].passport_expiry,
+        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
         dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
         Passport: "",
@@ -120,14 +136,6 @@ export default function Passport() {
   }, [selectedIndex, familyData]);
 
   const checkIncompleteData = (familyData) => {
-    // const compulsoryFields = [
-    //   "full_name",
-    //   "passport_number",
-    //   "nationality",
-    //   "passport_expiry",
-    //   "dob",
-    //   "gender",
-    // ];
     for (var i = 0; i < familyData.length; i++) {
       familyData[i]["status"] = true;
       //check if any of the compulsory fields in passport details are null or empty
@@ -135,7 +143,6 @@ export default function Passport() {
         Object.values(familyData[i]).slice(5, 11).includes(null) ||
         Object.values(familyData[i]).slice(5, 11).includes("")
       ) {
-        // console.log(familyData[i]);
         familyData[i]["status"] = false;
       }
     }
@@ -153,10 +160,10 @@ export default function Passport() {
   //TODO: when user click to other user, need update familyMember data the status of current user
   const onUserSelected = async (index) => {
     let data = getValues();
-    data["image_url"] =
-      "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
-        details.image_url
-      );
+    data["image_name"] = details.image_name;
+    // "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
+    //   details.image_name
+    // );
     console.log("onUserSelected");
     console.log(data);
     console.log(isValid);
@@ -204,20 +211,6 @@ export default function Passport() {
     // });
   };
 
-  // const toggleGenderToMale = () => {
-  //   setDetails((prevState) => ({
-  //     ...prevState,
-  //     gender: "MALE",
-  //   }));
-  // };
-
-  // const toggleGenderToFemale = () => {
-  //   setDetails((prevState) => ({
-  //     ...prevState,
-  //     gender: "FEMALE",
-  //   }));
-  // };
-
   const onPassportUpload = async (data) => {
     setIsLoading(true);
     console.log("DATA BELOW");
@@ -263,7 +256,8 @@ export default function Passport() {
         passport_expiry: new Date(ocrData.passport_expiry), //TODO: process to correct format date
         dob: new Date(ocrData.dob), //TODO: process to correct format date
         gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
-        image_url: OBJECT_NAME,
+        image_name: OBJECT_NAME,
+        // F,
       }));
       reset({
         full_name: ocrData.full_name,
@@ -291,6 +285,8 @@ export default function Passport() {
       dob: formData.dob,
       gender: formData.gender,
     });
+    details.image_name = null;
+    familyData[selectedIndex].image_name = null;
     trigger();
   };
 
@@ -347,7 +343,7 @@ export default function Passport() {
       <div className="absolute left-0 right-0 top-36 items-center ">
         <FormProvider {...methods}>
           <form className="mx-8" onSubmit={handleSubmit(onSubmit)}>
-            {isFamily === true ? (
+            {isFamily === true && !onEdit ? (
               <Carousel
                 nameArr={familyData}
                 onClickSelected={onUserSelected}
@@ -365,7 +361,12 @@ export default function Passport() {
               />
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
-                <img className="img_passport" src={passportFile} />
+                <img
+                  className={`${
+                    passportFile == undefined ? "hidden" : null
+                  } img_passport`}
+                  src={passportFile}
+                />
                 <DeleteImageButton
                   passportFile={passportFile}
                   onClick={deletePassportFile}
