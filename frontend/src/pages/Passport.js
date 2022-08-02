@@ -365,7 +365,7 @@ export default function Passport() {
               />
             ) : null}
             <div>
-              <label className="block font-medium">Upload Passport</label>
+              <label className="block font-medium">Upload Pass      port</label>
               <input
                 className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
@@ -380,10 +380,6 @@ export default function Passport() {
               {errors.Passport && (
                 <p className="text-red-500">{errors.Passport?.message}</p>
               )}
-              <button type="button" onClick={async () => {
-                await trigger("Passport");
-              console.log(errors);
-              }}>PRESS ME </button>  
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
                 <img
