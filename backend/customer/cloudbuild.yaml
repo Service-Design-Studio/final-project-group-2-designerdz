@@ -20,6 +20,17 @@ steps:
         "/buildstep/execute.sh -i gcr.io/$PROJECT_ID/${_SERVICE_NAME} -s ${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME} -e RAILS_MASTER_KEY=$$RAILS_KEY  -- bundle exec rails db:migrate",
       ]
     secretEnv: ["RAILS_KEY"]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "${_SERVICE_NAME}"
+      - "--image"
+      - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:$COMMIT_SHA"
+      - "--region"
+      - "${_REGION}"
+
 substitutions:
   _REGION: asia-southeast1
   _SERVICE_NAME: dbs-service
