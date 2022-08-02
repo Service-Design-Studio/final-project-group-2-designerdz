@@ -72,7 +72,19 @@ class Api::V1::UsersController < ApplicationController
     image = params[:image_name] 
     @vision = Vision.new
     @output = @vision.extract_data("#{image}")
-    render json: @output
+
+    if @output == ""
+      render json: { error: "This is not a valid passport image" }, status: :unprocessable_entity
+
+    elsif @output == "null"
+      render json: { error: "Image not found" }, status: :unprocessable_entity
+
+    elsif @output == "length_error"
+      render json: { error: "Image is blurry, please upload a new image" }, status: :unprocessable_entity
+
+    else 
+      render json: @output
+    end
   end
 
   private

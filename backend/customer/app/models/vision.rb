@@ -89,6 +89,7 @@ class Vision
         # }
    
         if (mrzIndex == nil)
+            puts "no mrz detected"
             return ""
         
         elsif (output[mrzIndex].length < 44 && mrzIndex != nil)
