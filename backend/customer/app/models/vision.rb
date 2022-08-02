@@ -55,61 +55,60 @@ class Vision
         output_hash = {}
 
         # handling full name for australian passport by hardcoding because names is separated by new line
-        # if nameIndex == nil
-        #     output_hash["full_name"] = ""
-        # else
-        #     output_hash["full_name"] = output[nameIndex+1] + " " + output[nameIndex+2]
-        # end
+        if nameIndex == nil
+            output_hash["full_name"] = ""
+        else
+            output_hash["full_name"] = output[nameIndex+1] + " " + output[nameIndex+2]
+        end
 
-        # # updating the hashmap for the remaining fields
-        # checkIndexArr = [passportIndex, nationalityIndex, genderIndex, expiryIndex, birthIndex]
-        # output_hash_keys = ["passport_number", "nationality", "gender", "passport_expiry", "dob"]
+        # updating the hashmap for the remaining fields
+        checkIndexArr = [passportIndex, nationalityIndex, genderIndex, expiryIndex, birthIndex]
+        output_hash_keys = ["passport_number", "nationality", "gender", "passport_expiry", "dob"]
 
 
-        # checkIndexArr.each_with_index {|item, index|
-        #     if item == nil
-        #         output_hash[output_hash_keys[index]] = ""
-        #     else
-        #         # assuming that the value of the hash keys are always the next item in the array
-        #         # ensure that item is not nil before changing value
-        #         if (item == expiryIndex)
-        #             # output[item+1] = change_expiry(output[item+1])
-        #             # puts output[item+1]
+        checkIndexArr.each_with_index {|item, index|
+            if item == nil
+                output_hash[output_hash_keys[index]] = ""
+            #else
+                # assuming that the value of the hash keys are always the next item in the array
+                # ensure that item is not nil before changing value
+                #if (item == expiryIndex)
+                    # output[item+1] = change_expiry(output[item+1])
+                    # puts output[item+1]
 
-        #         elsif (item == birthIndex)
-        #             # output[item+1] = change_dob(output[item+1])
-        #             # puts output[item+1]
+                # elsif (item == birthIndex)
+                    # output[item+1] = change_dob(output[item+1])
+                    # puts output[item+1]
 
-        #         end
-        #         output_hash[output_hash_keys[index]] = "#{output[item+1]}"
-        #     end
-        # }
-   
-        puts output[mrzIndex]  
-        puts output[mrzIndex+1]
-
-        mrzarr = [
-            "#{output[mrzIndex]}",
-            "#{output[mrzIndex+1]}"
-        ]
+                end
+                output_hash[output_hash_keys[index]] = "#{output[item+1]}"
         
-        result = MRZ.parse(mrzarr)
-
-
-        output_hash = {"full_name" => "#{result.last_name}" +  " " + "#{result.first_name}",
-                    "passport_number" => "#{result.document_number}", 
-                    "passport_expiry" => "#{result.expiration_date}", 
-                    "nationality" => "#{result.nationality}", 
-                    "gender" => "#{result.sex}",
-                        "dob" => "#{result.birth_date}"
         }
+   
+        # puts output[mrzIndex]  
+        # puts output[mrzIndex+1]
+
+        # mrzarr = [
+        #     "#{output[mrzIndex]}",
+        #     "#{output[mrzIndex+1]}"
+        # ]
+        
+        # result = MRZ.parse(mrzarr)
+
+
+        # output_hash = {"full_name" => "#{result.last_name}" +  " " + "#{result.first_name}",
+        #             "passport_number" => "#{result.document_number}", 
+        #             "passport_expiry" => "#{result.expiration_date}", 
+        #             "nationality" => "#{result.nationality}", 
+        #             "gender" => "#{result.sex}",
+        #                 "dob" => "#{result.birth_date}"
+        # }
 
         #puts result.valid?
         puts output_hash
         return output_hash.to_json
     end
-
-    # def change_expiry arg
+    #  def change_expiry arg
     #     month_hash = {"JAN" => "01", "FEB" => "02", "MAR" => "03", "APR" => "04", 
     #     "MAY" => "05", "JUN" => "06", "JUL" => "07", "AUG" => "08", "SEP" => "09", 
     #     "OCT" => "10", "NOV" => "11", "DEC" => "12"}
@@ -132,7 +131,3 @@ class Vision
 
     # end
 end
-
-vision = Vision.new
-vision.extract_data("australian_ps.jpg")
-
