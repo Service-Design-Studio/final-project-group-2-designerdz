@@ -48,6 +48,8 @@ export default function Passport() {
   });
   const {
     reset,
+    setError,
+    clearErrors,
     handleSubmit,
     register,
     getValues,
@@ -212,10 +214,22 @@ export default function Passport() {
   }; 
 
   const onPassportUpload = async (data) => {
+    clearErrors("valid_file_type")
+    clearErrors("valid_passport_image")
+    
     if (!["image/jpeg", "image/png", "image/jpg"].includes(data.target.files[0].type)) {
-      console.log("Not uploading")
+      console.log("Invalid File Type")
+      setError("valid_file_type", {type:"Custom", message:"Only PNG or JPEG is accepted"})
       return
     }
+
+    // TODO: Add classification model API call to determine if it is a passport image?
+    if (true) {
+      setError("valid_passport_image", {type: "Custom", message: "Please upload a valid image"});
+      console.log("Invalid Passport Image")
+      return
+    }
+
     setIsLoading(true);
     console.log("DATA BELOW");
     console.log(data.target);
@@ -271,10 +285,10 @@ export default function Passport() {
         dob: ocrData.dob,
         gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
       });
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   const deletePassportFile = () => {
@@ -332,15 +346,6 @@ export default function Passport() {
     }
   };
 
-  function validatePassport(files) {
-    console.log(files[0])
-    if (!["image/jpeg", "image/png", "image/jpg"].includes(files[0]?.type)) {
-      console.log("VALIDATION FAILED")
-      return "Only PNG or JPEG is accepted"
-    }
-    console.log("VALIDATION PASSED")
-  }
-
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -370,15 +375,14 @@ export default function Passport() {
                 className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
                 placeholder="Passport"
-                {...register("Passport", {
-                  validate: {
-                    acceptedFormats: validatePassport 
-                  },
-                })}
+                {...register("Passport")}
                 onInput={onPassportUpload}
               />
-              {errors.Passport && (
-                <p className="text-red-500">{errors.Passport?.message}</p>
+              {errors.valid_file_type && (
+                <p className="text-red-500">{errors.valid_file_type?.message}</p>
+              )}
+              {errors.valid_passport_image && (
+                <p className="text-red-500">{errors.valid_passport_image?.message}</p>
               )}
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
