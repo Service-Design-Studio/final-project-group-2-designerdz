@@ -173,6 +173,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitest (5.16.2)
+    mrz (0.2.0)
     msgpack (1.5.3)
     multi_json (1.15.0)
     net-imap (0.2.3)
@@ -275,6 +276,7 @@ DEPENDENCIES
   debug
   google-cloud-storage (~> 1.37)
   google-cloud-vision (~> 1.2.0)
+  mrz
   pg (~> 1.1)
   puma
   rack-cors

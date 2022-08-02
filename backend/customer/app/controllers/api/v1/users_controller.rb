@@ -1,6 +1,17 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: %i[ show update destroy ]
+  before_action :set_user, :set_cors, only: %i[ show update destroy ]
 
+  def set_cors
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  end
+
+  
+  def test
+    render plain: "status: up and running"
+  end
 
   # GET /users
   def index
