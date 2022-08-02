@@ -357,9 +357,19 @@ export default function Passport() {
                 className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
                 placeholder="Passport"
-                {...register("Passport", {})}
+                {...register("Passport", {
+                  validate: {
+                    acceptedFormats: (files) =>
+                      ["image/jpeg", "image/png"].includes(
+                        files[0]?.type
+                      ) || "Only PNG or JPEG is accepted",
+                  },
+                })}
                 onInput={onPassportUpload}
               />
+              {errors.Passport && (
+                <p className="text-red-500">{errors.Passport?.message}</p>
+              )}
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
                 <img
