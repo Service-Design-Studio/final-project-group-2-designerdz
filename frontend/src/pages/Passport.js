@@ -209,14 +209,18 @@ export default function Passport() {
     //   passport_expiry: null,
     //   dob: null,
     // });
-  };
+  }; 
 
   const onPassportUpload = async (data) => {
+    if (!["image/jpeg", "image/png", "image/jpg"].includes(data.target.files[0].type)) {
+      console.log("Not uploading")
+      return
+    }
     setIsLoading(true);
     console.log("DATA BELOW");
     console.log(data.target);
     const OBJECT_LOCATION = data.target.files[0];
-    const OBJECT_CONTENT_TYPE = "image/jpeg";
+    const OBJECT_CONTENT_TYPE = data.target.files[0].type
     const BUCKET_NAME = "dbs-backend-1-ruby";
     const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
     const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
@@ -328,6 +332,15 @@ export default function Passport() {
     }
   };
 
+  function validatePassport(files) {
+    console.log(files[0])
+    if (!["image/jpeg", "image/png", "image/jpg"].includes(files[0]?.type)) {
+      console.log("VALIDATION FAILED")
+      return "Only PNG or JPEG is accepted"
+    }
+    console.log("VALIDATION PASSED")
+  }
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -359,10 +372,7 @@ export default function Passport() {
                 placeholder="Passport"
                 {...register("Passport", {
                   validate: {
-                    acceptedFormats: (files) =>
-                      ["image/jpeg", "image/png"].includes(
-                        files[0]?.type
-                      ) || "Only PNG or JPEG is accepted",
+                    acceptedFormats: validatePassport 
                   },
                 })}
                 onInput={onPassportUpload}
@@ -370,6 +380,10 @@ export default function Passport() {
               {errors.Passport && (
                 <p className="text-red-500">{errors.Passport?.message}</p>
               )}
+              <button type="button" onClick={async () => {
+                await trigger("Passport");
+              console.log(errors);
+              }}>PRESS ME </button>  
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
                 <img
