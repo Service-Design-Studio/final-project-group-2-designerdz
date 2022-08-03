@@ -6,16 +6,14 @@ import ProgressBar from "../components/ProgressBar.js";
 import TextDesc from "../components/TextDesc.js";
 import { getUserData } from "../services/axiosRequests.js";
 
-export default function Landing() {
+export default function SignUp() {
   const navigate = useNavigate();
 
   function onClickSingle() {
-    // localStorage.setItem("is_family", false);
     navigate("/details", { state: { is_family: false } });
   }
 
   function onClickFamily() {
-    // localStorage.setItem("is_family", true); //to know whether is multi-user registration throughout the process
     navigate("/details", { state: { is_family: true } });
   }
 
