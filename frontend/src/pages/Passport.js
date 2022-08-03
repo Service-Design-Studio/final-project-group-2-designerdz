@@ -365,7 +365,7 @@ export default function Passport() {
               />
             ) : null}
             <div>
-              <label className="block font-medium">Upload Pass port</label>
+              <label className="block font-medium">Upload Passport</label>
               <input
                 className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
