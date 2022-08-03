@@ -14,6 +14,7 @@ import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
 import LoadingStatus from "../components/LoadingStatus";
+import bucketUpload from "../services/bucketUpload";
 import {
   patchUserData,
   getAllChildrenData,
@@ -112,8 +113,8 @@ export default function Passport() {
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
         gender: familyData[selectedIndex].gender,
-        passport_expiry: familyData[selectedIndex].passport_expiry,
-        dob: familyData[selectedIndex].dob,
+        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
+        dob: new Date(familyData[selectedIndex].dob),
         gender: familyData[selectedIndex].gender,
         image_name: familyData[selectedIndex].image_name,
       });
@@ -129,8 +130,8 @@ export default function Passport() {
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
-        passport_expiry: familyData[selectedIndex].passport_expiry,
-        dob: familyData[selectedIndex].dob,
+        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
+        dob: new Date(familyData[selectedIndex].dob),
         gender: familyData[selectedIndex].gender,
         Passport: "",
       });
@@ -211,59 +212,47 @@ export default function Passport() {
     //   passport_expiry: null,
     //   dob: null,
     // });
-  }; 
+  };
 
   const onPassportUpload = async (data) => {
-    clearErrors("valid_file_type")
-    clearErrors("valid_passport_image")
-    
-    if (!["image/jpeg", "image/png", "image/jpg"].includes(data.target.files[0].type)) {
-      console.log("Invalid File Type")
-      setError("valid_file_type", {type:"Custom", message:"Only PNG or JPEG is accepted"})
-      return
-    }
+    clearErrors("valid_file_type");
+    clearErrors("valid_passport_image");
+    setPassportFile();
 
-    // TODO: Add classification model API call to determine if it is a passport image?
-    if (true) {
-      setError("valid_passport_image", {type: "Custom", message: "Please upload a valid image"});
-      console.log("Invalid Passport Image")
-      return
+    if (
+      !["image/jpeg", "image/png", "image/jpg"].includes(
+        data.target.files[0].type
+      )
+    ) {
+      console.log("Invalid File Type");
+      setError("valid_file_type", {
+        type: "Custom",
+        message: "Only PNG or JPEG is accepted",
+      });
+      return;
     }
 
     setIsLoading(true);
-    console.log("DATA BELOW");
-    console.log(data.target);
-    const OBJECT_LOCATION = data.target.files[0];
-    const OBJECT_CONTENT_TYPE = data.target.files[0].type
-    const BUCKET_NAME = "dbs-backend-1-ruby";
     const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
-    const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
-    const UPLOAD_HEADERS = {
-      "Content-Type": OBJECT_CONTENT_TYPE,
-    };
-    //upload image to cloud storage
-    try {
-      const response = await fetch(UPLOAD_URL, {
-        method: "POST",
-        headers: UPLOAD_HEADERS,
-        body: OBJECT_LOCATION,
-      });
-      console.log("RESPONSE BELOW");
-      console.log(response);
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setPassportFile(reader.result);
-      });
-      reader.readAsDataURL(OBJECT_LOCATION);
-    } catch (error) {
-      console.log(error);
-    }
+    const OBJECT_LOCATION = data.target.files[0];
+
+    await bucketUpload(data, userId);
 
     //get autofill details and setDetails according to data
     try {
       // send image name to backend API
       const passportResponse = await getPassportData(OBJECT_NAME);
       const ocrData = passportResponse.data;
+      console.log("RESPONSE FROM VISION API BACKEND");
+      console.log(ocrData);
+
+      // display image on frontend
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setPassportFile(reader.result);
+      });
+      reader.readAsDataURL(OBJECT_LOCATION);
+
       // iterate through passportResponse and update setDetails
       //TODO: sprint 4 investigate possibility of removing this, seems redundant actually
       setDetails((prevState) => ({
@@ -282,11 +271,17 @@ export default function Passport() {
         passport_number: ocrData.passport_number,
         nationality: ocrData.nationality,
         passport_expiry: new Date(ocrData.passport_expiry),
-        dob: ocrData.dob,
+        dob: new Date(ocrData.dob),
         gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
       });
     } catch (error) {
-      console.log(error);
+      console.log("catch vision api error");
+      console.log(error.response);
+
+      setError("valid_passport_image", {
+        type: "Custom",
+        message: error.response.data.error,
+      });
     }
     setIsLoading(false);
   };
@@ -370,7 +365,7 @@ export default function Passport() {
               />
             ) : null}
             <div>
-              <label className="block font-medium">Upload Pass      port</label>
+              <label className="block font-medium">Upload Pass port</label>
               <input
                 className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
@@ -379,10 +374,14 @@ export default function Passport() {
                 onInput={onPassportUpload}
               />
               {errors.valid_file_type && (
-                <p className="text-red-500">{errors.valid_file_type?.message}</p>
+                <p className="text-red-500">
+                  {errors.valid_file_type?.message}
+                </p>
               )}
               {errors.valid_passport_image && (
-                <p className="text-red-500">{errors.valid_passport_image?.message}</p>
+                <p className="text-red-500">
+                  {errors.valid_passport_image?.message}
+                </p>
               )}
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
@@ -430,7 +429,7 @@ export default function Passport() {
             )}
             <div className="mb-3">
               <label className="block font-medium">
-                Passport Expiry (MM/YYYY)
+                Passport Expiry (DD/MM/YYYY)
               </label>
               <Calendar
                 calendarType="passport_expiry"
