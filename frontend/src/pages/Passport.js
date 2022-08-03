@@ -113,8 +113,8 @@ export default function Passport() {
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
         gender: familyData[selectedIndex].gender,
-        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
-        dob: new Date(familyData[selectedIndex].dob),
+        passport_expiry: familyData[selectedIndex].passport_expiry,
+        dob: familyData[selectedIndex].dob,
         gender: familyData[selectedIndex].gender,
         image_name: familyData[selectedIndex].image_name,
       });
@@ -125,16 +125,6 @@ export default function Passport() {
           )
         );
       }
-
-      reset({
-        full_name: familyData[selectedIndex].full_name,
-        passport_number: familyData[selectedIndex].passport_number,
-        nationality: familyData[selectedIndex].nationality,
-        passport_expiry: new Date(familyData[selectedIndex].passport_expiry),
-        dob: new Date(familyData[selectedIndex].dob),
-        gender: familyData[selectedIndex].gender,
-        Passport: "",
-      });
     }
   }, [selectedIndex, familyData]);
 

@@ -39,7 +39,7 @@ export default function Calendar({
                 dropdownMode="select"
                 // dateFormatCalendar="MMMM"
                 minDate={new Date("1900", "01", "01")}
-                maxDate={new Date()}
+                maxDate={new Date("2028", "12", "31")}
                 // showMonthYearPicker
                 dateFormat="dd/MM/yyyy"
                 // minDate={new Date()}
@@ -48,7 +48,9 @@ export default function Calendar({
                   handleDateChange(date, field.name);
                 }}
                 selected={
-                  defaultDate == undefined ? null : new Date(defaultDate)
+                  defaultDate == undefined || defaultDate === new Date(null)
+                    ? null
+                    : new Date(defaultDate)
                 }
                 value={field.value}
               />
