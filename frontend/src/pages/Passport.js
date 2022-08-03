@@ -48,6 +48,8 @@ export default function Passport() {
   });
   const {
     reset,
+    setError,
+    clearErrors,
     handleSubmit,
     register,
     getValues,
@@ -209,14 +211,30 @@ export default function Passport() {
     //   passport_expiry: null,
     //   dob: null,
     // });
-  };
+  }; 
 
   const onPassportUpload = async (data) => {
+    clearErrors("valid_file_type")
+    clearErrors("valid_passport_image")
+    
+    if (!["image/jpeg", "image/png", "image/jpg"].includes(data.target.files[0].type)) {
+      console.log("Invalid File Type")
+      setError("valid_file_type", {type:"Custom", message:"Only PNG or JPEG is accepted"})
+      return
+    }
+
+    // TODO: Add classification model API call to determine if it is a passport image?
+    if (true) {
+      setError("valid_passport_image", {type: "Custom", message: "Please upload a valid image"});
+      console.log("Invalid Passport Image")
+      return
+    }
+
     setIsLoading(true);
     console.log("DATA BELOW");
     console.log(data.target);
     const OBJECT_LOCATION = data.target.files[0];
-    const OBJECT_CONTENT_TYPE = "image/jpeg";
+    const OBJECT_CONTENT_TYPE = data.target.files[0].type
     const BUCKET_NAME = "dbs-backend-1-ruby";
     const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
     const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
@@ -267,10 +285,10 @@ export default function Passport() {
         dob: ocrData.dob,
         gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
       });
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   const deletePassportFile = () => {
@@ -352,14 +370,20 @@ export default function Passport() {
               />
             ) : null}
             <div>
-              <label className="block font-medium">Upload Passport</label>
+              <label className="block font-medium">Upload Pass      port</label>
               <input
                 className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
                 type="file"
                 placeholder="Passport"
-                {...register("Passport", {})}
+                {...register("Passport")}
                 onInput={onPassportUpload}
               />
+              {errors.valid_file_type && (
+                <p className="text-red-500">{errors.valid_file_type?.message}</p>
+              )}
+              {errors.valid_passport_image && (
+                <p className="text-red-500">{errors.valid_passport_image?.message}</p>
+              )}
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
                 <img
