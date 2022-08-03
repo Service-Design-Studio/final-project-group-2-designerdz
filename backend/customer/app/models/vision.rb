@@ -15,13 +15,13 @@ class Vision
         puts path
 
         ### credentials not needed if working on cloud environment
-        storage = Google::Cloud::Storage.new(
-            project_id: "dbs-backend-1",
-            credentials: "#{path}/dbs-backend-1-af6872211c29.json"
-        )
+        # storage = Google::Cloud::Storage.new(
+        #     project_id: "dbs-backend-1",
+        #     credentials: "#{path}/dbs-backend-1-af6872211c29.json"
+        # )
 
-        bucket = storage.bucket "dbs-backend-1-ruby"
-        file = bucket.file image_name
+        # bucket = storage.bucket "dbs-backend-1-ruby"
+        # file = bucket.file image_name
         
         client = ::Google::Cloud::Vision::V1::ImageAnnotator::Client.new do |config|
             config.credentials = "#{path}/key.json"
@@ -39,7 +39,10 @@ class Vision
             end
         end
 
-        #puts text[0]
+        if text[0] == nil
+            return "null"
+        end
+
         # output returns the data extracted from the image in an array
         output = text[0].split("\n")
         # puts output
@@ -61,50 +64,60 @@ class Vision
         #     output_hash["full_name"] = output[nameIndex+1] + " " + output[nameIndex+2]
         # end
 
-        # # updating the hashmap for the remaining fields
+        # updating the hashmap for the remaining fields
         # checkIndexArr = [passportIndex, nationalityIndex, genderIndex, expiryIndex, birthIndex]
         # output_hash_keys = ["passport_number", "nationality", "gender", "passport_expiry", "dob"]
 
 
-        # checkIndexArr.each_with_index {|item, index|
+        # #checkIndexArr.each_with_index {|item, index|
         #     if item == nil
         #         output_hash[output_hash_keys[index]] = ""
-        #     else
+        #     #else
         #         # assuming that the value of the hash keys are always the next item in the array
         #         # ensure that item is not nil before changing value
-        #         if (item == expiryIndex)
+        #         #if (item == expiryIndex)
         #             # output[item+1] = change_expiry(output[item+1])
         #             # puts output[item+1]
 
-        #         elsif (item == birthIndex)
+        #         # elsif (item == birthIndex)
         #             # output[item+1] = change_dob(output[item+1])
         #             # puts output[item+1]
 
-        #         end
-        #         output_hash[output_hash_keys[index]] = "#{output[item+1]}"
         #     end
+        #         output_hash[output_hash_keys[index]] = "#{output[item+1]}"
+        
         # }
    
-        puts output[mrzIndex]  
-        puts output[mrzIndex+1]
-
-        mrzarr = [
-            "#{output[mrzIndex]}",
-            "#{output[mrzIndex+1]}"
-        ]
+        if (mrzIndex == nil)
+            puts "no mrz detected"
+            return ""
         
-        result = MRZ.parse(mrzarr)
+        elsif (output[mrzIndex].length < 44 && mrzIndex != nil)
+            puts "length_error"
+            return "length_error"
+
+        else
+            puts output[mrzIndex]
+            puts output[mrzIndex+1]
+
+            mrzarr = [
+                "#{output[mrzIndex]}",
+                "#{output[mrzIndex+1]}"
+            ]
+            
+            result = MRZ.parse(mrzarr)
 
 
-        output_hash = {"full_name" => "#{result.last_name}" +  " " + "#{result.first_name}",
-                    "passport_number" => "#{result.document_number}", 
-                    "passport_expiry" => "#{result.expiration_date}", 
-                    "nationality" => "#{result.nationality}", 
-                    "gender" => "#{result.sex}",
-                        "dob" => "#{result.birth_date}"
-        }
+            output_hash = {"full_name" => "#{result.last_name}" +  " " + "#{result.first_name}",
+                        "passport_number" => "#{result.document_number}", 
+                        "passport_expiry" => "#{result.expiration_date}", 
+                        "nationality" => "#{result.nationality}", 
+                        "gender" => "#{result.sex}",
+                            "dob" => "#{result.birth_date}"
+            }
 
-        #puts result.valid?
+        end
+
         puts output_hash
         return output_hash.to_json
     end
@@ -134,5 +147,5 @@ class Vision
 end
 
 vision = Vision.new
-vision.extract_data("australian_ps.jpg")
+vision.extract_data("australian_ps3.jpg")
 

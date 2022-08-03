@@ -5,12 +5,12 @@ steps:
     args:
       [
         "-c",
-        "cd backend/customer && docker build --build-arg MASTER_KEY=$$RAILS_KEY --build-arg SECRET_KEY_BASE=${_SECRET_KEY_BASE} --build-arg DB_PASSWORD=${_DB_PASSWORD} -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . ",
+        "cd backend/customer && docker build --build-arg MASTER_KEY=$$RAILS_KEY --build-arg SECRET_KEY_BASE=${_SECRET_KEY_BASE} --build-arg DB_PASSWORD=${_DB_PASSWORD} -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:$COMMIT_SHA . ",
       ]
     secretEnv: ["RAILS_KEY"]
   - id: "push image"
     name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"]
+    args: ["push", "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:$COMMIT_SHA"]
   - id: "apply migrations"
     name: "gcr.io/google-appengine/exec-wrapper"
     entrypoint: "bash"
@@ -20,6 +20,18 @@ steps:
         "/buildstep/execute.sh -i gcr.io/$PROJECT_ID/${_SERVICE_NAME} -s ${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME} -e RAILS_MASTER_KEY=$$RAILS_KEY  -- bundle exec rails db:migrate",
       ]
     secretEnv: ["RAILS_KEY"]
+  - id: "deploy to cloud run"
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "${_SERVICE_NAME}"
+      - "--image"
+      - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:$COMMIT_SHA"
+      - "--region"
+      - "${_REGION}"
+
 substitutions:
   _REGION: asia-southeast1
   _SERVICE_NAME: dbs-service
@@ -31,4 +43,4 @@ availableSecrets:
     - versionName: projects/${PROJECT_ID}/secrets/${_SECRET_NAME}/versions/latest
       env: RAILS_KEY
 images:
-  - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"
+  - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:$COMMIT_SHA"
