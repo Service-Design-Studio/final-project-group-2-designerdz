@@ -39,6 +39,9 @@ export default function Family() {
       }
     }
     fetchData();
+    if (userId == null) {
+      navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
+    }
   }, []);
 
   function onEditClick(childId) {
