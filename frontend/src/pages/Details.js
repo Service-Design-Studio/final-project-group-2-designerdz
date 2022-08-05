@@ -32,11 +32,11 @@ export default function Details() {
       setIsFamily(location.state.is_family);
     } catch (error) {
       console.error(error);
+      //redirect back to landing if isfamily null
     }
 
     async function fetchData() {
       try {
-        
         const response = await getUserDataId(userId);
         userData = response.data[0];
         if (location.state == undefined) {
@@ -52,6 +52,9 @@ export default function Details() {
           email: userData.email,
         });
       } catch (error) {
+        if (location.state == undefined) {
+          navigate("/signup");
+        }
         console.log(error.response);
       }
     }

@@ -67,7 +67,6 @@ export default function Review() {
     //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
     if (userId == null) {
       navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
-      alert("Enter phone number at landing page!"); //TODO: remember to remove
     }
 
     fetchData();

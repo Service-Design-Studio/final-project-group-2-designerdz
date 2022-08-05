@@ -34,16 +34,23 @@ export default function Calendar({
                 className={
                   new Date(defaultDate) == Date() ? "text-gray-400" : null
                 }
-                placeholderText="Select Date"
-                showMonthYearPicker
-                dateFormat="MM/yyyy"
+                placeholderText="Select Passport Expiry Date"
+                showYearDropdown
+                dropdownMode="select"
+                // dateFormatCalendar="MMMM"
+                minDate={new Date("1900", "01", "01")}
+                maxDate={new Date("2028", "12", "31")}
+                // showMonthYearPicker
+                dateFormat="dd/MM/yyyy"
                 // minDate={new Date()}
                 onChange={(date) => {
                   field.onChange(date);
                   handleDateChange(date, field.name);
                 }}
                 selected={
-                  defaultDate == undefined ? null : new Date(defaultDate)
+                  defaultDate == undefined || defaultDate === new Date(null)
+                    ? null
+                    : new Date(defaultDate)
                 }
                 value={field.value}
               />
@@ -67,7 +74,7 @@ export default function Calendar({
                 placeholderText="Select Date of Birth"
                 showYearDropdown
                 dropdownMode="select"
-                dateFormatCalendar="MMMM"
+                // dateFormatCalendar="MMMM"
                 minDate={new Date("1900", "01", "01")}
                 maxDate={new Date()}
                 dateFormat="dd/MM/yyyy"
