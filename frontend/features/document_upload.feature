@@ -6,6 +6,7 @@
 #     Scenario: Document Preview and Loading
 #         Given I am on passport page
 #         And I have uploaded a document
+#         # FIXME: test
 #         Then I should see a loading indicator
 #         And I should see a preview of the document
 

@@ -10,6 +10,7 @@
 #         Then I should be on <page>
 #         And I should see <errors>
 
+# FIXME: 
 #         When I fill up <form_fields>
 #         And I click on <button>
 #         Then I should be on <next_page>

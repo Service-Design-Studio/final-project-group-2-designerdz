@@ -3,6 +3,8 @@
 #     I want to have my information auto-filled
 #     So that I do not need to fill it in manually
 
+#     # FIXME: File path
+
 #     Background: Uploaded a document
 #         Given I am on passport page
 #         And I have uploaded a document
