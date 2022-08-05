@@ -56,7 +56,7 @@ function birthDateCalendar(control, errors, defaultDate) {
     <Controller
       name={"dob"}
       control={control}
-      // defaultValue={defaultDate.toDate()}
+      defaultValue={defaultDate}
       rules={{ required: "Birth Date is Required" }}
       render={({ field: { onChange, value } }) => {
         return (
@@ -64,7 +64,7 @@ function birthDateCalendar(control, errors, defaultDate) {
             <DatePicker
               onChange={onChange}
               selected={value}
-              placeholderText="Enter your Birth Date"
+              placeholderText="Select Date of Birth"
               showYearDropdown
               dropdownMode="select"
               dateFormatCalendar="MMMM"
