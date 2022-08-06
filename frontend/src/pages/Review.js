@@ -22,7 +22,6 @@ export default function Review() {
   useEffect(() => {
     function checkIncompleteData(familyData) {
       let compulsory_fields = ["full_name", "passport_number", "nationality"];
-      console.log(familyData.length);
       for (var i = 0; i < familyData.length; i++) {
         familyData[i]["status"] = true;
         for (let field of compulsory_fields) {
@@ -53,7 +52,6 @@ export default function Review() {
           console.log(error);
         }
       } else if (familyData.length > 1) {
-        console.log("family data here");
         //this means family registration
         setIsFamily(true);
       }
@@ -70,13 +68,6 @@ export default function Review() {
     }
 
     fetchData();
-
-    // if (location.state != undefined) {
-    //   console.log(location.state.index);
-    //   setSelectedIndex(location.state.index);
-    //   console.log(newData);
-    //   setDetails(newData[location.state.index]);
-    // }
   }, [familyData]);
 
   const submitData = () => {
@@ -150,9 +141,6 @@ export default function Review() {
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
             <EditButton name="passport_edit" onClick={onEditPassport} />
-            {/* <EditButton
-              onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
-            /> */}
           </b>
         </div>
 
