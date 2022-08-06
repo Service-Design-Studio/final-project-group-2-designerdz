@@ -51,14 +51,20 @@ Given(
         .findElement(By.xpath("//input[@placeholder='Select Date of Birth']"))
         .sendKeys("14/07/1980");
 
+      await driver.findElement(By.className("dismiss")).click();
+      await driver.sleep(5000);
+
       await driver
-        .findElement(By.xpath("//input[@placeholder='Select Date']"))
+        .findElement(By.xpath("//input[@placeholder='Enter Passport Expiry date']"))
         .sendKeys("09/2022");
-      await driver.sleep(500);
+      await driver.sleep(5000);
+
+      await driver.findElement(By.className("dismiss")).click();
+      await driver.sleep(5000);
 
       // Move to review page
       await driver.findElement(By.className("next")).click();
-      await driver.sleep(500);
+      await driver.sleep(5000);
     }
 
     assert.equal(await driver.getCurrentUrl(), baseUrl + page2);

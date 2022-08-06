@@ -6,18 +6,10 @@ Given("I am on the passport page", async function() {
     
 })
 
-When("I upload an image with the wrong file format", async function() {
-    
+When("I upload a bad {string}", async function(image) {
 })
 
-Then("I should see an error", async function() {
-
-})
-
-When("I upload a not passport image", async function() {
-    
-})
-
-When("I upload a blur passport image", async function() {
-
+Then("I should see {error}", async function(error) {
+    const errorName = await driver.findElement(By.id("upload-error")).getText();
+    assert.equal(errorName, error);
 })

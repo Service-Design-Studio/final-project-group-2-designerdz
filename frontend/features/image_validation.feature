@@ -1,19 +1,18 @@
-Feature: Image Validation
-    As a user uploading images
-    I want to know that I have uploaded the correct image
-    So that I am able to fill up the form properly
+# Feature: Image Validation
+#     As a user uploading images
+#     I want to know that I have uploaded the correct image
+#     So that I am able to fill up the form properly
 
-    Background: Getting onto passport page
-        Given I am on the passport page
+#     Background: Getting onto passport page
+#         Given I am on the passport page
 
-    Scenario: Upload Invalid File Format 
-        When I upload an image with the wrong file format
-        Then I should see an error
+#     Scenario: Uploading of passport images
+#         When I upload a bad <image>
+#         Then I should see <error>
 
-    Scenario: Upload Not Passport
-        When I upload a not passport image
-        Then I should see an error
-
-    Scenario: Upload Blur Passport
-        When I upload a blur passport image
-        Then I should see an error
+#     Example:
+#     | image | error |
+#     | "blurry_passport.jpg" | "Image is blurry, please upload a new image" |
+#     | "not_passport.jpg"    | "This is not a valid passport image" |
+#     | "not_found.png"        | "Image not found" |
+#     | "invalid_file.csv"     | "Only PNG or JPEG is accepted" | 

@@ -280,7 +280,7 @@ export default function PassTest() {
         headerText="Fill up your passport details"
         bodyText="This is important for us to verify your information"
       />
-      <div className="absolute left-0 right-0 top-36 items-center ">
+      <div className="dismiss absolute left-0 right-0 top-36 items-center ">
         <FormProvider {...methods}>
           <form className="mx-8" onSubmit={handleSubmit(onSubmit)}>
             {isFamily === true && !onEdit ? (
@@ -300,12 +300,12 @@ export default function PassTest() {
                 onInput={onPassportUpload}
               />
               {errors.valid_file_type && (
-                <p className="text-red-500">
+                <p className="upload-error text-red-500">
                   {errors.valid_file_type?.message}
                 </p>
               )}
               {errors.valid_passport_image && (
-                <p className="text-red-500">
+                <p className="upload-error text-red-500">
                   {errors.valid_passport_image?.message}
                 </p>
               )}
