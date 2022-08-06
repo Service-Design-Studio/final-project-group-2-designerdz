@@ -28,53 +28,53 @@ class Vision
         end
 
         ### Instantiate AsyncAnnotateFileRequest
-        annotate_file_req = Google::Cloud::Vision::V1::AsyncAnnotateFileRequest.new
+        # annotate_file_req = Google::Cloud::Vision::V1::AsyncAnnotateFileRequest.new
         
 
-        ### Bottom most layer, Instantiate AsyncAnnotateFileRequest with methods #features and #input_config
-        # Instatiate Feature class
-        feature_req = Google::Cloud::Vision::V1::Feature.new
-        feature_req.type = "DOCUMENT_TEXT_DETECTION"
+        # ### Bottom most layer, Instantiate AsyncAnnotateFileRequest with methods #features and #input_config
+        # # Instatiate Feature class
+        # feature_req = Google::Cloud::Vision::V1::Feature.new
+        # feature_req.type = "DOCUMENT_TEXT_DETECTION"
 
-        # += required for repeated field array, if not will throw error
-        annotate_file_req.features += [feature_req]
-        # puts annotate_file_req
+        # # += required for repeated field array, if not will throw error
+        # annotate_file_req.features += [feature_req]
+        # # puts annotate_file_req
 
-        ### Instatiate InputConfig class, OutputConfig class, GcsSource class, 
-        gcs_req = Google::Cloud::Vision::V1::GcsSource.new
-        gcs_destination_req = Google::Cloud::Vision::V1::GcsDestination.new
-        input_config_req = Google::Cloud::Vision::V1::InputConfig.new
-        output_config_req = Google::Cloud::Vision::V1::OutputConfig.new
+        # ### Instatiate InputConfig class, OutputConfig class, GcsSource class, 
+        # gcs_req = Google::Cloud::Vision::V1::GcsSource.new
+        # gcs_destination_req = Google::Cloud::Vision::V1::GcsDestination.new
+        # input_config_req = Google::Cloud::Vision::V1::InputConfig.new
+        # output_config_req = Google::Cloud::Vision::V1::OutputConfig.new
 
-        gcs_req.uri = 'gs://dbs-backend-1-ruby/australian_ps.pdf'
-        input_config_req.gcs_source = gcs_req
-        input_config_req.mime_type = 'application/pdf'
+        # gcs_req.uri = 'gs://dbs-backend-1-ruby/australian_ps.pdf'
+        # input_config_req.gcs_source = gcs_req
+        # input_config_req.mime_type = 'application/pdf'
 
-        # add input config to async annotate file request
-        annotate_file_req.input_config = input_config_req
+        # # add input config to async annotate file request
+        # annotate_file_req.input_config = input_config_req
 
-        # configuring gcs destination
-        gcs_destination_req.uri = 'gs://dbs-backend-1-ruby/'
+        # # configuring gcs destination
+        # gcs_destination_req.uri = 'gs://dbs-backend-1-ruby/'
 
-        # configuring output config
-        output_config_req.batch_size = 1
-        output_config_req.gcs_destination = gcs_destination_req
+        # # configuring output config
+        # output_config_req.batch_size = 1
+        # output_config_req.gcs_destination = gcs_destination_req
 
-        # add output config to async annotate file request
-        annotate_file_req.output_config = output_config_req
-
-        
-
-        ### Uppermost layer, Instantiate AsyncBatchAnnotateFilesRequest
-        request = ::Google::Cloud::Vision::V1::AsyncBatchAnnotateFilesRequest.new do |config|
-            config.credentials = "#{path}/key.json"
-        end
-
-        request.requests += [annotate_file_req]
+        # # add output config to async annotate file request
+        # annotate_file_req.output_config = output_config_req
 
         
-        # puts request
-        result = client.async_batch_annotate_files(request)
+
+        # ### Uppermost layer, Instantiate AsyncBatchAnnotateFilesRequest
+        # request = ::Google::Cloud::Vision::V1::AsyncBatchAnnotateFilesRequest.new do |config|
+        #     config.credentials = "#{path}/key.json"
+        # end
+
+        # request.requests += [annotate_file_req]
+
+        
+        # # puts request
+        # # result = client.async_batch_annotate_files(request)
     
         ### END of authenticating to GCP
 
