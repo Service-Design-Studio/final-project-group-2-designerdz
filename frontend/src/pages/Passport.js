@@ -15,12 +15,14 @@ import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
 import LoadingStatus from "../components/LoadingStatus";
 import bucketUpload from "../services/bucketUpload";
+import pdfToPng from "../services/pdfToPNG.js";
 import {
   patchUserData,
   getAllChildrenData,
   patchChildData,
   getPassportData,
 } from "../services/axiosRequests.js";
+
 
 export default function PassTest() {
   const navigate = useNavigate();
@@ -231,12 +233,23 @@ export default function PassTest() {
     }
 
     setIsLoading(true);
-    const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
-    const OBJECT_LOCATION = data.target.files[0];
+    const OBJECT_NAME =  await `passport_image_${userId}_` + new Date().getTime();
+    console.log("OBJECT NAME", OBJECT_NAME);
+    var OBJECT_LOCATION
+    var OBJECT_TYPE
+    if (data.target.files[0].type === "application/pdf") {
+      OBJECT_LOCATION = await pdfToPng(OBJECT_NAME, data.target.files[0]);
+      OBJECT_TYPE = "image/png";
+    } else {
+      OBJECT_LOCATION = data.target.files[0];
+      OBJECT_TYPE = data.target.files[0].type;
+    }
+    // sleep for 3 seconds so that pdfToPng can run
+    
+    console.log("OBJECT_LOCATION", OBJECT_LOCATION)
 
-    //get autofill details and setDetails according to data
-    console.log("BUCKET UPLOAD?")
-    await bucketUpload(data, userId, OBJECT_NAME, OBJECT_LOCATION);
+    await bucketUpload(OBJECT_NAME, OBJECT_LOCATION);
+
     try {
       // send image name to backend API
       const passportResponse = await getPassportData(OBJECT_NAME);
