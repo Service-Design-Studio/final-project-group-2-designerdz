@@ -235,20 +235,17 @@ export default function PassTest() {
     setIsLoading(true);
     const OBJECT_NAME =  await `passport_image_${userId}_` + new Date().getTime();
     console.log("OBJECT NAME", OBJECT_NAME);
-    var OBJECT_LOCATION
-    var OBJECT_TYPE
+    var OBJECT_LOCATION = data.target.files[0]
+    var OBJECT_TYPE = data.target.files[0].type
     if (data.target.files[0].type === "application/pdf") {
-      OBJECT_LOCATION = await pdfToPng(OBJECT_NAME, data.target.files[0]);
+      OBJECT_LOCATION = await pdfToPng(OBJECT_NAME, OBJECT_LOCATION);
       OBJECT_TYPE = "image/png";
-    } else {
-      OBJECT_LOCATION = data.target.files[0];
-      OBJECT_TYPE = data.target.files[0].type;
-    }
+    } 
     // sleep for 3 seconds so that pdfToPng can run
     
     console.log("OBJECT_LOCATION", OBJECT_LOCATION)
 
-    await bucketUpload(OBJECT_NAME, OBJECT_LOCATION);
+    await bucketUpload(OBJECT_NAME, OBJECT_LOCATION, OBJECT_TYPE);
 
     try {
       // send image name to backend API
@@ -314,7 +311,7 @@ export default function PassTest() {
                 {...register("Passport")}
                 onInput={onPassportUpload}
               />
-              <canvas id="pdfCanvas" width="300" height="300"></canvas>
+              <canvas id="pdfCanvas" className="hidden" width="300" height="300"></canvas>
               {errors.valid_file_type && (
                 <p className="text-red-500">
                   {errors.valid_file_type?.message}
