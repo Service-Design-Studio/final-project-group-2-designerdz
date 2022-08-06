@@ -23,7 +23,7 @@ export default function Landing() {
   return (
     <div
       className={`grid h-screen w-screen place-content-center px-8 ${
-        open ? "bg-zinc-300 blur" : null
+        open ? "bg-zinc-400 blur" : null
       }`}
     >
       <img
