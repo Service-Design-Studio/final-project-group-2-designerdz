@@ -279,9 +279,12 @@ export default function PassTest() {
         ocrData.gender == "M" ? "MALE" : "FEMALE";
       setFamilyData(copyFamilyData);
     } catch (error) {
+      console.log(error)
+      let error_message = error.response.data.error
+      error_message = error_message == undefined ? "Please try with a different photo" : error_message
       setError("valid_passport_image", {
         type: "Custom",
-        message: error.response.data.error,
+        message: error_message
       });
     }
     setIsLoading(false);
