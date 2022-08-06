@@ -146,10 +146,6 @@ export default function PassTest() {
     };
 
     let data = getValues();
-    console.log("VALUES in onUserSelected");
-    console.log(data);
-    console.log(familyData[selectedIndex].image_name);
-
     data["image_name"] = familyData[selectedIndex].image_name;
     let copyFamilyData = familyData.slice();
 
@@ -184,6 +180,7 @@ export default function PassTest() {
 
   const onSubmit = async () => {
     let data = getValues();
+    data["image_name"] = familyData[selectedIndex].image_name;
 
     for (var i = 0; i < familyData.length; i++) {
       if (familyData[i].status === false) {
