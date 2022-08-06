@@ -300,9 +300,7 @@ export default function PassTest() {
             <div>
               <label className="block font-medium">Upload Passport</label>
               <input
-                className={`btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg ${
-                  passportFile ? "hidden" : null
-                }`}
+                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg "
                 type="file"
                 placeholder="Passport"
                 {...register("Passport")}

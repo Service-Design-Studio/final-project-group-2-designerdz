@@ -28,21 +28,18 @@ export default function SignUp() {
 
       <div className="flex flex-col absolute w-screen items-center top-0 bottom-0 m-auto place-content-center space-y-4 -z-50">
         <button
-          className="next bg-gray-300 hover:bg-red-200 text-xl font-semibold h-1/3 rounded w-10/12"
+          className="next relative hover:bg-red-200 bg-slate-100 text-2xl font-semibold h-1/4 w-10/12 rounded outline outline-2 outline-slate-300"
           onClick={onClickSingle}
         >
           No, just for myself only
         </button>
 
         <button
-          className="family-next hover:bg-red-200 text-xl font-semibold h-1/3 rounded w-10/12 opacity-30 -z-20 bg-[url('https://www.ocbc.com/assets/images/uploads/inside_lifegoals/articles/deciding-mast-1.jpg')]"
+          className="family-next relative hover:bg-red-200 bg-slate-100 text-2xl font-semibold h-1/4 w-10/12 rounded outline outline-2 outline-slate-300"
           onClick={onClickFamily}
         >
-          <span className="z-10 opacity-100">
-            Yes, for me and my children...
-          </span>
+          Yes, for me and my children...
         </button>
-
         <p className="absolute bottom-12 mb-10 mx-8 w-10/12 ">
           Only have a little time? <br />
           Don't worry, as your <b>data will be saved at every step!</b>
