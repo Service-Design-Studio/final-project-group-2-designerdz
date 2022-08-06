@@ -49,6 +49,16 @@ export default function PassTest() {
   } = methods;
   let userId = localStorage.getItem("user_id");
 
+  //to update the status of family members when isValid value changes (every keystroke)
+  if (familyData.length > 0) {
+    let copyFamilyData = familyData.slice();
+    //if there is change in isValid value from before, will trigger infinite rerender if no if condition
+    if (copyFamilyData[selectedIndex].status != isValid) {
+      copyFamilyData[selectedIndex].status = isValid;
+      setFamilyData(copyFamilyData);
+    }
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -138,10 +148,6 @@ export default function PassTest() {
     };
 
     let data = getValues();
-    console.log("VALUES in onUserSelected");
-    console.log(data);
-    console.log(familyData[selectedIndex].image_name);
-
     data["image_name"] = familyData[selectedIndex].image_name;
     let copyFamilyData = familyData.slice();
 
@@ -176,6 +182,7 @@ export default function PassTest() {
 
   const onSubmit = async () => {
     let data = getValues();
+    data["image_name"] = familyData[selectedIndex].image_name;
 
     for (var i = 0; i < familyData.length; i++) {
       if (familyData[i].status === false) {
@@ -305,7 +312,7 @@ export default function PassTest() {
             <div>
               <label className="block font-medium">Upload Passport</label>
               <input
-                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
+                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg "
                 type="file"
                 placeholder="Passport"
                 {...register("Passport")}
