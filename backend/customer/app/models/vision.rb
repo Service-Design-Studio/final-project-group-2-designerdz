@@ -27,12 +27,62 @@ class Vision
             config.credentials = "#{path}/key.json"
         end
 
+        ### Instantiate AsyncAnnotateFileRequest
+        annotate_file_req = Google::Cloud::Vision::V1::AsyncAnnotateFileRequest.new
+        
+
+        ### Bottom most layer, Instantiate AsyncAnnotateFileRequest with methods #features and #input_config
+        # Instatiate Feature class
+        feature_req = Google::Cloud::Vision::V1::Feature.new
+        feature_req.type = "DOCUMENT_TEXT_DETECTION"
+
+        # += required for repeated field array, if not will throw error
+        annotate_file_req.features += [feature_req]
+        # puts annotate_file_req
+
+        ### Instatiate InputConfig class, OutputConfig class, GcsSource class, 
+        gcs_req = Google::Cloud::Vision::V1::GcsSource.new
+        gcs_destination_req = Google::Cloud::Vision::V1::GcsDestination.new
+        input_config_req = Google::Cloud::Vision::V1::InputConfig.new
+        output_config_req = Google::Cloud::Vision::V1::OutputConfig.new
+
+        gcs_req.uri = 'gs://dbs-backend-1-ruby/australian_ps.pdf'
+        input_config_req.gcs_source = gcs_req
+        input_config_req.mime_type = 'application/pdf'
+
+        # add input config to async annotate file request
+        annotate_file_req.input_config = input_config_req
+
+        # configuring gcs destination
+        gcs_destination_req.uri = 'gs://dbs-backend-1-ruby/'
+
+        # configuring output config
+        output_config_req.batch_size = 1
+        output_config_req.gcs_destination = gcs_destination_req
+
+        # add output config to async annotate file request
+        annotate_file_req.output_config = output_config_req
+
+        
+
+        ### Uppermost layer, Instantiate AsyncBatchAnnotateFilesRequest
+        request = ::Google::Cloud::Vision::V1::AsyncBatchAnnotateFilesRequest.new do |config|
+            config.credentials = "#{path}/key.json"
+        end
+
+        request.requests += [annotate_file_req]
+
+        
+        # puts request
+        result = client.async_batch_annotate_files(request)
+    
         ### END of authenticating to GCP
 
         text = []
-        response = client.text_detection(image: 'https://storage.googleapis.com/dbs-backend-1-ruby/' + image_name)
+        response = client.document_text_detection(image: 'https://storage.googleapis.com/dbs-backend-1-ruby/' + image_name)
     
-      
+
+
         response.responses.each do |res|
             res.text_annotations.each do |annotation|
                 text << annotation.description
@@ -40,7 +90,8 @@ class Vision
         end
 
         if text[0] == nil
-            return "null"
+            puts "cannot detect image"
+            return "no text detected"
         end
 
         # output returns the data extracted from the image in an array
@@ -97,8 +148,21 @@ class Vision
             return "length_error"
 
         else
-            puts output[mrzIndex]
-            puts output[mrzIndex+1]
+            if (output[mrzIndex].include?(" "))
+                output[mrzIndex] = output[mrzIndex+1].gsub(" ", "")
+            end
+
+            if (output[mrzIndex+1].include?(" "))
+                output[mrzIndex+1] = output[mrzIndex+1].gsub(" ", "")
+            end
+            
+            if (output[mrzIndex].length != 44 || output[mrzIndex+1].length != 44)
+                puts "invalid MRZ"
+                return "invalid MRZ"
+            end
+
+            puts output[mrzIndex].length
+            puts output[mrzIndex+1].length
 
             mrzarr = [
                 "#{output[mrzIndex]}",
@@ -147,5 +211,5 @@ class Vision
 end
 
 vision = Vision.new
-vision.extract_data("australian_ps3.jpg")
+vision.extract_data("passport_image_5006_1659777205684")
 
