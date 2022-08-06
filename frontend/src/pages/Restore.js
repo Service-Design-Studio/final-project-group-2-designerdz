@@ -14,7 +14,6 @@ export default function Restore() {
       const response = await getUserDataPhoneNumber(data.phone_number);
       let userData = response.data[0];
       localStorage.setItem("user_id", userData.id);
-      console.log(userData.url);
       switch (userData.url) {
         case "details":
           navigate("details");
@@ -44,7 +43,7 @@ export default function Restore() {
   console.log(errors);
   return (
     <form
-      className="flex flex-col justify-around bg-gray-300 mx-0 my-auto px-2 py-4 rounded-lg h-64"
+      className="flex flex-col justify-around bg-slate-50 px-2 py-4 rounded-lg shadow-lg h-[40vh]"
       onSubmit={handleSubmit(onSubmit)}
     >
       <a className="text-center">

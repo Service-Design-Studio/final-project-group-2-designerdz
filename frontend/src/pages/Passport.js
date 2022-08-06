@@ -47,6 +47,16 @@ export default function PassTest() {
   } = methods;
   let userId = localStorage.getItem("user_id");
 
+  //to update the status of family members when isValid value changes (every keystroke)
+  if (familyData.length > 0) {
+    let copyFamilyData = familyData.slice();
+    //if there is change in isValid value from before, will trigger infinite rerender if no if condition
+    if (copyFamilyData[selectedIndex].status != isValid) {
+      copyFamilyData[selectedIndex].status = isValid;
+      setFamilyData(copyFamilyData);
+    }
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
