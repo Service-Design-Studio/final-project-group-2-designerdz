@@ -138,6 +138,13 @@ class Vision
         #         output_hash[output_hash_keys[index]] = "#{output[item+1]}"
         
         # }
+
+        # puts output[mrzIndex]
+        # puts output[mrzIndex+1]
+        # puts output[mrzIndex].length
+        # puts output[mrzIndex+1].length
+
+
    
         if (mrzIndex == nil)
             puts "no mrz detected"
@@ -148,10 +155,11 @@ class Vision
             return "length_error"
 
         else
-            if (output[mrzIndex].include?(" "))
-                output[mrzIndex] = output[mrzIndex+1].gsub(" ", "")
-            end
 
+            if (output[mrzIndex].include?(" "))
+                output[mrzIndex] = output[mrzIndex].gsub(" ", "")
+            end
+    
             if (output[mrzIndex+1].include?(" "))
                 output[mrzIndex+1] = output[mrzIndex+1].gsub(" ", "")
             end
@@ -182,7 +190,7 @@ class Vision
 
         end
 
-        puts output_hash
+        # puts output_hash
         return output_hash.to_json
     end
 
@@ -210,6 +218,6 @@ class Vision
     # end
 end
 
-vision = Vision.new
-vision.extract_data("passport_image_5006_1659777205684")
+# vision = Vision.new
+# vision.extract_data("passport_image_5006_1659777205684")
 

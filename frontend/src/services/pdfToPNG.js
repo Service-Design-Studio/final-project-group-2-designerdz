@@ -10,7 +10,7 @@ export default async function pdfToPng(OBJECT_NAME, OBJECT_LOCATION) {
     const loadingTask = pdfjs.getDocument(typedarray);
     loadingTask.promise.then(function (pdf) {
       pdf.getPage(1).then(async function (page) {
-        var scale = 1.5;
+        var scale = 4.5;
         var viewport = page.getViewport({ scale: scale });
         var canvas = document.getElementById("pdfCanvas");
         var context = canvas.getContext("2d");
