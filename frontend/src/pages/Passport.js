@@ -70,7 +70,6 @@ export default function Passport() {
     }
   }
 
-  //TODO: see if you can get away with details,setDetails useState for sprint 4 is can one JYYYY
   useEffect(() => {
     async function fetchData() {
       try {
