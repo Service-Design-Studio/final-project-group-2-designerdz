@@ -30,7 +30,7 @@ export default async function pdfToPng(OBJECT_NAME, OBJECT_LOCATION) {
         // save image as blob
         canvas.toBlob(function (blob) {
           console.log("Converting Image to Blob to PNG");
-          convertedImg = new File([blob], OBJECT_NAME, {
+          convertedImg = new File([blob], OBJECT_NAME+".png", {
             type: "image/png",
           });
         });
