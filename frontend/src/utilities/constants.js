@@ -1,5 +1,5 @@
-const URL = "http://localhost:3000";
-// "https://dbs-service-qz6esvmepq-as.a.run.app"
+// const URL = "http://localhost:3000";
+const URL = "https://dbs-service-qz6esvmepq-as.a.run.app"
 
 export const USER_API = URL.concat("/api/v1/users");
 

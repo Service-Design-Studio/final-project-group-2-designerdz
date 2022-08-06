@@ -212,12 +212,13 @@ export default function PassTest() {
   };
 
   const onPassportUpload = async (data) => {
+    console.log(data)
     clearErrors("valid_file_type");
     clearErrors("valid_passport_image");
     setPassportFile();
 
     if (
-      !["image/jpeg", "image/png", "image/jpg"].includes(
+      !["image/jpeg", "image/png", "image/jpg", "application/pdf"].includes(
         data.target.files[0].type
       )
     ) {
@@ -234,7 +235,7 @@ export default function PassTest() {
     const OBJECT_LOCATION = data.target.files[0];
 
     //get autofill details and setDetails according to data
-    await bucketUpload(data, userId);
+    await bucketUpload(data, userId, OBJECT_NAME, OBJECT_LOCATION);
     try {
       // send image name to backend API
       const passportResponse = await getPassportData(OBJECT_NAME);
