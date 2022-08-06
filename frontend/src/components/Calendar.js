@@ -1,7 +1,6 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useFormContext } from "react-hook-form";
-import { pase } from "date-fns";
 
 export default function Calendar({ calendarType, defaultDate }) {
   const {
@@ -9,7 +8,6 @@ export default function Calendar({ calendarType, defaultDate }) {
     formState: { errors },
   } = useFormContext();
 
-  console.log("Calendar");
   switch (calendarType) {
     case "passport_expiry":
       return passportExpiryCalendar(control, errors, defaultDate);
