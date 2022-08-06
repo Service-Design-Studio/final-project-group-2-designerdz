@@ -235,6 +235,7 @@ export default function PassTest() {
     const OBJECT_LOCATION = data.target.files[0];
 
     //get autofill details and setDetails according to data
+    console.log("BUCKET UPLOAD?")
     await bucketUpload(data, userId, OBJECT_NAME, OBJECT_LOCATION);
     try {
       // send image name to backend API
@@ -300,6 +301,7 @@ export default function PassTest() {
                 {...register("Passport")}
                 onInput={onPassportUpload}
               />
+              <canvas id="pdfCanvas" width="300" height="300"></canvas>
               {errors.valid_file_type && (
                 <p className="text-red-500">
                   {errors.valid_file_type?.message}
