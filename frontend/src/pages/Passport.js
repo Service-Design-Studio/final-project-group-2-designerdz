@@ -259,13 +259,13 @@ export default function PassTest() {
       copyFamilyData[selectedIndex].gender =
         ocrData.gender == "M" ? "MALE" : "FEMALE";
       setFamilyData(copyFamilyData);
-      setIsLoading(false);
     } catch (error) {
       setError("valid_passport_image", {
         type: "Custom",
         message: error.response.data.error,
       });
     }
+    setIsLoading(false);
   };
 
   return (
