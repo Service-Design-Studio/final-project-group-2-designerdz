@@ -160,6 +160,7 @@ export default function Review() {
               : new Date(details.passport_expiry).toLocaleDateString("en-us", {
                   year: "numeric",
                   month: "short",
+                  day: "numeric",
                 })}
           </p>
           <p>Nationality:</p>

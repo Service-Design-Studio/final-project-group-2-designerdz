@@ -15,12 +15,14 @@ import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
 import LoadingStatus from "../components/LoadingStatus";
 import bucketUpload from "../services/bucketUpload";
+import pdfToPng from "../services/pdfToPNG.js";
 import {
   patchUserData,
   getAllChildrenData,
   patchChildData,
   getPassportData,
 } from "../services/axiosRequests.js";
+
 
 export default function PassTest() {
   const navigate = useNavigate();
@@ -219,12 +221,13 @@ export default function PassTest() {
   };
 
   const onPassportUpload = async (data) => {
+    console.log(data)
     clearErrors("valid_file_type");
     clearErrors("valid_passport_image");
     setPassportFile();
 
     if (
-      !["image/jpeg", "image/png", "image/jpg"].includes(
+      !["image/jpeg", "image/png", "image/jpg", "application/pdf"].includes(
         data.target.files[0].type
       )
     ) {
@@ -237,11 +240,20 @@ export default function PassTest() {
     }
 
     setIsLoading(true);
-    const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
-    const OBJECT_LOCATION = data.target.files[0];
+    const OBJECT_NAME =  await `passport_image_${userId}_` + new Date().getTime();
+    console.log("OBJECT NAME", OBJECT_NAME);
+    var OBJECT_LOCATION = data.target.files[0]
+    var OBJECT_TYPE = data.target.files[0].type
+    if (data.target.files[0].type === "application/pdf") {
+      OBJECT_LOCATION = await pdfToPng(OBJECT_NAME, OBJECT_LOCATION);
+      OBJECT_TYPE = "image/png";
+    } 
+    // sleep for 3 seconds so that pdfToPng can run
+    
+    console.log("OBJECT_LOCATION", OBJECT_LOCATION)
 
-    //get autofill details and setDetails according to data
-    await bucketUpload(data, userId);
+    await bucketUpload(OBJECT_NAME, OBJECT_LOCATION, OBJECT_TYPE);
+
     try {
       // send image name to backend API
       const passportResponse = await getPassportData(OBJECT_NAME);
@@ -267,9 +279,12 @@ export default function PassTest() {
         ocrData.gender == "M" ? "MALE" : "FEMALE";
       setFamilyData(copyFamilyData);
     } catch (error) {
+      console.log(error)
+      let error_message = error.response.data.error
+      error_message = error_message == undefined ? "Please try with a different photo" : error_message
       setError("valid_passport_image", {
         type: "Custom",
-        message: error.response.data.error,
+        message: error_message
       });
     }
     setIsLoading(false);
@@ -300,12 +315,13 @@ export default function PassTest() {
             <div>
               <label className="block font-medium">Upload Passport</label>
               <input
-                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
+                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg "
                 type="file"
                 placeholder="Passport"
                 {...register("Passport")}
                 onInput={onPassportUpload}
               />
+              <canvas id="pdfCanvas" className="hidden" width="300" height="300"></canvas>
               {errors.valid_file_type && (
                 <p className="text-red-500">
                   {errors.valid_file_type?.message}

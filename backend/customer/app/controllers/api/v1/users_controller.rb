@@ -73,14 +73,21 @@ class Api::V1::UsersController < ApplicationController
     @vision = Vision.new
     @output = @vision.extract_data("#{image}")
 
+    # MRZ is not detected, so its not a valid image
     if @output == ""
       render json: { error: "This is not a valid passport image" }, status: :unprocessable_entity
 
-    elsif @output == "null"
-      render json: { error: "Image not found" }, status: :unprocessable_entity
+    # If you upload an image with no words
+    elsif @output == "no text detected"
+      render json: { error: "This image does not have texts, try again with another image" }, status: :unprocessable_entity
 
+    # mrz with < 44 chars, it is definitely invalid
     elsif @output == "length_error"
-      render json: { error: "Image is blurry, please upload a new image" }, status: :unprocessable_entity
+      render json: { error: "Image does not meet the requirements, please upload a new image" }, status: :unprocessable_entity
+
+    # mrz != 44 chars after splitting whitespaces
+    elsif @output == "invalid mrz"
+      render json: { error: "This passport does not have correct MRZ, autofill unavailable" }, status: :unprocessable_entity
 
     else 
       render json: @output

@@ -1,13 +1,11 @@
-export default async function bucketUpload(data, userId) {
-  const OBJECT_LOCATION = data.target.files[0];
-  const OBJECT_CONTENT_TYPE = data.target.files[0].type;
+export default async function bucketUpload(OBJECT_NAME, OBJECT_LOCATION, OBJECT_TYPE) {
   const BUCKET_NAME = "dbs-backend-1-ruby";
-  const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
+  // const BUCKET_NAME = "react-frontend-353408.appspot.com"
   const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
-  const UPLOAD_HEADERS = {
-    "Content-Type": OBJECT_CONTENT_TYPE,
+  var UPLOAD_HEADERS = {
+    "Content-Type": OBJECT_TYPE,
   };
-  //upload image to cloud storage
+
   try {
     const response = await fetch(UPLOAD_URL, {
       method: "POST",
