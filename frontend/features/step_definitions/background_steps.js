@@ -16,6 +16,7 @@ async function passportPage(fullName, passportNumber, nationality, gender, dob, 
     await driver.findElement(By.className(gender)).click();
     await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys(dob);
     await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(500);
     await driver.findElement(By.xpath("//input[@placeholder='Enter Passport Expiry date']")).sendKeys(passportExpiry);
     await driver.findElement(By.className("dismiss")).click();
     await driver.sleep(500);
@@ -62,7 +63,7 @@ Given(/^I (.*) a child$/, async function(next) {
 })
 
 When("I fill in my passport details", async function () {
-    await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "09/2024");
+    await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
 });
 
 When(/^I have uploaded the document (.*)$/, async function (filePath) {

@@ -16,11 +16,13 @@ async function passportPage(fullName, passportNumber, nationality, gender, dob, 
     await driver.findElement(By.className(gender)).click();
     await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys(dob);
     await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(500);
     await driver.findElement(By.xpath("//input[@placeholder='Enter Passport Expiry date']")).sendKeys(passportExpiry);
     await driver.findElement(By.className("dismiss")).click();
     await driver.sleep(500);
 }
 
+// TODO: Fix this wonky step that works half the time
 When("I go from the family page to the review page", async function () {
     var actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, baseUrl + "family");
@@ -32,12 +34,12 @@ When("I go from the family page to the review page", async function () {
     var actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, baseUrl + "passport");
 
-    await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "09/2024");
-    
-    await driver.findElement(By.id("user_1")).click();
-    await driver.sleep(2000);
+    await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
 
-    await passportPage("Sarah Abbot", "E34152315", "American", "female", "14/07/2005", "09/2030");
+    await driver.findElement(By.id("user_1")).click();
+    await driver.sleep(1000);
+
+    await passportPage("Sarah Abbot", "E34152315", "American", "female", "14/07/2005", "01/09/2030");
 
     // Move to review page
     await driver.findElement(By.className("next")).click();

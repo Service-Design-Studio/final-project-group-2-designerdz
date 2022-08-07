@@ -12,13 +12,8 @@ When(/^I click on (.*) icon$/, async function(type) {
   }
 })
 
-When(/^I click on the (.*) button$/, async function(type) {
-  if (type == "next") {
-    await driver.findElement(By.className("next")).click();
-    await driver.sleep(500);
-  } else if (type == "back") {
-    await driver.findElement(By.className("back")).click();
-    await driver.sleep(500);
-  }
+When(/^I click on the (.*) button$/, async function(name) {
+  await driver.findElement(By.className(name)).click();
+  await driver.sleep(500);
 })
   
