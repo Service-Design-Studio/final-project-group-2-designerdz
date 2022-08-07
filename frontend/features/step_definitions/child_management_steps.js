@@ -23,11 +23,11 @@ When("I edit my child name", async function () {
 Then("I should see my edited child name on the family page", async function () {
     const childName = await driver.findElement(By.id("name_0")).getText();
     assert.equal(childName, "Mr Salah Abbot Edited");
-    });
+});
 
-    When("I click on remove button for my child", async function () {
-    await driver.findElement(By.id("delete_0")).click();
-    await driver.sleep(500);
+When("I click on remove button for my child", async function () {
+await driver.findElement(By.id("delete_0")).click();
+await driver.sleep(500);
 });
 
 Then("my child should be removed", async function () {

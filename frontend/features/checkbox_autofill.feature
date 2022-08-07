@@ -4,7 +4,8 @@
 #     So that I do not have to repeatedly fill up information
 
 #     Background: Filling up of parent details
-#         Given I have filled in my details
+#         Given I am signing up for my family
+#         And I have filled in my details
 #         And I am adding a child
 
 #     Scenario: Check autofill

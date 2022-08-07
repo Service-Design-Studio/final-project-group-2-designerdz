@@ -21,50 +21,53 @@ async function passportPage(fullName, passportNumber, nationality, gender, dob, 
     await driver.sleep(500);
 }
 
-Given("I have filled in my details", async function () {
+Given(/^I am signing up for (.*)$/, async function(type) {
     await driver.get(baseUrl);
     await driver.sleep(1000);
   
     await driver.findElement(By.className("bg-red-500")).click();
     await driver.sleep(1000);
-  
-    await driver.findElement(By.className("family-next")).click();
-    await driver.sleep(1000);
 
+    if (type == "myself") {
+        await driver.findElement(By.className("next")).click();
+        await driver.sleep(1000);
+    } else if (type == "my family") {
+        await driver.findElement(By.className("family-next")).click();
+        await driver.sleep(1000);
+    }
+})
+
+Given("I have filled in my details", async function () {
     await detailsPage("Sally Abbot", parentNumber, "sally@gmail.com");
   
     await driver.findElement(By.className("next")).click();
     await driver.sleep(1000);
 });
 
-Given("I have added a child", async function () {
+// have added = go to next step
+Given(/^I (.*) a child$/, async function(next) {
     await driver.findElement(By.className("add")).click();
     await driver.sleep(500);
 
     await driver
         .findElement(By.className("display_name"))
         .sendKeys("Salah Abbot");
-    
-    await driver.findElement(By.className("next")).click();
-    await driver.sleep(1000);
 
-    assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
-});
+    if (next == "have added"){
+        await driver.findElement(By.className("next")).click();
+        await driver.sleep(1000);
+    
+        assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
+    }
+})
 
 When("I fill in my passport details", async function () {
     await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "09/2024");
 });
 
-Given("I am adding a child", async function () {
-    assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
-
-    await driver.findElement(By.className("add")).click();
-    await driver.sleep(1000);
-
-    var actualUrl = await driver.getCurrentUrl();
-    assert.equal(actualUrl, baseUrl + "child");
-
-    await driver
-    .findElement(By.className("display_name"))
-    .sendKeys("Salah Abbot");
-})
+When(/^I have uploaded the document (.*)$/, async function (filePath) {
+    const uploadButton = await driver.findElement(By.className("btn_upload"));
+    var path = process.cwd()+'/features/resources/' + filePath;
+    uploadButton.sendKeys(path);
+    await driver.sleep(5000);
+});
