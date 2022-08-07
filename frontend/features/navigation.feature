@@ -8,6 +8,7 @@ Feature: User Navigation
         When I click on the next button
         Then I should move forward to the <next> page
 
+    # FIXME: Passport page does not work unless everything has been filled out
     Examples:
     | page       | next       |
     | "signup"   | "details"  |
@@ -18,7 +19,8 @@ Feature: User Navigation
         Given I am on <page>
         When I click on the back button
         Then I should go back to the <previous> page
-        
+    
+    # FIXME: Passport page does not work unless everything has been filled out
     Examples:
         | previous   | page       |
         | ""         | "signup"   |

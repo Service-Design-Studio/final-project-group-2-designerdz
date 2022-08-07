@@ -287,7 +287,7 @@ export default function PassTest() {
         headerText="Fill up your passport details"
         bodyText="This is important for us to verify your information"
       />
-      <div className="absolute left-0 right-0 top-36 items-center ">
+      <div className="dismiss absolute left-0 right-0 top-36 items-center ">
         <FormProvider {...methods}>
           <form className="mx-8" onSubmit={handleSubmit(onSubmit)}>
             {isFamily === true && !onEdit ? (

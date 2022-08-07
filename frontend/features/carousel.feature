@@ -13,10 +13,14 @@
 
 #     Scenario: Navigation from parent to child
 #         When I fill in my passport details
-#         And I navigate to my child tab
-#         And I navigate back to my tab 
+#         And I click on my child icon
+#         And I click on my icon
 #         Then I should be able to view my own passport details
 
-#     Scenario: Selection of user
-#         When I navigate to my child tab
+#     Scenario: Selection of child
+#         When I click on my child icon
 #         Then my child icon should be selected
+
+#     Scenario: Selection of parent
+#         When I click on my icon
+#         Then my icon should be selected
