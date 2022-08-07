@@ -21,14 +21,16 @@ Given("I am on passport page", async function () {
 
   const goToPassportButton = await driver.findElement(By.className("next"));
   goToPassportButton.click();
-  await driver.sleep(1000);
+  await driver.sleep(5000);
   expect(await driver.getCurrentUrl()).to.equal(baseUrl + "passport");
 });
 
 When("I have uploaded a document", async function () {
   const uploadButton = await driver.findElement(By.className("btn_upload"));
   // FIXME: update path
-  uploadButton.sendKeys("/Users/yida/Desktop/passport_aussie.jpg");
+  var path = process.cwd()+'/sgPassport.jpg';
+  uploadButton.sendKeys(path);
+  await driver.sleep(5000);
 });
 
 Then("I should see a loading indicator", async function () {
@@ -40,8 +42,9 @@ Then("I should see a loading indicator", async function () {
   // get all classNames of loadingIndicator
   const classNames = await loadingIndicator.getAttribute("class");
 
+  
   // check that element does not have classname of hidden
-  expect(classNames).to.not.include("hidden");
+  expect(classNames).to.not.include("pop");
 });
 
 Then("I should see a preview of the document", async function () {
