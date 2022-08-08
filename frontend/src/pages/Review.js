@@ -22,10 +22,10 @@ export default function Review() {
     try {
       const response = await getAllChildrenData(userId);
       let updatedFamilyData = checkIncompleteData(response.data);
-      console.log("ALL data")
-      console.log(updatedFamilyData)
-      console.log("selected index: " + idx)
-      console.log(updatedFamilyData[idx])
+      console.log("ALL data");
+      console.log(updatedFamilyData);
+      console.log("selected index: " + idx);
+      console.log(updatedFamilyData[idx]);
       setDetails(updatedFamilyData[idx]);
       setFamilyData(updatedFamilyData);
       if (updatedFamilyData.length > 1) {
@@ -33,8 +33,8 @@ export default function Review() {
       }
     } catch (error) {
       console.log(error);
+    }
   }
-}
 
   function checkIncompleteData(familyData) {
     let compulsory_fields = ["full_name", "passport_number", "nationality"];
@@ -55,7 +55,6 @@ export default function Review() {
   }
 
   useEffect(() => {
-
     //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
     if (userId == null) {
       navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
@@ -63,7 +62,7 @@ export default function Review() {
 
     if (location.state != undefined) {
       setSelectedIndex(location.state.index);
-      fetchData(location.state.index)
+      fetchData(location.state.index);
     } else {
       fetchData(0);
     }
@@ -90,7 +89,7 @@ export default function Review() {
         },
       });
     } else {
-      navigate("/details", { state: { on_edit: true , is_family: isFamily} });
+      navigate("/details", { state: { on_edit: true, is_family: isFamily } });
     }
   };
 
