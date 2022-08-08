@@ -23,7 +23,6 @@ import {
   getPassportData,
 } from "../services/axiosRequests.js";
 
-
 export default function PassTest() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,7 +34,7 @@ export default function PassTest() {
   const [isLoading, setIsLoading] = useState(false);
   const methods = useForm({
     mode: "onChange",
-    reValidateMode: "onChange",
+    // reValidateMode: "onChange",
   });
   const {
     reset,
@@ -221,7 +220,7 @@ export default function PassTest() {
   };
 
   const onPassportUpload = async (data) => {
-    console.log(data)
+    console.log(data);
     clearErrors("valid_file_type");
     clearErrors("valid_passport_image");
     setPassportFile();
@@ -240,17 +239,18 @@ export default function PassTest() {
     }
 
     setIsLoading(true);
-    const OBJECT_NAME =  await `passport_image_${userId}_` + new Date().getTime();
+    const OBJECT_NAME =
+      (await `passport_image_${userId}_`) + new Date().getTime();
     console.log("OBJECT NAME", OBJECT_NAME);
-    var OBJECT_LOCATION = data.target.files[0]
-    var OBJECT_TYPE = data.target.files[0].type
+    var OBJECT_LOCATION = data.target.files[0];
+    var OBJECT_TYPE = data.target.files[0].type;
     if (data.target.files[0].type === "application/pdf") {
       OBJECT_LOCATION = await pdfToPng(OBJECT_NAME, OBJECT_LOCATION);
       OBJECT_TYPE = "image/png";
-    } 
+    }
     // sleep for 3 seconds so that pdfToPng can run
-    
-    console.log("OBJECT_LOCATION", OBJECT_LOCATION)
+
+    console.log("OBJECT_LOCATION", OBJECT_LOCATION);
 
     await bucketUpload(OBJECT_NAME, OBJECT_LOCATION, OBJECT_TYPE);
 
@@ -279,12 +279,15 @@ export default function PassTest() {
         ocrData.gender == "M" ? "MALE" : "FEMALE";
       setFamilyData(copyFamilyData);
     } catch (error) {
-      console.log(error)
-      let error_message = error.response.data.error
-      error_message = error_message == undefined ? "Please try with a different photo" : error_message
+      console.log(error);
+      let error_message = error.response.data.error;
+      error_message =
+        error_message == undefined
+          ? "Please try with a different photo"
+          : error_message;
       setError("valid_passport_image", {
         type: "Custom",
-        message: error_message
+        message: error_message,
       });
     }
     setIsLoading(false);
@@ -321,7 +324,12 @@ export default function PassTest() {
                 {...register("Passport")}
                 onInput={onPassportUpload}
               />
-              <canvas id="pdfCanvas" className="hidden" width="300" height="300"></canvas>
+              <canvas
+                id="pdfCanvas"
+                className="hidden"
+                width="300"
+                height="300"
+              ></canvas>
               {errors.valid_file_type && (
                 <p className="text-red-500">
                   {errors.valid_file_type?.message}
