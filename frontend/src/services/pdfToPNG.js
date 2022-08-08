@@ -10,7 +10,7 @@ export default async function pdfToPng(OBJECT_NAME, OBJECT_LOCATION) {
     const loadingTask = pdfjs.getDocument(typedarray);
     loadingTask.promise.then(function (pdf) {
       pdf.getPage(1).then(async function (page) {
-        var scale = 4.5;
+        var scale = 3.5;
         var viewport = page.getViewport({ scale: scale });
         var canvas = document.getElementById("pdfCanvas");
         var context = canvas.getContext("2d");
@@ -30,7 +30,7 @@ export default async function pdfToPng(OBJECT_NAME, OBJECT_LOCATION) {
         // save image as blob
         canvas.toBlob(function (blob) {
           console.log("Converting Image to Blob to PNG");
-          convertedImg = new File([blob], OBJECT_NAME+".png", {
+          convertedImg = new File([blob], OBJECT_NAME + ".png", {
             type: "image/png",
           });
         });
