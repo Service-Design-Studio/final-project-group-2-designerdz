@@ -93,7 +93,6 @@ export default function Details() {
         navigateNextPage();
       } catch (error) {
         if (error.response.status === 422) {
-          navigate("/");
           alert("User already exist!");
         }
         console.log(error.response);
