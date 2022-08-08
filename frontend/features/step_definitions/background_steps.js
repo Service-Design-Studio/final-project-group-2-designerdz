@@ -96,19 +96,20 @@ Given(/^I have proceeded to the (.*) page$/, async function(page) {
             // Should have been in passport page automatically from previous steps
         } 
 
-        await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
+        await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "05/09/2024");
 
         // Try for child if exist
         try {
             await driver.findElement(By.id("user_1")).click();
             await driver.sleep(1000);
         
-            await passportPage("Sarah Abbot", "E34152315", "American", "female", "14/07/2005", "01/09/2030");
+            await passportPage("Sarah Abbot", "E34152315", "American", "female", "14/07/2005", "05/09/2030");
+            await driver.findElement(By.className("next")).click();
+            await driver.sleep(2000);
         } catch (error) {
+            await driver.findElement(By.className("next")).click();
+            await driver.sleep(2000);
         }
-
-        await driver.findElement(By.className("next")).click();
-        await driver.sleep(2000);
     }
 
     // Assert that the page is correct
