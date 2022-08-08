@@ -91,7 +91,7 @@ function DeleteImageButton({ passportFile, onClick }) {
   return (
     <button
       type="button"
-      className={`btn_delete ${
+      className={`delete ${
         passportFile == undefined ? "hidden" : null
       } rounded outline outline-1 outline-gray-300 px-4 py-2 text-center text-red-500 self-end mt-2`}
       onClick={onClick}

@@ -3,26 +3,28 @@ Feature: User Navigation
     I want to be able to fill up the form smoothly
     So that I am able to have a positive experience signing up
 
+    Background: Signing up for single user
+        Given I am signing up for myself
+
     Scenario:  
-        Given I am on <page>
+        Given I have proceeded to the <page> page
+        And I have filled up the <page> page
         When I click on the next button
-        Then I should move forward to the <next> page
-
-    Examples:
-    | page       | next       |
-    | "signup"   | "details"  |
-    | "passport" | "review"   |
-    | "review"   | "success"  |
-
-    Scenario:
-        Given I am on <page>
-        When I click on the back button
-        Then I should go back to the <previous> page
+        Then I should be on the <next> page
         
     Examples:
-        | previous   | page       |
-        | ""         | "signup"   |
-        | "details"  | "passport" |
-        | "passport" | "review"   |
+        | page       | next       |
+        | details   | passport |
+        | passport | review   |
+        | review  | success  |
 
+    Scenario:
+        Given I have proceeded to the <page> page
+        When I click on the back button
+        Then I should be on the <previous> page
+
+    Examples:
+        | page   | previous  |
+        | passport | details |
+        | review | passport|
     

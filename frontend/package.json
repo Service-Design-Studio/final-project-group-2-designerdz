@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@cucumber/cucumber": "^8.3.0",
+    "@cucumber/cucumber": "^8.5.1",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.9.1",
@@ -13,7 +13,6 @@
     "axios": "^0.27.2",
     "axois": "^0.0.1-security",
     "chai": "^4.3.6",
-    "chromedriver": "^102.0.0",
     "js-cookie": "^3.0.1",
     "pactum": "^3.1.10",
     "pdfjs-dist": "^2.15.349",
@@ -55,6 +54,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
+    "chromedriver": "^102.0.0",
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.3"
   }

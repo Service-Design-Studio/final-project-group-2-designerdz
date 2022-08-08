@@ -1,26 +1,27 @@
 Feature: Form Validation
-As a user filling up the form
-I want to be informed when the form has errors 
-So that I know where to make edits and be sure that I have filled up the form correctly
+    As a user filling up the form
+    I want to be informed when the form has errors 
+    So that I know where to make edits and be sure that I have filled up the form correctly
+
+    Background: Signing up for family
+        Given I am signing up for my family
 
     Scenario: Prevent moving to next page if compulsory fields are not filled
-        Given I am on <page> and I have not filled in any fields
+        Given I have proceeded to the <page> page
+        And I have not filled in any fields
         
-        When I click on <button>
-        Then I should be on <page>
+        When I click on the next button
+        Then I should be on the <page> page
         And I should see <errors>
 
-        When I fill up <form_fields>
-        And I click on <button>
-        Then I should be on <next_page>
-
         Examples:
-        | page       | button | errors                                  | form_fields                             | next_page  |
-        # | "details"  | "next" | "Display Name,Phone Number"             | "display_name,phone_number"             | "family"   |
-        # | "child"    | "next" | "Display Name,Phone Number"             | "display_name,phone_number"             | "family"   |
-        | "passport" | "next" | "Full Name,Passport Number,Passport Expiry,Nationality,Gender,Date of Birth" | "full_name,passport_number,passport_expiry,nationality,gender,dob" | "review"   |
+        | page     | errors                                  |
+        | details  | "Display Name,Phone Number"             |
+        | child    | "Display Name"             |
+        | passport | "Full Name,Passport Number,Passport Expiry,Nationality,Gender,Birth Date" | 
 
     Scenario: Carousel Pop-up For Incomplete Family Member Details
-        Given I am on passport page, have at least one child and have not completed the fields on the current page
-        When I click on another family member
+        Given I have proceeded to the passport page
+        And I have not filled in any fields
+        When I click on my child icon
         Then I should see an icon on the carousel of the family member I just navigated away from
