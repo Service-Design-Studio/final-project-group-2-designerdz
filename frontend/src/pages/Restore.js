@@ -40,7 +40,6 @@ export default function Restore() {
       );
     }
   };
-  console.log(errors);
   return (
     <form
       className="flex flex-col justify-around bg-slate-50 px-2 py-4 rounded-lg shadow-lg h-[40vh]"

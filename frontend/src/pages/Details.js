@@ -80,6 +80,7 @@ export default function Details() {
 
     //TODO: fix bug, if new user click next but user exist, navigate back to landing page,
     //then pop up enter phone number, will redirect to passport, but phone number is empty field??? NEED TO CHECK
+    //ASSUMPTION: user not likely to type in the wrong phone number
     if (isFamily) {
       data["url"] = "family"; //will be redirected to /family on resumption
     } else {
@@ -93,8 +94,8 @@ export default function Details() {
         navigateNextPage();
       } catch (error) {
         if (error.response.status === 422) {
-          navigate("/");
-          alert("User already exist!");
+          //TODO; redirect to latest step
+          navigate("/", { state: { pop_up: true } });
         }
         console.log(error.response);
       }

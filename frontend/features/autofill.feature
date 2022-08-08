@@ -6,7 +6,7 @@ Feature: Autofill
     # TODO: add in pdf
     Background: Uploaded a document
         Given I am signing up for myself
-        And I have filled in my details
+        And I have proceeded to the passport page
         And I have uploaded the document good_passport.png
 
     Scenario: Input fields are autofilled

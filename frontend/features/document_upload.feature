@@ -5,7 +5,7 @@ Feature: Document Upload
 
     Background: Uploading of passport
         Given I am signing up for myself
-        And I have filled in my details
+        And I have proceeded to the passport page
         When I have uploaded the document good_passport.png
 
     Scenario: Document Preview and Loading

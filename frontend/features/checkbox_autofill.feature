@@ -5,8 +5,7 @@ Feature: Checkbox Autofill
 
     Background: Filling up of parent details
         Given I am signing up for my family
-        And I have filled in my details
-        And I am adding a child
+        And I have proceeded to the child page
 
     Scenario: Check autofill
         When I check the autofill checkbox

@@ -67,10 +67,6 @@ Then("I should be able to see that my information is correct", async function() 
     var childDOB = await driver.findElement(By.className("review_dob")).getText();
     assert.equal(childDOB, "Jul 14, 2005");
   });
-
-  Then("I should be on {string}", async function(page) {
-    assert.equal(await driver.getCurrentUrl(), baseUrl + page);
-  });
   
   When("I see that my child information is misfilled", async function() {
     var childDisplayNameValue = await driver.findElement(By.className("display_name")).getText();

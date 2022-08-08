@@ -5,9 +5,7 @@ Feature: Carousel System
 
     Background: Added one child and navigating to next page
         Given I am signing up for my family
-        And I have filled in my details
-        And I have added a child
-        When I click on the next button
+        And I have proceeded to the passport page
 
     Scenario: Correct number of children
         Then I should be able to see my child's and my name in the carousel

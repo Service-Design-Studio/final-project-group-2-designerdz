@@ -2,6 +2,23 @@ const { Given, When, Then } = require("@cucumber/cucumber");
 const { By, Button } = require("selenium-webdriver");
 const { expect, assert } = require("chai");
 
+async function passportPage(fullName, passportNumber, nationality, gender, dob, passportExpiry){
+    await driver.findElement(By.className("full_name")).sendKeys(fullName);
+    await driver.findElement(By.className("passport_number")).sendKeys(passportNumber);
+    await driver.findElement(By.className("nationality")).sendKeys(nationality);
+    await driver.findElement(By.className(gender)).click();
+    await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys(dob);
+    await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(500);
+    await driver.findElement(By.xpath("//input[@placeholder='Enter Passport Expiry date']")).sendKeys(passportExpiry);
+    await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(500);
+}
+
+When("I fill in my passport details", async function () {
+    await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
+});
+
 Then(
     "I should be able to see my child's and my name in the carousel",
         async function () {

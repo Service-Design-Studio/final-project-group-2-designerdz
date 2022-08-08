@@ -24,6 +24,9 @@ async function passportPage(fullName, passportNumber, nationality, gender, dob, 
 
 // TODO: Fix this wonky step that works half the time
 When("I go from the family page to the review page", async function () {
+    await driver.findElement(By.className("next")).click();
+    await driver.sleep(500);
+    
     var actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, baseUrl + "family");
 

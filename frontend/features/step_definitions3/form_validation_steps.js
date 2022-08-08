@@ -5,23 +5,6 @@ const { expect, assert } = require("chai");
 Given(
   "I am on {string} and I have not filled in any fields",
   async function (page) {
-    await driver.get(baseUrl);
-    await driver.sleep(2000);
-
-    const notACustomerYetButton = await driver.findElement(
-      By.className("bg-red-500")
-    );
-    notACustomerYetButton.click();
-    await driver.sleep(1000);
-
-    if (page == "details") {
-      const familyNextButton = await driver.findElement(
-        By.className("family-next")
-      );
-      familyNextButton.click();
-      await driver.sleep(1000);
-    }
-
     if (page == "child") {
       const familyNextButton = await driver.findElement(
         By.className("family-next")

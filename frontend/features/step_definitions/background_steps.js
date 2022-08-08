@@ -1,6 +1,6 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
 const { By } = require("selenium-webdriver");
-const { assert } = require("chai");
+const { expect, assert } = require("chai");
 
 async function detailsPage(displayName, phoneNumber = "", email = "") {
     await driver.findElement(By.className("display_name")).sendKeys(displayName);
@@ -38,12 +38,65 @@ Given(/^I am signing up for (.*)$/, async function(type) {
     }
 })
 
-Given("I have filled in my details", async function () {
-    await detailsPage("Sally Abbot", parentNumber, "sally@gmail.com");
+Given(/^I have proceeded to the (.*) page$/, async function(page) {
+    if (page == "details") {
+        // Coninue, should already have been on details
+    } else {
+        await detailsPage("Sally Abbot", parentNumber, "sally@gmail.com");
   
-    await driver.findElement(By.className("next")).click();
-    await driver.sleep(1000);
-});
+        await driver.findElement(By.className("next")).click();
+        await driver.sleep(1000);
+    }
+
+    if (page == "family") {
+        // Should be on family after this
+    }
+
+    // Going from family to child page if exist
+    if (page == "child") {
+        await driver.findElement(By.className("add")).click();
+        await driver.sleep(500);
+        // FIXME: overlapping one from both sides
+        // await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
+    }
+
+    if (page == "passport") {
+        try {
+            // Add a child if possible
+            await driver.findElement(By.className("add")).click();
+            await driver.sleep(500);
+            await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
+            await driver.findElement(By.className("next")).click();
+            await driver.sleep(1000);
+
+            await driver.findElement(By.className("next")).click();
+            await driver.sleep(1000);
+        } catch (error) {
+            // Should have been in passport page automatically from previous steps
+        }
+    }
+
+    if (page == "review") {
+        await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
+
+        // Try for child if exist
+        try {
+            await driver.findElement(By.id("user_1")).click();
+            await driver.sleep(1000);
+        
+            await passportPage("Sarah Abbot", "E34152315", "American", "female", "14/07/2005", "01/09/2030");
+        } catch (error) {
+        }
+        
+        await driver.findElement(By.className("next")).click();
+        await driver.sleep(2000);
+    }
+
+    // Assert that the page is correct
+    var actualUrl = await driver.getCurrentUrl();
+    actualUrl = actualUrl.split("/")[3];
+    expect(actualUrl).to.equal(page);
+})
 
 // have added = go to next step
 Given(/^I (.*) a child$/, async function(next) {
@@ -61,10 +114,6 @@ Given(/^I (.*) a child$/, async function(next) {
         assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
     }
 })
-
-When("I fill in my passport details", async function () {
-    await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
-});
 
 When(/^I have uploaded the document (.*)$/, async function (filePath) {
     const uploadButton = await driver.findElement(By.className("btn_upload"));

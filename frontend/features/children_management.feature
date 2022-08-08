@@ -5,7 +5,7 @@ Feature: Children management
 
     Background: Added one child
         Given I am signing up for my family
-        And I have filled in my details
+        And I have proceeded to the family page
         And I have added a child
 
     Scenario: View of correct number of children

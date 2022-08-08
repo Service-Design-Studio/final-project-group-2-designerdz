@@ -5,7 +5,7 @@ Feature: Image Validation
 
     Background: Getting onto passport page
         Given I am signing up for myself
-        And I have filled in my details
+        And I have proceeded to the passport page
 
     Scenario: Uploading unsatisfactory images for passport
         When I upload a bad <image>
