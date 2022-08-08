@@ -15,18 +15,20 @@ async function passportPage(fullName, passportNumber, nationality, gender, dob, 
     await driver.findElement(By.className("nationality")).sendKeys(nationality);
     await driver.findElement(By.className(gender)).click();
     await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys(dob);
+    await driver.sleep(1000);
     await driver.findElement(By.className("dismiss")).click();
-    await driver.sleep(500);
+    await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(1000);
     await driver.findElement(By.xpath("//input[@placeholder='Enter Passport Expiry date']")).sendKeys(passportExpiry);
+    await driver.sleep(1000);
     await driver.findElement(By.className("dismiss")).click();
-    await driver.sleep(500);
+    await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(1000);
+    await driver.findElement(By.className("full_name")).click();
+    await driver.sleep(1000);
 }
 
-// TODO: Fix this wonky step that works half the time
 When("I go from the family page to the review page", async function () {
-    await driver.findElement(By.className("next")).click();
-    await driver.sleep(500);
-    
     var actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, baseUrl + "family");
 
@@ -50,30 +52,4 @@ When("I go from the family page to the review page", async function () {
 
     var actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, baseUrl + "review");
-});
-
-Given("that I have filled up {string} and have navigated to {string}", async function (page1, page2) {
-    await driver.get(baseUrl + "signup");
-    await driver.sleep(500);
-
-    // Navigate into single user details
-    await driver.findElement(By.className("next")).click();
-    await driver.sleep(500);
-    assert.equal(await driver.getCurrentUrl(), baseUrl + "details");
-
-    await detailsPage("Yi Ma", parentNumber, "dayima@gmail.com");  
-
-    // Navigate to passport page
-    await driver.findElement(By.className("next")).click();
-    await driver.sleep(500);
-
-    if (page2 == "review") {
-        await passportPage("Da Yi Ma", "E32136512", "China", "male", "14/07/1980", "09/2022");
-
-        // Move to review page
-        await driver.findElement(By.className("next")).click();
-        await driver.sleep(500);
-    }
-
-    assert.equal(await driver.getCurrentUrl(), baseUrl + page2);
 });

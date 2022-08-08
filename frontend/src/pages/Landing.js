@@ -45,7 +45,7 @@ export default function Landing() {
           onClick={() => alert("Sorry we are not DBS!")}
         />
       </div>
-      <button onClick={() => setOpen(true)} className="button">
+      <button onClick={() => setOpen(true)} className="resume-progress button">
         <a>
           Left registration midway? &nbsp;
           <span className="underline">Continue where you left.</span>

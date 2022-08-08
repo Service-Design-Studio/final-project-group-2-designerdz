@@ -24,7 +24,7 @@ Then("the fields I have filled up in {string} should remain", async function (pa
         await driver
           .findElement(By.className("display_name"))
           .getAttribute("value"),
-        "Yi Ma"
+        "Sally Abbot"
       );
       assert.equal(
         await driver
@@ -34,26 +34,26 @@ Then("the fields I have filled up in {string} should remain", async function (pa
       );
       assert.equal(
         await driver.findElement(By.className("email")).getAttribute("value"),
-        "dayima@gmail.com"
+        "sally@gmail.com"
       );
     } else if (page == "passport") {
       assert.equal(
         await driver
           .findElement(By.className("full_name"))
           .getAttribute("value"),
-        "Da Yi Ma"
+        "Sally Abbot"
       );
       assert.equal(
         await driver
           .findElement(By.className("passport_number"))
           .getAttribute("value"),
-        "E32136512"
+        "E1234567S"
       );
       assert.equal(
         await driver
           .findElement(By.className("nationality"))
           .getAttribute("value"),
-        "China"
+        "American"
       );
     }
   }

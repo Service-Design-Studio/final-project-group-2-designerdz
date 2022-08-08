@@ -2,27 +2,10 @@ const { Given, When, Then } = require("@cucumber/cucumber");
 const { By } = require("selenium-webdriver");
 const { assert } = require("chai");
 
-// When("I check the autofill checkbox", async function () {
-//     const autofillCheckbox = await driver.findElement(By.className("autofill"));
-
-//     if (!autofillCheckbox.isSelected()) {
-//         autofillCheckbox.click();
-//     }
-
-//     var checked = await autofillCheckbox.isSelected();
-//     assert.equal(checked, true);
-// });
-
-// When("I uncheck the autofill checkbox", async function () {
-//     const autofillCheckbox = await driver.findElement(By.className("autofill"));
-  
-//     if (autofillCheckbox.isSelected()) {
-//       autofillCheckbox.click();
-//     }
-  
-//     var checked = await autofillCheckbox.isSelected();
-//     assert.equal(checked, false);
-// });
+Given("I have filled in my child name", async function(){
+  await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
+  await driver.sleep(500);
+})
 
 When(/^I (.*) the autofill checkbox$/, async function (check) {
   const autofillCheckbox = await driver.findElement(By.className("autofill"));
@@ -41,7 +24,6 @@ When(/^I (.*) the autofill checkbox$/, async function (check) {
     assert.equal(checked, false);
   }
 });
-
 
 Then("I should see my child details autofilled", async function () {
     var childNumberValue = await driver

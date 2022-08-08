@@ -8,12 +8,12 @@ Feature: Image Validation
         And I have proceeded to the passport page
 
     Scenario: Uploading unsatisfactory images for passport
-        When I upload a bad <image>
+        When I have uploaded the document <passport>
         Then I should observe <error>
 
     Examples:
-        | image                 |      error                                   |
-        | "blurry_passport.jpg" | "Image does not meet the requirements, please upload a new image" |
-        | "not_passport.png"    | "This is not a valid passport image"         |
-        | "textless.png"       | "This image does not have texts, try again with another image"                            |
-        | "invalid_file.csv"    | "Only PNG or JPEG is accepted"               | 
+        | passport                |      error                                   |
+        | blurry_passport.jpg | "Image does not meet the requirements, please upload a new image" |
+        | not_passport.png    | "This is not a valid passport image"         |
+        | textless.png       | "This image does not have texts, try again with another image"                            |
+        | invalid_file.csv    | "Only PNG or JPEG is accepted"               | 

@@ -3,7 +3,6 @@ Feature: Autofill
     I want to have my information auto-filled
     So that I do not need to fill it in manually
 
-    # TODO: add in pdf
     Background: Uploaded a document
         Given I am signing up for myself
         And I have proceeded to the passport page

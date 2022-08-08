@@ -5,11 +5,12 @@ Feature: Check API Response
         Then response should have a status 200
 
     Scenario: Navigating back and seeing forms saved
-        Given that I have filled up <previous_page> and have navigated to <page>
+        Given I am signing up for myself
+        And I have proceeded to the <page> page
         When I click on the back button
         Then the fields I have filled up in <previous_page> should remain
 
         Examples:
         | previous_page   | page       |
-        | "details"  | "passport" |
-        | "passport" | "review"   |
+        | "details"  | passport |
+        | "passport" | review   |

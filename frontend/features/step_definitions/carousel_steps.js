@@ -8,11 +8,17 @@ async function passportPage(fullName, passportNumber, nationality, gender, dob, 
     await driver.findElement(By.className("nationality")).sendKeys(nationality);
     await driver.findElement(By.className(gender)).click();
     await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys(dob);
+    await driver.sleep(1000);
     await driver.findElement(By.className("dismiss")).click();
-    await driver.sleep(500);
+    await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(1000);
     await driver.findElement(By.xpath("//input[@placeholder='Enter Passport Expiry date']")).sendKeys(passportExpiry);
+    await driver.sleep(1000);
     await driver.findElement(By.className("dismiss")).click();
-    await driver.sleep(500);
+    await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(1000);
+    await driver.findElement(By.className("full_name")).click();
+    await driver.sleep(1000);
 }
 
 When("I fill in my passport details", async function () {

@@ -15,11 +15,17 @@ async function passportPage(fullName, passportNumber, nationality, gender, dob, 
     await driver.findElement(By.className("nationality")).sendKeys(nationality);
     await driver.findElement(By.className(gender)).click();
     await driver.findElement(By.xpath("//input[@placeholder='Select Date of Birth']")).sendKeys(dob);
+    await driver.sleep(1000);
     await driver.findElement(By.className("dismiss")).click();
-    await driver.sleep(500);
+    await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(1000);
     await driver.findElement(By.xpath("//input[@placeholder='Enter Passport Expiry date']")).sendKeys(passportExpiry);
+    await driver.sleep(1000);
     await driver.findElement(By.className("dismiss")).click();
-    await driver.sleep(500);
+    await driver.findElement(By.className("dismiss")).click();
+    await driver.sleep(1000);
+    await driver.findElement(By.className("full_name")).click();
+    await driver.sleep(1000);
 }
 
 Given(/^I am signing up for (.*)$/, async function(type) {
@@ -56,11 +62,26 @@ Given(/^I have proceeded to the (.*) page$/, async function(page) {
     if (page == "child") {
         await driver.findElement(By.className("add")).click();
         await driver.sleep(500);
-        // FIXME: overlapping one from both sides
-        // await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
     }
 
     if (page == "passport") {
+        try {
+            // Add a child if possible
+            await driver.findElement(By.className("add")).click();
+            await driver.sleep(500);
+            await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
+            await driver.findElement(By.className("next")).click();
+            await driver.sleep(1000);
+            
+            // Should be on family
+            await driver.findElement(By.className("next")).click();
+            await driver.sleep(1000);
+        } catch (error) {
+            // For single user, should have been in passport page from previous steps
+        }
+    }
+
+    if (page == "review") {
         try {
             // Add a child if possible
             await driver.findElement(By.className("add")).click();
@@ -73,10 +94,8 @@ Given(/^I have proceeded to the (.*) page$/, async function(page) {
             await driver.sleep(1000);
         } catch (error) {
             // Should have been in passport page automatically from previous steps
-        }
-    }
+        } 
 
-    if (page == "review") {
         await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
 
         // Try for child if exist
@@ -87,7 +106,7 @@ Given(/^I have proceeded to the (.*) page$/, async function(page) {
             await passportPage("Sarah Abbot", "E34152315", "American", "female", "14/07/2005", "01/09/2030");
         } catch (error) {
         }
-        
+
         await driver.findElement(By.className("next")).click();
         await driver.sleep(2000);
     }
@@ -117,7 +136,7 @@ Given(/^I (.*) a child$/, async function(next) {
 
 When(/^I have uploaded the document (.*)$/, async function (filePath) {
     const uploadButton = await driver.findElement(By.className("btn_upload"));
-    var path = process.cwd()+'/features/resources/' + filePath;
+    var path = process.cwd()+ '/features/resources/' + filePath;
     uploadButton.sendKeys(path);
     await driver.sleep(5000);
 });
