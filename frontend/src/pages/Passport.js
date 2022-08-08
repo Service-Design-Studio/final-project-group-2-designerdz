@@ -33,7 +33,7 @@ export default function PassTest() {
   const [isFamily, setIsFamily] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const methods = useForm({
-    mode: "onSubmit",
+    mode: "onChange",
     reValidateMode: "onChange",
   });
   const {
@@ -52,6 +52,14 @@ export default function PassTest() {
   if (familyData.length > 0) {
     let copyFamilyData = familyData.slice();
     //if there is change in isValid value from before, will trigger infinite rerender if no if condition
+    let formData = getValues();
+    copyFamilyData[selectedIndex].full_name = formData.full_name;
+    copyFamilyData[selectedIndex].passport_number = formData.passport_number;
+    copyFamilyData[selectedIndex].nationality = formData.nationality;
+    copyFamilyData[selectedIndex].passport_expiry = formData.passport_expiry;
+    copyFamilyData[selectedIndex].dob = formData.dob;
+    copyFamilyData[selectedIndex].gender = formData.gender;
+    copyFamilyData[selectedIndex].Passport = formData.Passport;
     if (copyFamilyData[selectedIndex].status != isValid) {
       copyFamilyData[selectedIndex].status = isValid;
       setFamilyData(copyFamilyData);
