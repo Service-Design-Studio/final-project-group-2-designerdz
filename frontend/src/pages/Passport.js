@@ -69,17 +69,40 @@ export default function PassTest() {
     }
   }
 
-  useEffect(() => {
-    async function fetchData() {
+  // useEffect on component mount which queries backend and resets the form
+  useEffect(()=>{
+    
+    async function fetchData(idx) {
       try {
         const response = await getAllChildrenData(userId);
         let userData = checkIncompleteData(response.data); //check status of each family member
         setFamilyData(userData);
         setIsFamily(userData[0].is_family === "true"); //convert from string to boolean
         //if user has image, set image to passportFile state
-        if (userData[0].image_name != undefined) {
-          setPassportFile(userData[0].image_name); //need set concat
+        if (userData[idx].image_name != undefined) {
+          setPassportFile(
+            "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
+            userData[idx].image_name))
         }
+        console.log("USER DATA")
+        console.log(userData)
+
+        reset({
+          full_name: userData[idx].full_name,
+          passport_number: userData[idx].passport_number,
+          nationality: userData[idx].nationality,
+          passport_expiry:
+            userData[idx].passport_expiry == undefined
+              ? null
+              : new Date(userData[idx].passport_expiry),
+          dob:
+            userData[idx].dob == undefined
+              ? null
+              : new Date(userData[idx].dob),
+          gender: userData[idx].gender,
+          Passport: "",
+        });
+
       } catch (error) {
         console.log(error.response);
       }
@@ -89,15 +112,27 @@ export default function PassTest() {
     if (userId == null) {
       navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
     }
+
     //check if user coming from redirect page and which user it selected
     if (location.state != undefined) {
       setOnEdit(location.state.on_edit);
       setSelectedIndex(location.state.index);
-    }
-    if (familyData.length === 0) {
-      fetchData();
+      fetchData(location.state.index)
+    } else {
+      fetchData(0)
     }
 
+
+  }, [])
+
+  // useEffect on form isValid change which is triggered everytime the form validity changes
+  useEffect(()=>{
+    onFormChange();
+    // trigger()
+  } , [isValid])
+  
+  // useEffect on selectedIndex change which is called after onUserSelected
+  useEffect(()=>{
     if (familyData[selectedIndex] != undefined) {
       if (familyData[selectedIndex].image_name != undefined) {
         setPassportFile(
@@ -106,9 +141,23 @@ export default function PassTest() {
           )
         );
       }
+      reset({
+        full_name: familyData[selectedIndex].full_name,
+        passport_number: familyData[selectedIndex].passport_number,
+        nationality: familyData[selectedIndex].nationality,
+        passport_expiry:
+          familyData[selectedIndex].passport_expiry == undefined
+            ? null
+            : new Date(familyData[selectedIndex].passport_expiry),
+        dob:
+          familyData[selectedIndex].dob == undefined
+            ? null
+            : new Date(familyData[selectedIndex].dob),
+        gender: familyData[selectedIndex].gender,
+        Passport: "",
+      });
     }
-    onFormChange();
-  }, [selectedIndex, familyData, isValid]);
+  } , [selectedIndex])
 
   const checkIncompleteData = (familyData) => {
     for (var i = 0; i < familyData.length; i++) {
@@ -178,21 +227,6 @@ export default function PassTest() {
     setFamilyData(copyFamilyData);
     setSelectedIndex(index);
     setPassportFile();
-    reset({
-      full_name: copyFamilyData[index].full_name,
-      passport_number: copyFamilyData[index].passport_number,
-      nationality: copyFamilyData[index].nationality,
-      passport_expiry:
-        copyFamilyData[index].passport_expiry == undefined
-          ? null
-          : new Date(copyFamilyData[index].passport_expiry),
-      dob:
-        copyFamilyData[index].dob == undefined
-          ? null
-          : new Date(copyFamilyData[index].dob),
-      gender: copyFamilyData[index].gender,
-      Passport: "",
-    });
   };
 
   const onSubmit = async () => {
