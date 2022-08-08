@@ -103,7 +103,7 @@ export default function ChildDetails() {
     }
 
     if (onEdit === true) {
-      navigate("/review");
+      navigate("/review", { state: { index: location.state.index }});
       setOnEdit(false);
     } else {
       navigate("/family");

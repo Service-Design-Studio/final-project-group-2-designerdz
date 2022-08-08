@@ -33,7 +33,7 @@ export default function PassTest() {
   const [isFamily, setIsFamily] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const methods = useForm({
-    mode: "onSubmit",
+    mode: "onChange",
     reValidateMode: "onChange",
   });
   const {
@@ -43,32 +43,66 @@ export default function PassTest() {
     handleSubmit,
     register,
     getValues,
+    trigger,
     control,
     formState: { isValid, errors },
   } = methods;
   let userId = localStorage.getItem("user_id");
 
-  //to update the status of family members when isValid value changes (every keystroke)
-  if (familyData.length > 0) {
-    let copyFamilyData = familyData.slice();
-    //if there is change in isValid value from before, will trigger infinite rerender if no if condition
-    if (copyFamilyData[selectedIndex].status != isValid) {
-      copyFamilyData[selectedIndex].status = isValid;
-      setFamilyData(copyFamilyData);
+  function onFormChange() {
+    console.log("FORM CHANGED");
+    //to update the status of family members when isValid value changes (every keystroke)
+    if (familyData.length > 0) {
+      console.log("SETTING TO FORM VALUES");
+      let copyFamilyData = familyData.slice();
+      //if there is change in isValid value from before, will trigger infinite rerender if no if condition
+      let formData = getValues();
+      // iterate through formdata and set copyFamilyData[selectedIndex] to formData
+      for (let key in formData) {
+        copyFamilyData[selectedIndex][key] = formData[key];
+      }
+
+      if (copyFamilyData[selectedIndex].status != isValid) {
+        copyFamilyData[selectedIndex].status = isValid;
+        setFamilyData(copyFamilyData);
+      }
     }
   }
 
-  useEffect(() => {
-    async function fetchData() {
+  // useEffect on component mount which queries backend and resets the form
+  useEffect(()=>{
+    
+    async function fetchData(idx) {
       try {
         const response = await getAllChildrenData(userId);
         let userData = checkIncompleteData(response.data); //check status of each family member
         setFamilyData(userData);
         setIsFamily(userData[0].is_family === "true"); //convert from string to boolean
         //if user has image, set image to passportFile state
-        if (userData[0].image_name != undefined) {
-          setPassportFile(userData[0].image_name); //need set concat
+        if (userData[idx].image_name != undefined) {
+          setPassportFile(
+            "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
+            userData[idx].image_name))
         }
+        console.log("USER DATA")
+        console.log(userData)
+
+        reset({
+          full_name: userData[idx].full_name,
+          passport_number: userData[idx].passport_number,
+          nationality: userData[idx].nationality,
+          passport_expiry:
+            userData[idx].passport_expiry == undefined
+              ? null
+              : new Date(userData[idx].passport_expiry),
+          dob:
+            userData[idx].dob == undefined
+              ? null
+              : new Date(userData[idx].dob),
+          gender: userData[idx].gender,
+          Passport: "",
+        });
+
       } catch (error) {
         console.log(error.response);
       }
@@ -78,16 +112,28 @@ export default function PassTest() {
     if (userId == null) {
       navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
     }
+
     //check if user coming from redirect page and which user it selected
     if (location.state != undefined) {
       setOnEdit(location.state.on_edit);
       setSelectedIndex(location.state.index);
-    }
-    if (familyData.length === 0) {
-      fetchData();
+      fetchData(location.state.index)
+    } else {
+      fetchData(0)
     }
 
-    if (familyData[selectedIndex] !== undefined) {
+
+  }, [])
+
+  // useEffect on form isValid change which is triggered everytime the form validity changes
+  useEffect(()=>{
+    onFormChange();
+    // trigger()
+  } , [isValid])
+  
+  // useEffect on selectedIndex change which is called after onUserSelected
+  useEffect(()=>{
+    if (familyData[selectedIndex] != undefined) {
       if (familyData[selectedIndex].image_name != undefined) {
         setPassportFile(
           "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
@@ -95,7 +141,6 @@ export default function PassTest() {
           )
         );
       }
-      console.log(isValid);
       reset({
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
@@ -112,7 +157,7 @@ export default function PassTest() {
         Passport: "",
       });
     }
-  }, [selectedIndex, familyData]);
+  } , [selectedIndex])
 
   const checkIncompleteData = (familyData) => {
     for (var i = 0; i < familyData.length; i++) {
@@ -150,6 +195,10 @@ export default function PassTest() {
     let data = getValues();
     data["image_name"] = familyData[selectedIndex].image_name;
     let copyFamilyData = familyData.slice();
+    console.log("COPY FAMILY DATA");
+    console.log(copyFamilyData);
+    console.log("Image Name");
+    console.log(familyData[selectedIndex].image_name);
 
     //indicating parent
     if (selectedIndex === 0) {
@@ -269,16 +318,33 @@ export default function PassTest() {
 
       //update form input data from ocrData
       //useEffect is triggered with setState with reset in it
-      let copyFamilyData = familyData.slice();
-      copyFamilyData[selectedIndex].image_name = OBJECT_NAME;
-      copyFamilyData[selectedIndex].full_name = ocrData.full_name;
-      copyFamilyData[selectedIndex].passport_number = ocrData.passport_number;
-      copyFamilyData[selectedIndex].nationality = ocrData.nationality;
-      copyFamilyData[selectedIndex].passport_expiry = ocrData.passport_expiry;
-      copyFamilyData[selectedIndex].dob = ocrData.dob;
-      copyFamilyData[selectedIndex].gender =
-        ocrData.gender == "M" ? "MALE" : "FEMALE";
-      setFamilyData(copyFamilyData);
+      let copyFamilyDataTwo = familyData.slice();
+
+      // iterate through formdata and set copyFamilyDataTwo[selectedIndex] to formData
+      for (const key in ocrData) {
+        copyFamilyDataTwo[selectedIndex][key] = ocrData[key];
+        if (key == "gender") {
+          copyFamilyDataTwo[selectedIndex][key] =
+            ocrData[key] == "M" ? "MALE" : "FEMALE";
+        }
+      }
+      copyFamilyDataTwo[selectedIndex]["image_name"] = OBJECT_NAME;
+      setFamilyData(copyFamilyDataTwo);
+      reset({
+        full_name: copyFamilyDataTwo[selectedIndex].full_name,
+        passport_number: copyFamilyDataTwo[selectedIndex].passport_number,
+        nationality: copyFamilyDataTwo[selectedIndex].nationality,
+        passport_expiry:
+          copyFamilyDataTwo[selectedIndex].passport_expiry == undefined
+            ? null
+            : new Date(copyFamilyDataTwo[selectedIndex].passport_expiry),
+        dob:
+          copyFamilyDataTwo[selectedIndex].dob == undefined
+            ? null
+            : new Date(copyFamilyDataTwo[selectedIndex].dob),
+        gender: copyFamilyDataTwo[selectedIndex].gender,
+        Passport: "",
+      });
     } catch (error) {
       console.log(error);
       let error_message = error.response.data.error;
@@ -308,7 +374,11 @@ export default function PassTest() {
       />
       <div className="dismiss absolute left-0 right-0 top-36 items-center ">
         <FormProvider {...methods}>
-          <form className="mx-8" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="mx-8"
+            onSubmit={handleSubmit(onSubmit)}
+            onChange={onFormChange}
+          >
             {isFamily === true && !onEdit ? (
               <Carousel
                 nameArr={familyData}
@@ -396,6 +466,7 @@ export default function PassTest() {
                     ? null
                     : familyData[selectedIndex].passport_expiry
                 }
+                onChangeHandler={onFormChange}
               />
             </div>
 
@@ -426,6 +497,7 @@ export default function PassTest() {
                       aria-label="text alignment"
                       onChange={(newGender) => {
                         field.onChange(newGender);
+                        onFormChange();
                       }}
                       value={field.value}
                       color="error"
@@ -467,6 +539,7 @@ export default function PassTest() {
                     ? null
                     : familyData[selectedIndex].dob
                 }
+                onChangeHandler={onFormChange}
               />
             </div>
             <Button
