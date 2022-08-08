@@ -2,7 +2,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useFormContext } from "react-hook-form";
 
-export default function Calendar({ calendarType, defaultDate }) {
+export default function Calendar({ calendarType, defaultDate, onChangeHandler}) {
   const {
     control,
     formState: { errors },
@@ -10,15 +10,15 @@ export default function Calendar({ calendarType, defaultDate }) {
 
   switch (calendarType) {
     case "passport_expiry":
-      return passportExpiryCalendar(control, errors, defaultDate);
+      return passportExpiryCalendar(control, errors, defaultDate, onChangeHandler);
     case "dob":
-      return birthDateCalendar(control, errors, defaultDate);
+      return birthDateCalendar(control, errors, defaultDate, onChangeHandler);
     default:
       return;
   }
 }
 
-function passportExpiryCalendar(control, errors, defaultDate) {
+function passportExpiryCalendar(control, errors, defaultDate, onChangeHandler) {
   return (
     <Controller
       name={"passport_expiry"}
@@ -29,7 +29,10 @@ function passportExpiryCalendar(control, errors, defaultDate) {
         return (
           <>
             <DatePicker
-              onChange={onChange}
+              onChange={(date) => {
+                        onChange(date);
+                        onChangeHandler()
+                      }}
               selected={value}
               placeholderText="Enter Passport Expiry date"
               dateFormat="dd/MM/yyyy"
@@ -49,7 +52,7 @@ function passportExpiryCalendar(control, errors, defaultDate) {
   );
 }
 
-function birthDateCalendar(control, errors, defaultDate) {
+function birthDateCalendar(control, errors, defaultDate, onChangeHandler) {
   return (
     <Controller
       name={"dob"}
@@ -60,7 +63,10 @@ function birthDateCalendar(control, errors, defaultDate) {
         return (
           <>
             <DatePicker
-              onChange={onChange}
+              onChange={(date) => {
+                        onChange(date);
+                        onChangeHandler()
+                      }}
               selected={value}
               placeholderText="Select Date of Birth"
               showYearDropdown

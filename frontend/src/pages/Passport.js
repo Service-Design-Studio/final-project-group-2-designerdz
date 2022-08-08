@@ -43,24 +43,27 @@ export default function PassTest() {
     handleSubmit,
     register,
     getValues,
+    trigger,
     control,
-    formState: { isValid, errors },
+    formState: { isValid, isValidating, errors },
   } = methods;
   let userId = localStorage.getItem("user_id");
 
-  //to update the status of family members when isValid value changes (every keystroke)
-  if (familyData.length > 0) {
-    let copyFamilyData = familyData.slice();
-    //if there is change in isValid value from before, will trigger infinite rerender if no if condition
-    let formData = getValues();
-    // iterate through formdata and set copyFamilyData[selectedIndex] to formData
-    for (let key in formData) {
-      copyFamilyData[selectedIndex][key] = formData[key];
-    }
+  function onFormChange() {
+    //to update the status of family members when isValid value changes (every keystroke)
+    if (familyData.length > 0) {
+      let copyFamilyData = familyData.slice();
+      //if there is change in isValid value from before, will trigger infinite rerender if no if condition
+      let formData = getValues();
+      // iterate through formdata and set copyFamilyData[selectedIndex] to formData
+      for (let key in formData) {
+        copyFamilyData[selectedIndex][key] = formData[key];
+      }
 
-    if (copyFamilyData[selectedIndex].status != isValid) {
-      copyFamilyData[selectedIndex].status = isValid;
-      setFamilyData(copyFamilyData);
+      if (copyFamilyData[selectedIndex].status != isValid) {
+        copyFamilyData[selectedIndex].status = isValid;
+        setFamilyData(copyFamilyData);
+      }
     }
   }
 
@@ -118,7 +121,31 @@ export default function PassTest() {
         Passport: "",
       });
     }
-  }, [selectedIndex, familyData]);
+
+    function onFormChange() {
+      console.log("FORM CHANGED")
+      //to update the status of family members when isValid value changes (every keystroke)
+      if (familyData.length > 0) {
+        console.log("SETTING TO FORM VALUES")
+        let copyFamilyData = familyData.slice();
+        //if there is change in isValid value from before, will trigger infinite rerender if no if condition
+        let formData = getValues();
+        // iterate through formdata and set copyFamilyData[selectedIndex] to formData
+        for (let key in formData) {
+          copyFamilyData[selectedIndex][key] = formData[key];
+        }
+  
+        if (copyFamilyData[selectedIndex].status != isValid) {
+          copyFamilyData[selectedIndex].status = isValid;
+          setFamilyData(copyFamilyData);
+        }
+      }
+      trigger()
+    }
+
+    onFormChange();
+
+  }, [selectedIndex, familyData, isValid]);
 
   const checkIncompleteData = (familyData) => {
     for (var i = 0; i < familyData.length; i++) {
@@ -275,16 +302,16 @@ export default function PassTest() {
 
       //update form input data from ocrData
       //useEffect is triggered with setState with reset in it
-      let copyFamilyData = familyData.slice();
-      copyFamilyData[selectedIndex].image_name = OBJECT_NAME;
-      copyFamilyData[selectedIndex].full_name = ocrData.full_name;
-      copyFamilyData[selectedIndex].passport_number = ocrData.passport_number;
-      copyFamilyData[selectedIndex].nationality = ocrData.nationality;
-      copyFamilyData[selectedIndex].passport_expiry = ocrData.passport_expiry;
-      copyFamilyData[selectedIndex].dob = ocrData.dob;
-      copyFamilyData[selectedIndex].gender =
-        ocrData.gender == "M" ? "MALE" : "FEMALE";
-      setFamilyData(copyFamilyData);
+      let copyFamilyDataTwo = familyData.slice();
+
+      // iterate through formdata and set copyFamilyDataTwo[selectedIndex] to formData
+      for (const key in ocrData) {
+        copyFamilyDataTwo[selectedIndex][key] = ocrData[key];
+        if (key == "gender") {
+          copyFamilyDataTwo[selectedIndex][key] = (ocrData[key] == "M") ? "MALE" : "FEMALE";
+        }
+      }
+      setFamilyData(copyFamilyDataTwo);
     } catch (error) {
       console.log(error);
       let error_message = error.response.data.error;
@@ -314,7 +341,7 @@ export default function PassTest() {
       />
       <div className="absolute left-0 right-0 top-36 items-center ">
         <FormProvider {...methods}>
-          <form className="mx-8" onSubmit={handleSubmit(onSubmit)}>
+          <form className="mx-8" onSubmit={handleSubmit(onSubmit)} onChange={onFormChange}>
             {isFamily === true && !onEdit ? (
               <Carousel
                 nameArr={familyData}
@@ -402,6 +429,7 @@ export default function PassTest() {
                     ? null
                     : familyData[selectedIndex].passport_expiry
                 }
+                onChangeHandler = {onFormChange}
               />
             </div>
 
@@ -432,6 +460,7 @@ export default function PassTest() {
                       aria-label="text alignment"
                       onChange={(newGender) => {
                         field.onChange(newGender);
+                        onFormChange()
                       }}
                       value={field.value}
                       color="error"
@@ -455,6 +484,7 @@ export default function PassTest() {
                   )}
                   name="gender"
                   control={control}
+                  
                 />
               </div>
               {errors.gender && (
@@ -473,6 +503,7 @@ export default function PassTest() {
                     ? null
                     : familyData[selectedIndex].dob
                 }
+                onChangeHandler = {onFormChange}
               />
             </div>
             <Button
