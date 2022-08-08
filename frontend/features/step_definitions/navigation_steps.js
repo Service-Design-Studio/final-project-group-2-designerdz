@@ -42,7 +42,7 @@ Given(/^I have filled up the (.*) page$/, async function(page) {
   if (page == "details") {
     await detailsPage("Sally Abbot", parentNumber, "sally@gmail.com");
   } else if (page == "passport") {
-    await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
+    await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "05/09/2024");
   }
 
   // Do nothing for review page
