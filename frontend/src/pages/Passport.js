@@ -33,8 +33,8 @@ export default function PassTest() {
   const [isFamily, setIsFamily] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const methods = useForm({
-    mode: "onChange",
-    // reValidateMode: "onChange",
+    mode: "onSubmit",
+    reValidateMode: "onChange",
   });
   const {
     reset,
@@ -67,7 +67,7 @@ export default function PassTest() {
         setIsFamily(userData[0].is_family === "true"); //convert from string to boolean
         //if user has image, set image to passportFile state
         if (userData[0].image_name != undefined) {
-          setPassportFile(userData[0].image_name);
+          setPassportFile(userData[0].image_name); //need set concat
         }
       } catch (error) {
         console.log(error.response);
@@ -95,6 +95,7 @@ export default function PassTest() {
           )
         );
       }
+      console.log(isValid);
       reset({
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
