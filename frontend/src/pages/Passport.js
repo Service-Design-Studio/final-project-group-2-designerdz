@@ -53,13 +53,11 @@ export default function PassTest() {
     let copyFamilyData = familyData.slice();
     //if there is change in isValid value from before, will trigger infinite rerender if no if condition
     let formData = getValues();
-    copyFamilyData[selectedIndex].full_name = formData.full_name;
-    copyFamilyData[selectedIndex].passport_number = formData.passport_number;
-    copyFamilyData[selectedIndex].nationality = formData.nationality;
-    copyFamilyData[selectedIndex].passport_expiry = formData.passport_expiry;
-    copyFamilyData[selectedIndex].dob = formData.dob;
-    copyFamilyData[selectedIndex].gender = formData.gender;
-    copyFamilyData[selectedIndex].Passport = formData.Passport;
+    // iterate through formdata and set copyFamilyData[selectedIndex] to formData
+    for (let key in formData) {
+      copyFamilyData[selectedIndex][key] = formData[key];
+    }
+
     if (copyFamilyData[selectedIndex].status != isValid) {
       copyFamilyData[selectedIndex].status = isValid;
       setFamilyData(copyFamilyData);
