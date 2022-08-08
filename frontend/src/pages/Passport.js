@@ -283,7 +283,7 @@ export default function PassTest() {
       console.log("Invalid File Type");
       setError("valid_file_type", {
         type: "Custom",
-        message: "Only PNG or JPEG is accepted",
+        message: "Only PNG, JPEG or PDF files are accepted",
       });
       return;
     }
