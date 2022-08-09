@@ -86,7 +86,7 @@ class Api::V1::UsersController < ApplicationController
       render json: { error: "Image does not meet the requirements, please upload a new image" }, status: :unprocessable_entity
 
     # mrz != 44 chars after splitting whitespaces
-    elsif @output == "invalid mrz"
+    elsif @output == "invalid MRZ"
       render json: { error: "This passport does not have correct MRZ, autofill unavailable" }, status: :unprocessable_entity
 
     else 

@@ -23,7 +23,7 @@ import {
   getPassportData,
 } from "../services/axiosRequests.js";
 
-export default function PassTest() {
+export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
   const [passportFile, setPassportFile] = useState();
@@ -43,7 +43,6 @@ export default function PassTest() {
     handleSubmit,
     register,
     getValues,
-    trigger,
     control,
     formState: { isValid, errors },
   } = methods;
@@ -70,8 +69,7 @@ export default function PassTest() {
   }
 
   // useEffect on component mount which queries backend and resets the form
-  useEffect(()=>{
-    
+  useEffect(() => {
     async function fetchData(idx) {
       try {
         const response = await getAllChildrenData(userId);
@@ -82,10 +80,12 @@ export default function PassTest() {
         if (userData[idx].image_name != undefined) {
           setPassportFile(
             "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
-            userData[idx].image_name))
+              userData[idx].image_name
+            )
+          );
         }
-        console.log("USER DATA")
-        console.log(userData)
+        console.log("USER DATA");
+        console.log(userData);
 
         reset({
           full_name: userData[idx].full_name,
@@ -96,13 +96,10 @@ export default function PassTest() {
               ? null
               : new Date(userData[idx].passport_expiry),
           dob:
-            userData[idx].dob == undefined
-              ? null
-              : new Date(userData[idx].dob),
+            userData[idx].dob == undefined ? null : new Date(userData[idx].dob),
           gender: userData[idx].gender,
           Passport: "",
         });
-
       } catch (error) {
         console.log(error.response);
       }
@@ -117,22 +114,20 @@ export default function PassTest() {
     if (location.state != undefined) {
       setOnEdit(location.state.on_edit);
       setSelectedIndex(location.state.index);
-      fetchData(location.state.index)
+      fetchData(location.state.index);
     } else {
-      fetchData(0)
+      fetchData(0);
     }
-
-
-  }, [])
+  }, []);
 
   // useEffect on form isValid change which is triggered everytime the form validity changes
-  useEffect(()=>{
+  useEffect(() => {
     onFormChange();
     // trigger()
-  } , [isValid])
-  
+  }, [isValid]);
+
   // useEffect on selectedIndex change which is called after onUserSelected
-  useEffect(()=>{
+  useEffect(() => {
     if (familyData[selectedIndex] != undefined) {
       if (familyData[selectedIndex].image_name != undefined) {
         setPassportFile(
@@ -157,7 +152,7 @@ export default function PassTest() {
         Passport: "",
       });
     }
-  } , [selectedIndex])
+  }, [selectedIndex]);
 
   const checkIncompleteData = (familyData) => {
     for (var i = 0; i < familyData.length; i++) {
@@ -306,8 +301,11 @@ export default function PassTest() {
 
     try {
       // send image name to backend API
+      console.log("TRY BLOCK");
       const passportResponse = await getPassportData(OBJECT_NAME);
       const ocrData = passportResponse.data;
+      console.log("passportResponse", passportResponse);
+      console.log("ocrData:", ocrData);
 
       //display image on frontend
       const reader = new FileReader();
