@@ -16,4 +16,4 @@ Feature: Image Validation
         | blurry_passport.jpg | "Image does not meet the requirements, please upload a new image" |
         | not_passport.png    | "This is not a valid passport image"         |
         | textless.png       | "This image does not have texts, try again with another image"                            |
-        | invalid_file.csv    | "Only PNG or JPEG is accepted"               | 
+        | invalid_file.csv    | "Only PNG, JPEG or PDF files are accepted"               | 
