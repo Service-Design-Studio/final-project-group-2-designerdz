@@ -16,69 +16,57 @@ export default function Review() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
   const [isFamily, setIsFamily] = useState(false);
-  let userData;
   let userId = localStorage.getItem("user_id");
 
-  useEffect(() => {
-    function checkIncompleteData(familyData) {
-      let compulsory_fields = ["full_name", "passport_number", "nationality"];
-      console.log(familyData.length);
-      for (var i = 0; i < familyData.length; i++) {
-        familyData[i]["status"] = true;
-        for (let field of compulsory_fields) {
-          if (
-            familyData[i][field] == undefined ||
-            familyData[i][field] == null ||
-            familyData[i][field] == "" ||
-            familyData[i][field] == " "
-          ) {
-            familyData[i]["status"] = false;
-          }
-        }
-      }
-      return familyData;
-    }
-
-    async function fetchData() {
-      let updatedFamilyData;
-      if (familyData.length === 0) {
-        console.log("If statement");
-        try {
-          const response = await getAllChildrenData(userId);
-          updatedFamilyData = checkIncompleteData(response.data);
-          userData = updatedFamilyData[0];
-          setDetails(userData);
-          setFamilyData(updatedFamilyData);
-        } catch (error) {
-          console.log(error);
-        }
-      } else if (familyData.length > 1) {
-        console.log("family data here");
-        //this means family registration
+  async function fetchData(idx) {
+    try {
+      const response = await getAllChildrenData(userId);
+      let updatedFamilyData = checkIncompleteData(response.data);
+      console.log("ALL data");
+      console.log(updatedFamilyData);
+      console.log("selected index: " + idx);
+      console.log(updatedFamilyData[idx]);
+      setDetails(updatedFamilyData[idx]);
+      setFamilyData(updatedFamilyData);
+      if (updatedFamilyData.length > 1) {
         setIsFamily(true);
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-      if (location.state != undefined) {
-        setSelectedIndex(location.state.index);
-        setDetails(updatedFamilyData[location.state.index]);
+  function checkIncompleteData(familyData) {
+    let compulsory_fields = ["full_name", "passport_number", "nationality"];
+    for (var i = 0; i < familyData.length; i++) {
+      familyData[i]["status"] = true;
+      for (let field of compulsory_fields) {
+        if (
+          familyData[i][field] == undefined ||
+          familyData[i][field] == null ||
+          familyData[i][field] == "" ||
+          familyData[i][field] == " "
+        ) {
+          familyData[i]["status"] = false;
+        }
       }
     }
+    return familyData;
+  }
 
+  useEffect(() => {
     //if user do not exist, reroute to landing page and prompt them to enter phone number to resume where they left off
     if (userId == null) {
       navigate("/", { state: { pop_up: true } }); //redirect to landing page and show pop up
-      alert("Enter phone number at landing page!"); //TODO: remember to remove
     }
 
-    fetchData();
-
-    // if (location.state != undefined) {
-    //   console.log(location.state.index);
-    //   setSelectedIndex(location.state.index);
-    //   console.log(newData);
-    //   setDetails(newData[location.state.index]);
-    // }
-  }, [familyData]);
+    if (location.state != undefined) {
+      setSelectedIndex(location.state.index);
+      fetchData(location.state.index);
+    } else {
+      fetchData(0);
+    }
+  }, []);
 
   const submitData = () => {
     navigate("/success");
@@ -97,10 +85,11 @@ export default function Review() {
           child_id: familyData[selectedIndex].id,
           phone_number: familyData[0].phone_number,
           email: familyData[0].email,
+          index: selectedIndex,
         },
       });
     } else {
-      navigate("/details", { state: { on_edit: true } });
+      navigate("/details", { state: { on_edit: true, is_family: isFamily } });
     }
   };
 
@@ -151,9 +140,6 @@ export default function Review() {
           <b className="text-xl">Passport</b>
           <b className="text-xl text-right">
             <EditButton name="passport_edit" onClick={onEditPassport} />
-            {/* <EditButton
-              onClick={() => navigate("/passport", { state: { onEdit: true } })} //pass onEdit param to page
-            /> */}
           </b>
         </div>
 
@@ -173,6 +159,7 @@ export default function Review() {
               : new Date(details.passport_expiry).toLocaleDateString("en-us", {
                   year: "numeric",
                   month: "short",
+                  day: "numeric",
                 })}
           </p>
           <p>Nationality:</p>

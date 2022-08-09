@@ -2,88 +2,86 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useFormContext } from "react-hook-form";
 
-export default function Calendar({
-  calendarType,
-  defaultDate,
-  setDetailsHandler,
-}) {
+export default function Calendar({ calendarType, defaultDate, onChangeHandler}) {
   const {
     control,
     formState: { errors },
   } = useFormContext();
 
-  const handleDateChange = (date, name) => {
-    console.log(name);
-    console.log(date);
-    setDetailsHandler((prevState) => ({
-      ...prevState,
-      [name]: date,
-    }));
-  };
+  switch (calendarType) {
+    case "passport_expiry":
+      return passportExpiryCalendar(control, errors, defaultDate, onChangeHandler);
+    case "dob":
+      return birthDateCalendar(control, errors, defaultDate, onChangeHandler);
+    default:
+      return;
+  }
+}
 
+function passportExpiryCalendar(control, errors, defaultDate, onChangeHandler) {
   return (
-    <>
-      {calendarType === "passport_expiry" ? (
-        <>
-          <Controller
-            control={control}
-            name="passport_expiry"
-            rules={{ required: "Passport Expiry is Required" }}
-            render={({ field }) => (
-              <DatePicker
-                className={
-                  new Date(defaultDate) == Date() ? "text-gray-400" : null
-                }
-                placeholderText="Select Date"
-                showMonthYearPicker
-                dateFormat="MM/yyyy"
-                // minDate={new Date()}
-                onChange={(date) => {
-                  field.onChange(date);
-                  handleDateChange(date, field.name);
-                }}
-                selected={
-                  defaultDate == undefined ? null : new Date(defaultDate)
-                }
-                value={field.value}
-              />
+    <Controller
+      name={"passport_expiry"}
+      control={control}
+      defaultValue={defaultDate}
+      rules={{ required: "Passport Expiry is Required" }}
+      render={({ field: { onChange, value } }) => {
+        return (
+          <>
+            <DatePicker
+              onChange={(date) => {
+                        onChange(date);
+                        onChangeHandler()
+                      }}
+              selected={value}
+              placeholderText="Enter Passport Expiry date"
+              dateFormat="dd/MM/yyyy"
+              showYearDropdown
+              dropdownMode="select"
+              dateFormatCalendar="MMMM"
+              minDate={new Date()}
+              maxDate={new Date("2050", "01", "01")}
+            />
+            {errors.passport_expiry && (
+              <p className="text-red-500">{errors.passport_expiry?.message}</p>
             )}
-          />
-          {errors.passport_expiry && (
-            <p className="text-red-500">{errors.passport_expiry?.message}</p>
-          )}
-        </>
-      ) : (
-        <>
-          <Controller
-            control={control}
-            name="dob"
-            rules={{ required: "Date of Birth is Required" }}
-            render={({ field }) => (
-              <DatePicker
-                className={
-                  new Date(defaultDate) == Date() ? "text-gray-400" : null
-                }
-                placeholderText="Select Date of Birth"
-                showYearDropdown
-                dropdownMode="select"
-                dateFormatCalendar="MMMM"
-                minDate={new Date("1900", "01", "01")}
-                maxDate={new Date()}
-                dateFormat="dd/MM/yyyy"
-                onChange={(date) => {
-                  field.onChange(date);
-                  handleDateChange(date, field.name);
-                }}
-                selected={
-                  defaultDate == undefined ? null : new Date(defaultDate)
-                }
-              />
+          </>
+        );
+      }}
+    />
+  );
+}
+
+function birthDateCalendar(control, errors, defaultDate, onChangeHandler) {
+  return (
+    <Controller
+      name={"dob"}
+      control={control}
+      defaultValue={defaultDate}
+      rules={{ required: "Birth Date is Required" }}
+      render={({ field: { onChange, value } }) => {
+        return (
+          <>
+            <DatePicker
+              onChange={(date) => {
+                        onChange(date);
+                        onChangeHandler()
+                      }}
+              selected={value}
+              placeholderText="Select Date of Birth"
+              showYearDropdown
+              dropdownMode="select"
+              dateFormatCalendar="MMMM"
+              minDate={new Date("1900", "01", "01")}
+              maxDate={new Date()}
+              dateFormat="dd/MM/yyyy"
+            />
+            {errors.dob && (
+              <p className="text-red-500">{errors.dob?.message}</p>
             )}
-          />
-          {errors.dob && <p className="text-red-500">{errors.dob?.message}</p>}
-        </>
-      )}
-    </>
+          </>
+        );
+      }}
+    />
   );
 }

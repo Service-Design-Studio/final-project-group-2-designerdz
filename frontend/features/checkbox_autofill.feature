@@ -4,19 +4,20 @@ Feature: Checkbox Autofill
     So that I do not have to repeatedly fill up information
 
     Background: Filling up of parent details
-        Given that I have saved my details
-        And I add a new child
+        Given I am signing up for my family
+        And I have proceeded to the child page
+        And I have filled in my child name
 
     Scenario: Check autofill
         When I check the autofill checkbox
         Then I should see my child details autofilled
-        When I move to the review page
+        When I go from the family page to the review page
         And I click on my child icon
         Then I should be able to see that my child details are the same as mine
 
     Scenario: Uncheck autofill
         When I uncheck the autofill checkbox
         And I edit my child contact details
-        And I move to the review page
+        And I go from the family page to the review page
         And I click on my child icon
         Then I should be able to see that my child details are different

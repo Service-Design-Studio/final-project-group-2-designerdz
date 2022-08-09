@@ -21,10 +21,14 @@ export default function Landing() {
   const closeModal = () => setOpen(false);
 
   return (
-    <div className="grid h-screen place-content-center mx-8">
+    <div
+      className={`grid h-screen w-screen place-content-center px-8 ${
+        open ? "bg-zinc-400 blur" : null
+      }`}
+    >
       <img
         className="mx-auto w-5/6 max-w-md"
-        src="https://1000logos.net/wp-content/uploads/2020/04/DBS-logo.jpg"
+        src="https://logos-download.com/wp-content/uploads/2016/12/DBS_Bank_logo_logotype.png"
         alt="DBS Logo"
       />
       <div className="relative mt-[80%]">
@@ -41,17 +45,15 @@ export default function Landing() {
           onClick={() => alert("Sorry we are not DBS!")}
         />
       </div>
-      <button onClick={() => setOpen(true)} className="button">
+      <button onClick={() => setOpen(true)} className="resume-progress button">
         <a>
           Left registration midway? &nbsp;
           <span className="underline">Continue where you left.</span>
         </a>
       </button>
       <Popup open={open} closeOnDocumentClick onClose={closeModal}>
-        <div className="fixed top-2/4 left-0 right-0">
-          <div className="w-8/12 m-auto">
-            <Restore />
-          </div>
+        <div className="w-fit mx-8">
+          <Restore />
         </div>
       </Popup>
     </div>

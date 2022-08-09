@@ -1,21 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 import { BackButton } from "../components/Buttons.js";
 import ProgressBar from "../components/ProgressBar.js";
 import TextDesc from "../components/TextDesc.js";
-import { getUserData } from "../services/axiosRequests.js";
 
-export default function Landing() {
+export default function SignUp() {
   const navigate = useNavigate();
 
   function onClickSingle() {
-    // localStorage.setItem("is_family", false);
     navigate("/details", { state: { is_family: false } });
   }
 
   function onClickFamily() {
-    // localStorage.setItem("is_family", true); //to know whether is multi-user registration throughout the process
     navigate("/details", { state: { is_family: true } });
   }
 
@@ -32,20 +28,19 @@ export default function Landing() {
 
       <div className="flex flex-col absolute w-screen items-center top-0 bottom-0 m-auto place-content-center space-y-4 -z-50">
         <button
-          className="next bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
+          className="next relative hover:bg-red-200 bg-slate-100 text-2xl font-semibold h-1/4 w-10/12 rounded outline outline-2 outline-slate-300 hover:outline-red-400"
           onClick={onClickSingle}
         >
           No, just for myself only
         </button>
 
         <button
-          className="family-next bg-gray-300 hover:bg-red-200 text-xl font-semibold h-40 rounded w-10/12"
+          className="family-next relative hover:bg-red-200 bg-slate-100 text-2xl font-semibold h-1/4 w-10/12 rounded outline outline-2 outline-slate-300 hover:outline-red-400"
           onClick={onClickFamily}
         >
           Yes, for me and my children...
         </button>
-
-        <p className="absolute bottom-24 mb-10 mx-8 w-10/12 ">
+        <p className="absolute bottom-12 mb-10 mx-8 w-10/12 ">
           Only have a little time? <br />
           Don't worry, as your <b>data will be saved at every step!</b>
         </p>

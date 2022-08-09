@@ -4,10 +4,11 @@ Feature: Children management
     So that I register bank account for them
 
     Background: Added one child
-        Given I have successfully added a child
+        Given I am signing up for my family
+        And I have proceeded to the family page
+        And I have added a child
 
     Scenario: View of correct number of children
-        When I am on the family page
         Then I should see my child on the family page
 
     Scenario: Edit child details

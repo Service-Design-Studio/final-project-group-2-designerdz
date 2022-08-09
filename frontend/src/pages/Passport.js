@@ -14,6 +14,8 @@ import FormFill from "../components/FormFill";
 import Calendar from "../components/Calendar";
 import Carousel from "../components/Carousel";
 import LoadingStatus from "../components/LoadingStatus";
+import bucketUpload from "../services/bucketUpload";
+import pdfToPng from "../services/pdfToPNG.js";
 import {
   patchUserData,
   getAllChildrenData,
@@ -25,10 +27,6 @@ export default function Passport() {
   const navigate = useNavigate();
   const location = useLocation();
   const [passportFile, setPassportFile] = useState();
-  const [details, setDetails] = useState({
-    dob: new Date(),
-    passport_expiry: new Date(),
-  });
   const [onEdit, setOnEdit] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [familyData, setFamilyData] = useState([]);
@@ -37,51 +35,71 @@ export default function Passport() {
   const methods = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    defaultValues: {
-      full_name: "",
-      nationality: "",
-      passport_number: "",
-      passport_expiry: null,
-      dob: null,
-      // gender: "MALE",
-    },
   });
   const {
     reset,
+    setError,
+    clearErrors,
     handleSubmit,
     register,
     getValues,
     control,
-    trigger,
     formState: { isValid, errors },
   } = methods;
   let userId = localStorage.getItem("user_id");
 
-  //to update the status of family members when isValid value changes (every keystroke)
-  if (familyData.length > 0) {
-    let copyFamilyData = familyData.slice();
-    //if there is change in isValid value from before, will trigger infinite rerender if no if condition
-    if (copyFamilyData[selectedIndex].status != isValid) {
-      copyFamilyData[selectedIndex].status = isValid;
-      setFamilyData(copyFamilyData);
+  function onFormChange() {
+    console.log("FORM CHANGED");
+    //to update the status of family members when isValid value changes (every keystroke)
+    if (familyData.length > 0) {
+      console.log("SETTING TO FORM VALUES");
+      let copyFamilyData = familyData.slice();
+      //if there is change in isValid value from before, will trigger infinite rerender if no if condition
+      let formData = getValues();
+      // iterate through formdata and set copyFamilyData[selectedIndex] to formData
+      for (let key in formData) {
+        copyFamilyData[selectedIndex][key] = formData[key];
+      }
+
+      if (copyFamilyData[selectedIndex].status != isValid) {
+        copyFamilyData[selectedIndex].status = isValid;
+        setFamilyData(copyFamilyData);
+      }
     }
   }
 
-  //TODO: see if you can get away with details,setDetails useState for sprint 4 is can one JYYYY
+  // useEffect on component mount which queries backend and resets the form
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData(idx) {
       try {
         const response = await getAllChildrenData(userId);
-        let userData = checkIncompleteData(response.data); //check status of each famiy member
+        let userData = checkIncompleteData(response.data); //check status of each family member
         setFamilyData(userData);
-
         setIsFamily(userData[0].is_family === "true"); //convert from string to boolean
-        console.log("WHOLE USER DATA");
-        console.log(userData[0]);
-        console.log(userData[0].image_name);
-        if (userData[0].image_name != undefined) {
-          setPassportFile(userData[0].image_name);
+        //if user has image, set image to passportFile state
+        if (userData[idx].image_name != undefined) {
+          setPassportFile(
+            "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
+              userData[idx].image_name
+            )
+          );
         }
+        console.log("USER DATA");
+        console.log(userData);
+
+        reset({
+          full_name: userData[idx].full_name,
+          passport_number: userData[idx].passport_number,
+          nationality: userData[idx].nationality,
+          passport_expiry:
+            userData[idx].passport_expiry == undefined
+              ? null
+              : new Date(userData[idx].passport_expiry),
+          dob:
+            userData[idx].dob == undefined ? null : new Date(userData[idx].dob),
+          gender: userData[idx].gender,
+          Passport: "",
+        });
       } catch (error) {
         console.log(error.response);
       }
@@ -93,28 +111,24 @@ export default function Passport() {
     }
 
     //check if user coming from redirect page and which user it selected
-    try {
+    if (location.state != undefined) {
       setOnEdit(location.state.on_edit);
       setSelectedIndex(location.state.index);
-    } catch (error) {
-      console.error(error);
+      fetchData(location.state.index);
+    } else {
+      fetchData(0);
     }
+  }, []);
 
-    if (familyData.length === 0) {
-      fetchData();
-    }
+  // useEffect on form isValid change which is triggered everytime the form validity changes
+  useEffect(() => {
+    onFormChange();
+    // trigger()
+  }, [isValid]);
 
-    if (familyData[selectedIndex] !== undefined) {
-      setDetails({
-        full_name: familyData[selectedIndex].full_name,
-        passport_number: familyData[selectedIndex].passport_number,
-        nationality: familyData[selectedIndex].nationality,
-        gender: familyData[selectedIndex].gender,
-        passport_expiry: familyData[selectedIndex].passport_expiry,
-        dob: familyData[selectedIndex].dob,
-        gender: familyData[selectedIndex].gender,
-        image_name: familyData[selectedIndex].image_name,
-      });
+  // useEffect on selectedIndex change which is called after onUserSelected
+  useEffect(() => {
+    if (familyData[selectedIndex] != undefined) {
       if (familyData[selectedIndex].image_name != undefined) {
         setPassportFile(
           "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
@@ -122,18 +136,23 @@ export default function Passport() {
           )
         );
       }
-
       reset({
         full_name: familyData[selectedIndex].full_name,
         passport_number: familyData[selectedIndex].passport_number,
         nationality: familyData[selectedIndex].nationality,
-        passport_expiry: familyData[selectedIndex].passport_expiry,
-        dob: familyData[selectedIndex].dob,
+        passport_expiry:
+          familyData[selectedIndex].passport_expiry == undefined
+            ? null
+            : new Date(familyData[selectedIndex].passport_expiry),
+        dob:
+          familyData[selectedIndex].dob == undefined
+            ? null
+            : new Date(familyData[selectedIndex].dob),
         gender: familyData[selectedIndex].gender,
         Passport: "",
       });
     }
-  }, [selectedIndex, familyData]);
+  }, [selectedIndex]);
 
   const checkIncompleteData = (familyData) => {
     for (var i = 0; i < familyData.length; i++) {
@@ -157,18 +176,7 @@ export default function Passport() {
     }
   };
 
-  //TODO: when user click to other user, need update familyMember data the status of current user
   const onUserSelected = async (index) => {
-    let data = getValues();
-    data["image_name"] = details.image_name;
-    // "https://storage.googleapis.com/dbs-backend-1-ruby/".concat(
-    //   details.image_name
-    // );
-    console.log("onUserSelected");
-    console.log(data);
-    console.log(isValid);
-    let copyFamilyData = familyData.slice();
-
     const updateFamilyData = (memberData, data) => {
       for (const key in memberData) {
         if (data[key] != undefined) {
@@ -178,6 +186,15 @@ export default function Passport() {
       memberData["status"] = isValid; //check if need not
       return memberData;
     };
+
+    let data = getValues();
+    data["image_name"] = familyData[selectedIndex].image_name;
+    let copyFamilyData = familyData.slice();
+    console.log("COPY FAMILY DATA");
+    console.log(copyFamilyData);
+    console.log("Image Name");
+    console.log(familyData[selectedIndex].image_name);
+
     //indicating parent
     if (selectedIndex === 0) {
       try {
@@ -205,102 +222,14 @@ export default function Passport() {
     setFamilyData(copyFamilyData);
     setSelectedIndex(index);
     setPassportFile();
-    // reset({
-    //   passport_expiry: null,
-    //   dob: null,
-    // });
   };
 
-  const onPassportUpload = async (data) => {
-    setIsLoading(true);
-    console.log("DATA BELOW");
-    console.log(data.target);
-    const OBJECT_LOCATION = data.target.files[0];
-    const OBJECT_CONTENT_TYPE = "image/jpeg";
-    const BUCKET_NAME = "dbs-backend-1-ruby";
-    const OBJECT_NAME = `passport_image_${userId}_` + new Date().getTime();
-    const UPLOAD_URL = `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${OBJECT_NAME}`;
-    const UPLOAD_HEADERS = {
-      "Content-Type": OBJECT_CONTENT_TYPE,
-    };
-    //upload image to cloud storage
-    try {
-      const response = await fetch(UPLOAD_URL, {
-        method: "POST",
-        headers: UPLOAD_HEADERS,
-        body: OBJECT_LOCATION,
-      });
-      console.log("RESPONSE BELOW");
-      console.log(response);
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setPassportFile(reader.result);
-      });
-      reader.readAsDataURL(OBJECT_LOCATION);
-    } catch (error) {
-      console.log(error);
-    }
-
-    //get autofill details and setDetails according to data
-    try {
-      // send image name to backend API
-      const passportResponse = await getPassportData(OBJECT_NAME);
-      const ocrData = passportResponse.data;
-      // iterate through passportResponse and update setDetails
-      //TODO: sprint 4 investigate possibility of removing this, seems redundant actually
-      setDetails((prevState) => ({
-        ...prevState,
-        full_name: ocrData.full_name,
-        passport_number: ocrData.passport_number,
-        nationality: ocrData.nationality,
-        passport_expiry: new Date(ocrData.passport_expiry), //TODO: process to correct format date
-        dob: new Date(ocrData.dob), //TODO: process to correct format date
-        gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
-        image_name: OBJECT_NAME,
-        // F,
-      }));
-      reset({
-        full_name: ocrData.full_name,
-        passport_number: ocrData.passport_number,
-        nationality: ocrData.nationality,
-        passport_expiry: new Date(ocrData.passport_expiry),
-        dob: ocrData.dob,
-        gender: ocrData.gender == "M" ? "MALE" : "FEMALE",
-      });
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const deletePassportFile = () => {
-    setPassportFile(); //to remove image preview
-    //reset image name field under upload passport
-    console.log(getValues());
-    const formData = getValues();
-    //TODO: figure out less hacky way of resetting, cos upon delete, form validation fails
-    reset({
-      Passport: "",
-      passport_expiry: formData.passport_expiry,
-      dob: formData.dob,
-      gender: formData.gender,
-    });
-    details.image_name = null;
-    familyData[selectedIndex].image_name = null;
-    trigger();
-  };
-
-  //must remember to check if all members including currently selected family member data is valid
   const onSubmit = async () => {
-    //TODO: can check other family member status + current member status from isValid
-    console.log("inside onSubmit");
     let data = getValues();
-    console.log(data);
+    data["image_name"] = familyData[selectedIndex].image_name;
 
     for (var i = 0; i < familyData.length; i++) {
-      console.log(familyData[i].status);
       if (familyData[i].status === false) {
-        // alert("Please fill in all the compulsory fields")
         return;
       }
     }
@@ -328,6 +257,107 @@ export default function Passport() {
     }
   };
 
+  const deletePassportFile = () => {
+    setPassportFile(); //to remove image preview
+    let copyFamilyData = familyData.slice();
+    copyFamilyData[selectedIndex].image_name = null;
+    setFamilyData(copyFamilyData);
+  };
+
+  const onPassportUpload = async (data) => {
+    console.log(data);
+    clearErrors("valid_file_type");
+    clearErrors("valid_passport_image");
+    setPassportFile();
+
+    if (
+      !["image/jpeg", "image/png", "image/jpg", "application/pdf"].includes(
+        data.target.files[0].type
+      )
+    ) {
+      console.log("Invalid File Type");
+      setError("valid_file_type", {
+        type: "Custom",
+        message: "Only PNG, JPEG or PDF files are accepted",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    const OBJECT_NAME =
+      (await `passport_image_${userId}_`) + new Date().getTime();
+    console.log("OBJECT NAME", OBJECT_NAME);
+    var OBJECT_LOCATION = data.target.files[0];
+    var OBJECT_TYPE = data.target.files[0].type;
+    if (data.target.files[0].type === "application/pdf") {
+      OBJECT_LOCATION = await pdfToPng(OBJECT_NAME, OBJECT_LOCATION);
+      OBJECT_TYPE = "image/png";
+    }
+    // sleep for 3 seconds so that pdfToPng can run
+
+    console.log("OBJECT_LOCATION", OBJECT_LOCATION);
+
+    await bucketUpload(OBJECT_NAME, OBJECT_LOCATION, OBJECT_TYPE);
+
+    try {
+      // send image name to backend API
+      console.log("TRY BLOCK");
+      const passportResponse = await getPassportData(OBJECT_NAME);
+      const ocrData = passportResponse.data;
+      console.log("passportResponse", passportResponse);
+      console.log("ocrData:", ocrData);
+
+      //display image on frontend
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setPassportFile(reader.result);
+      });
+      reader.readAsDataURL(OBJECT_LOCATION);
+
+      //update form input data from ocrData
+      //useEffect is triggered with setState with reset in it
+      let copyFamilyDataTwo = familyData.slice();
+
+      // iterate through formdata and set copyFamilyDataTwo[selectedIndex] to formData
+      for (const key in ocrData) {
+        copyFamilyDataTwo[selectedIndex][key] = ocrData[key];
+        if (key == "gender") {
+          copyFamilyDataTwo[selectedIndex][key] =
+            ocrData[key] == "M" ? "MALE" : "FEMALE";
+        }
+      }
+      copyFamilyDataTwo[selectedIndex]["image_name"] = OBJECT_NAME;
+      setFamilyData(copyFamilyDataTwo);
+      reset({
+        full_name: copyFamilyDataTwo[selectedIndex].full_name,
+        passport_number: copyFamilyDataTwo[selectedIndex].passport_number,
+        nationality: copyFamilyDataTwo[selectedIndex].nationality,
+        passport_expiry:
+          copyFamilyDataTwo[selectedIndex].passport_expiry == undefined
+            ? null
+            : new Date(copyFamilyDataTwo[selectedIndex].passport_expiry),
+        dob:
+          copyFamilyDataTwo[selectedIndex].dob == undefined
+            ? null
+            : new Date(copyFamilyDataTwo[selectedIndex].dob),
+        gender: copyFamilyDataTwo[selectedIndex].gender,
+        Passport: "",
+      });
+    } catch (error) {
+      console.log(error);
+      let error_message = error.response.data.error;
+      error_message =
+        error_message == undefined
+          ? "Please try with a different photo"
+          : error_message;
+      setError("valid_passport_image", {
+        type: "Custom",
+        message: error_message,
+      });
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div>
       <div className="fixed top-0 right-0 left-0 h-16 bg-white w-screen z-10" />
@@ -340,10 +370,13 @@ export default function Passport() {
         headerText="Fill up your passport details"
         bodyText="This is important for us to verify your information"
       />
-
-      <div className="absolute left-0 right-0 top-36 items-center ">
+      <div className="dismiss absolute left-0 right-0 top-36 items-center ">
         <FormProvider {...methods}>
-          <form className="mx-8" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="mx-8"
+            onSubmit={handleSubmit(onSubmit)}
+            onChange={onFormChange}
+          >
             {isFamily === true && !onEdit ? (
               <Carousel
                 nameArr={familyData}
@@ -354,12 +387,28 @@ export default function Passport() {
             <div>
               <label className="block font-medium">Upload Passport</label>
               <input
-                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg"
+                className="btn_upload mt-1 w-full p-2 border border-gray-300 rounded-lg "
                 type="file"
                 placeholder="Passport"
-                {...register("Passport", {})}
+                {...register("Passport")}
                 onInput={onPassportUpload}
               />
+              <canvas
+                id="pdfCanvas"
+                className="hidden"
+                width="300"
+                height="300"
+              ></canvas>
+              {errors.valid_file_type && (
+                <p className="text-red-500">
+                  {errors.valid_file_type?.message}
+                </p>
+              )}
+              {errors.valid_passport_image && (
+                <p className="text-red-500">
+                  {errors.valid_passport_image?.message}
+                </p>
+              )}
               <div className="flex items-center flex-col">
                 <LoadingStatus isLoading={isLoading} />
                 <img
@@ -406,14 +455,19 @@ export default function Passport() {
             )}
             <div className="mb-3">
               <label className="block font-medium">
-                Passport Expiry (MM/YYYY)
+                Passport Expiry (DD/MM/YYYY)
               </label>
               <Calendar
                 calendarType="passport_expiry"
-                defaultDate={details.passport_expiry}
-                setDetailsHandler={setDetails}
+                defaultDate={
+                  familyData[selectedIndex] == undefined
+                    ? null
+                    : familyData[selectedIndex].passport_expiry
+                }
+                onChangeHandler={onFormChange}
               />
             </div>
+
             <FormFill
               text="Nationality"
               name="nationality"
@@ -429,6 +483,7 @@ export default function Passport() {
             {errors.nationality && (
               <p className="text-red-500">{errors.nationality?.message}</p>
             )}
+
             <div className="mb-3">
               <label className="bflock font-medium">Gender</label>
               <div className="flex justify-around">
@@ -440,6 +495,7 @@ export default function Passport() {
                       aria-label="text alignment"
                       onChange={(newGender) => {
                         field.onChange(newGender);
+                        onFormChange();
                       }}
                       value={field.value}
                       color="error"
@@ -476,8 +532,12 @@ export default function Passport() {
               </label>
               <Calendar
                 calendarType="dob"
-                defaultDate={details.dob}
-                setDetailsHandler={setDetails}
+                defaultDate={
+                  familyData[selectedIndex] == undefined
+                    ? null
+                    : familyData[selectedIndex].dob
+                }
+                onChangeHandler={onFormChange}
               />
             </div>
             <Button

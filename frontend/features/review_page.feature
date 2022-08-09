@@ -4,8 +4,8 @@ Feature: Review page
     So that I do not have to navigate the process of filling up again
 
     Background:
-        Given that I have filled all me and my child's details
-        And that I am on the review page
+        Given I am signing up for my family
+        And I have proceeded to the review page
 
     Scenario: Reviewing all of my family details
         When I click on my icon
@@ -16,12 +16,12 @@ Feature: Review page
     Scenario: Redirect to respective pages on click of edit button on review page
         When I click on my child icon
         And I click on the <edit> button 
-        Then I should be on <page>
+        Then I should be on the <page> page
 
         Examples:
         | edit | page |
-        | "basic_edit" | "child"  |
-        | "passport_edit" | "passport" |
+        | basic_edit | child  |
+        | passport_edit | passport |
 
     Scenario: Editing my child misfilled information
         When I click on my child icon

@@ -7,21 +7,18 @@ Then("my information should be auto-filled", async function () {
   var fullName = await driver
     .findElement(By.className("full_name"))
     .getAttribute("value");
-
-  assert.equal(fullName, "MCCABE NICOLE SANDRA");
+  assert.equal(fullName, "NG LINDA ZEE ZEE");
 
   var passportNumber = await driver
     .findElement(By.className("passport_number"))
     .getAttribute("value");
-  assert.equal(passportNumber, "L4041765");
+  assert.equal(passportNumber, "X2000444N");
 
   let passportExpiry = await driver
-    .findElement(By.xpath("//input[@placeholder='Select Date']"))
+    .findElement(By.xpath("//input[@placeholder='Enter Passport Expiry date']"))
     .getAttribute("value");
-  assert.equal(passportExpiry, "05/2013");
+  assert.equal(passportExpiry, "23/08/2010");
 
-  // TODO: How to get gender?
-  // select element with class "Mui-selected" and get its value
   let selected_button = await driver.findElement(By.className("Mui-selected"));
   let curGender = await selected_button.getAttribute("value");
   assert.equal(curGender, "FEMALE");
@@ -29,30 +26,30 @@ Then("my information should be auto-filled", async function () {
   var nationality = await driver
     .findElement(By.className("nationality"))
     .getAttribute("value");
-  assert.equal(nationality, "AUSTRALIAN");
+  assert.equal(nationality, "SGP");
 
   await driver.findElement(By.className("male")).click();
 
   let dateOfBirth = await driver
     .findElement(By.xpath("//input[@placeholder='Select Date of Birth']"))
     .getAttribute("value");
-  assert.equal(dateOfBirth, "16/11/1982");
+  assert.equal(dateOfBirth, "27/06/1977");
 });
 
-When("I edit my information", async function () {
+When("I correct my full name", async function () {
   await driver.sleep(4000);
   let full_name = await driver.findElement(By.className("full_name"));
   await full_name.clear();
-  await full_name.sendKeys("Da Yi Ma");
+  await full_name.sendKeys("LINDA NG ZEE ZEE");
   await driver.sleep(500);
 });
 
-Then("my information should be overwritten", async function () {
+Then("my full name should be overwritten", async function () {
   await driver.sleep(500);
   let full_name_elem = await driver.findElement(By.className("full_name"));
   let full_name_text = await full_name_elem.getAttribute("value");
   await driver.sleep(500);
-  expect(full_name_text).to.equal("Da Yi Ma");
+  expect(full_name_text).to.equal("LINDA NG ZEE ZEE");
 });
 
 Then("I should be able to see it in the review page", async function () {
@@ -62,5 +59,5 @@ Then("I should be able to see it in the review page", async function () {
   assert.equal(await driver.getCurrentUrl(), baseUrl + "review");
 
   var reviewFN = await driver.findElement(By.className("review_fn")).getText();
-  assert.equal(reviewFN, "Da Yi Ma");
+  assert.equal(reviewFN, "LINDA NG ZEE ZEE");
 });
