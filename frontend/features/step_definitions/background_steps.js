@@ -46,7 +46,7 @@ Given(/^I am signing up for (.*)$/, async function(type) {
 
 Given(/^I have proceeded to the (.*) page$/, async function(page) {
     if (page == "details") {
-        // Coninue, should already have been on details
+        // Continue, should already have been on details
     } else {
         await detailsPage("Sally Abbot", parentNumber, "sally@gmail.com");
   
@@ -55,7 +55,13 @@ Given(/^I have proceeded to the (.*) page$/, async function(page) {
     }
 
     if (page == "family") {
-        // Should be on family after this
+        if (page != "family") {
+            await detailsPage("Sally Abbot", parentNumber, "sally@gmail.com");
+  
+            await driver.findElement(By.className("next")).click();
+            await driver.sleep(1000);
+        }
+
     }
 
     // Going from family to child page if exist
@@ -68,14 +74,14 @@ Given(/^I have proceeded to the (.*) page$/, async function(page) {
         try {
             // Add a child if possible
             await driver.findElement(By.className("add")).click();
-            await driver.sleep(500);
+            await driver.sleep(5000);
             await driver.findElement(By.className("display_name")).sendKeys("Salah Abbot");
             await driver.findElement(By.className("next")).click();
-            await driver.sleep(1000);
+            await driver.sleep(10000);
             
             // Should be on family
             await driver.findElement(By.className("next")).click();
-            await driver.sleep(1000);
+            await driver.sleep(5000);
         } catch (error) {
             // For single user, should have been in passport page from previous steps
         }
@@ -112,6 +118,7 @@ Given(/^I have proceeded to the (.*) page$/, async function(page) {
     }
 
     // Assert that the page is correct
+// 
     var actualUrl = await driver.getCurrentUrl();
     actualUrl = actualUrl.split("/")[3];
     expect(actualUrl).to.equal(page);
@@ -125,10 +132,11 @@ Given(/^I (.*) a child$/, async function(next) {
     await driver
         .findElement(By.className("display_name"))
         .sendKeys("Salah Abbot");
+        await driver.sleep(2000);
 
     if (next == "have added"){
         await driver.findElement(By.className("next")).click();
-        await driver.sleep(1000);
+        await driver.sleep(2000);
     
         assert.equal(await driver.getCurrentUrl(), baseUrl + "family");
     }

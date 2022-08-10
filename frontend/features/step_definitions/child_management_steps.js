@@ -3,6 +3,7 @@ const { By } = require("selenium-webdriver");
 const { assert } = require("chai");
   
 Then("I should see my child on the family page", async function () {
+    await driver.sleep(1000)
     const childName = await driver.findElement(By.id("name_0")).getText();
     assert.equal(childName, "Mr Salah Abbot");
 });
@@ -14,10 +15,11 @@ When("I edit my child name", async function () {
 
     const childName2 = await driver.findElement(By.className("display_name"));
     childName2.sendKeys(" Edited");
-
+    await driver.sleep(1000);
+    
     const nextButton2 = await driver.findElement(By.className("next"));
     nextButton2.click();
-    await driver.sleep(500);
+    await driver.sleep(2000);
 });
 
 Then("I should see my edited child name on the family page", async function () {

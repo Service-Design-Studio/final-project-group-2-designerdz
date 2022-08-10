@@ -19,6 +19,7 @@ When(/^I (.*) the autofill checkbox$/, async function (check) {
   } else if (check == "uncheck") {
     if (autofillCheckbox.isSelected()) {
       autofillCheckbox.click();
+      await driver.sleep(1000);
     }
     var checked = await autofillCheckbox.isSelected();
     assert.equal(checked, false);
@@ -45,7 +46,7 @@ When("I edit my child contact details", async function () {
     await driver.findElement(By.className("email")).sendKeys("sarah@gmail.com");
 
     await driver.findElement(By.className("next")).click();
-    await driver.sleep(500);
+    await driver.sleep(1000);
 });
 
 Then("I should be able to see that my child details are the same as mine",
