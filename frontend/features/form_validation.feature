@@ -9,7 +9,6 @@ Feature: Form Validation
     Scenario: Prevent moving to next page if compulsory fields are not filled
         Given I have proceeded to the <page> page
         And I have not filled in any fields
-        
         When I click on the next button
         Then I should be on the <page> page
         And I should see <errors>

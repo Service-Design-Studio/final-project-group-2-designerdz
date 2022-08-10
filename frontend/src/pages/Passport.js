@@ -431,7 +431,7 @@ export default function Passport() {
                 required: "Full Name is Required",
                 pattern: {
                   value: /^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/,
-                  message: "invalid full name",
+                  message: "Invalid full name",
                 },
               })}
             />
