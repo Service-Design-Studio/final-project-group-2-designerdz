@@ -166,11 +166,14 @@ export default function Details() {
 
           <FormFill
             text="Phone Number"
-            type="number"
+            type="text"
             name="phone_number"
             onFill={register("phone_number", {
               required: "Phone Number is Required",
-              valueAsNumber: true,
+              pattern: {
+                value: /^[0-9]*$/,
+                message: "Please enter using numbers only",
+              },
             })}
           />
           {errors.phone_number && (
