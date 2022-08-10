@@ -38,14 +38,14 @@ When("I go from the family page to the review page", async function () {
 
     var actualUrl = await driver.getCurrentUrl();
     assert.equal(actualUrl, baseUrl + "passport");
-<<<<<<< HEAD
+
     await driver.sleep(2000);
     
     await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "01/09/2024");
-=======
+
 
     await passportPage("Sally Abbot", "E1234567S", "American", "female", "14/07/1980", "05/09/2024");
->>>>>>> f644c164a01b162bfdf59f865c5b16427b79e87f
+
 
     await driver.findElement(By.id("user_1")).click();
     await driver.sleep(2000);

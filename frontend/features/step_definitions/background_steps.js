@@ -55,7 +55,9 @@ Given(/^I have proceeded to the (.*) page$/, async function(page) {
     }
 
     if (page == "family") {
-        if (page != "family") {
+        var actualUrl = await driver.getCurrentUrl();
+        actualUrl = actualUrl.split("/")[3];
+        if (actualUrl=="details") {
             await detailsPage("Sally Abbot", parentNumber, "sally@gmail.com");
   
             await driver.findElement(By.className("next")).click();
