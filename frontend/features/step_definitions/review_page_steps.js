@@ -29,7 +29,7 @@ Then("I should be able to see that my information is correct", async function() 
     assert.equal(parentGenderValue, "FEMALE");
   
     var parentPassportExpiry = await driver.findElement(By.className("review_pe")).getText();
-    assert.equal(parentPassportExpiry, "Sep 1, 2024");
+    assert.equal(parentPassportExpiry, "Sep 5, 2024");
   
     var parentDOB = await driver.findElement(By.className("review_dob")).getText();
     assert.equal(parentDOB, "Jul 14, 1980");
@@ -62,7 +62,7 @@ Then("I should be able to see that my information is correct", async function() 
     assert.equal(childGenderValue, "FEMALE");
   
     var childPassportExpiry = await driver.findElement(By.className("review_pe")).getText();
-    assert.equal(childPassportExpiry, "Sep 1, 2030");
+    assert.equal(childPassportExpiry, "Sep 5, 2030");
   
     var childDOB = await driver.findElement(By.className("review_dob")).getText();
     assert.equal(childDOB, "Jul 14, 2005");
@@ -117,7 +117,7 @@ Then("I should be able to see that my information is correct", async function() 
     assert.equal(childGenderValue, "FEMALE");
   
     var childPassportExpiry = await driver.findElement(By.className("review_pe")).getText();
-    assert.equal(childPassportExpiry, "Sep 1, 2030");
+    assert.equal(childPassportExpiry, "Sep 5, 2030");
   
     var childDOB = await driver.findElement(By.className("review_dob")).getText();
     assert.equal(childDOB, "Jul 14, 2005");
