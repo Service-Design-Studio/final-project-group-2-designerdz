@@ -1,7 +1,7 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
 const { By } = require("selenium-webdriver");
 const { expect, assert } = require("chai");
-const { RandExp } = require("randexp");
+const randexp = require('randexp').randexp;
 
 When(/^I have filled in the (.*) field for (.*)$/, async function(type, field) {
     await driver.navigate().refresh();
@@ -9,23 +9,33 @@ When(/^I have filled in the (.*) field for (.*)$/, async function(type, field) {
     if (type == "wrong"){
         // TODO: make this wrong
         if (field == "number") {
-            const randexp = new RandExp(/^[0-9]*$/).gen();
+            const phoneNumber = randexp(/^[A-Z]*$/);
+            await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
+            // console.log(number);
+            // const randexp = new RandExp(/^[0-9]*$/).gen();
         } else if (field == "full_name") {
-            const randexp = new RandExp(/^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/).gen();
+            const fullName = randexp(/^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/);
+            // console.log(fullName);
         } else if (field == "passport_number") {
-            const randexp = new RandExp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/).gen();
+            const passportNumber = randexp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/);
+            console.log(passportNumber);
         } else if (field == "nationality") {
-            const randexp = new RandExp(/^[^-\s][a-zA-Z_\s-]+$/).gen();
+            const nationality = randexp(/^[^-\s][a-zA-Z_\s-]+$/);
+            // console.log(nationality);
         }
     } else if (type == "correct") {
         if (field == "number") {
-            const randexp = new RandExp(/^[0-9]*$/).gen();
+            const phoneNumber = randexp(/^[A-Z]*$/);
+            await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
         } else if (field == "full_name") {
-            const randexp = new RandExp(/^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/).gen();
+            const fullName = randexp(/^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/);
+            // await driver.findElement(By.className("full_name")).sendKeys(fullName);
         } else if (field == "passport_number") {
-            const randexp = new RandExp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/).gen();
+            const passportNumber = randexp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/);
+            // await driver.findElement(By.className("passport_number")).sendKeys(passportNumber);
         } else if (field == "nationality") {
-            const randexp = new RandExp(/^[^-\s][a-zA-Z_\s-]+$/).gen();
+            const nationality = randexp(/^[^-\s][a-zA-Z_\s-]+$/);
+            // await driver.findElement(By.className("nationality")).sendKeys(nationality);
         }
     }
 });
@@ -41,6 +51,6 @@ Then("I should not see {string}", async function (errors) {
     expect(error_elements.length).to.equal(error_array.length);
     for (let i = 0; i < error_elements.length; i++) {
       let error_text = await error_elements[i].getText();
-      expect(error_text).to.equal(error_array[i] + " is Required");
+      expect(error_text).to.equal(error_array[i]);
     }
   });
