@@ -7,8 +7,8 @@ Team 2 designerdz:
 
 1. Ng Jing Heng Jarron, [Jarron-Ng](https://github.com/Jarron-Ng)
 2. Mah Yi Da, [Fruittips](https://github.com/Fruittips)
-3. Joseph Low, [jolow99](https://github.com/jolow99)
-4. Sarah Chua, [sarahchua17](https://github.com/sarahchua17)
+3. Low Bing Chen, Joseph, [jolow99](https://github.com/jolow99)
+4. Chua Yi Qi, Sarah, [sarahchua17](https://github.com/sarahchua17)
 5. Foo Chuan Shao, [chuanshaof](https://github.com/chuanshaof)
 6. Seetoh Jian Qing, [stjianqing](https://github.com/stjianqing)
 
