@@ -400,12 +400,12 @@ export default function Passport() {
                 height="300"
               ></canvas>
               {errors.valid_file_type && (
-                <p className="text-red-500">
+                <p className="error text-red-500">
                   {errors.valid_file_type?.message}
                 </p>
               )}
               {errors.valid_passport_image && (
-                <p className="text-red-500">
+                <p className="error text-red-500">
                   {errors.valid_passport_image?.message}
                 </p>
               )}
@@ -436,7 +436,7 @@ export default function Passport() {
               })}
             />
             {errors.full_name && (
-              <p className="text-red-500">{errors.full_name?.message}</p>
+              <p className="error text-red-500">{errors.full_name?.message}</p>
             )}
             <FormFill
               name="passport_number"
@@ -451,7 +451,7 @@ export default function Passport() {
               })}
             />
             {errors.passport_number && (
-              <p className="text-red-500">{errors.passport_number?.message}</p>
+              <p className="error text-red-500">{errors.passport_number?.message}</p>
             )}
             <div className="mb-3">
               <label className="block font-medium">
@@ -481,7 +481,7 @@ export default function Passport() {
               })}
             />
             {errors.nationality && (
-              <p className="text-red-500">{errors.nationality?.message}</p>
+              <p className="error text-red-500">{errors.nationality?.message}</p>
             )}
 
             <div className="mb-3">
@@ -522,7 +522,7 @@ export default function Passport() {
                 />
               </div>
               {errors.gender && (
-                <p className="text-red-500">{errors.gender?.message}</p>
+                <p className="error text-red-500">{errors.gender?.message}</p>
               )}
             </div>
 

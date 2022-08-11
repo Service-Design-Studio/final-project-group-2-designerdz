@@ -11,6 +11,7 @@ import {
   getUserDataId,
 } from "../services/axiosRequests.js";
 
+
 export default function Details() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,7 +22,7 @@ export default function Details() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode:"onChange", reValidateMode:"onChange" });
   let userData;
   let userId = localStorage.getItem("user_id") || "";
 
@@ -60,6 +61,8 @@ export default function Details() {
     }
     fetchData();
   }, []);
+
+  
 
   //post request to database backend
   const onSubmit = async (data) => {
@@ -177,7 +180,7 @@ export default function Details() {
             })}
           />
           {errors.phone_number && (
-            <p className="text-red-500">{errors.phone_number.message}</p>
+            <p className="error text-red-500">{errors.phone_number.message}</p>
           )}
           <FormFill
             type="email"

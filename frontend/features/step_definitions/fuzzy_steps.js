@@ -3,62 +3,90 @@ const { By } = require("selenium-webdriver");
 const { expect, assert } = require("chai");
 const randexp = require('randexp').randexp;
 
-When(/^I have filled in the (.*) field for (.*)$/, async function(type, field) {
-    await driver.navigate().refresh();
-    
-    if (type == "wrong"){
-        // TODO: make this wrong
-        if (field == "number") {
-            const phoneNumber = randexp(/^[A-Z]*$/);
-            await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
-            // console.log(number);
-            // const randexp = new RandExp(/^[0-9]*$/).gen();
-        } else if (field == "full_name") {
-            const fullName = randexp(/^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/);
-            // console.log(fullName);
-        } else if (field == "passport_number") {
-            const passportNumber = randexp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/);
-            console.log(passportNumber);
-        } else if (field == "nationality") {
-            const nationality = randexp(/^[^-\s][a-zA-Z_\s-]+$/);
-            // console.log(nationality);
-        }
-    } else if (type == "correct") {
-        if (field == "number") {
-            const phoneNumber = randexp(/^[A-Z]*$/);
-            await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
-            await driver.findElement(By.className("next")).click();;
-        } else if (field == "full_name") {
-            const fullName = randexp(/^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/);
-            // console.log(fullName);
-            // await driver.findElement(By.className("full_name")).sendKeys(fullName);
-        } else if (field == "passport_number") {
-            const passportNumber = randexp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/);
-            // await driver.findElement(By.className("passport_number")).sendKeys(passportNumber);
-        } else if (field == "nationality") {
-            const nationality = randexp(/^[^-\s][a-zA-Z_\s-]+$/);
-            // await driver.findElement(By.className("nationality")).sendKeys(nationality);
+When(/^I have filled in the (.*) field for (.*), I should (.*) the error (.*)$/, async function(typeField, field, typeError, error) {
+    for (let i = 0; i < 100; i++) {
+        await driver.findElement(By.className(field)).clear();
+
+        if (typeField == "wrong"){
+            if (field == "phone_number") {
+                const phoneNumber = randexp(/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,15}$/);
+                await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
+            } else if (field == "full_name") {
+                const fullName = randexp(/^(?=.{8,30}$)\D*\d/);
+                await driver.findElement(By.className("full_name")).sendKeys(fullName);
+            } else if (field == "passport_number") {
+                const passportNumber = randexp(/^(?=.*?[!-\/:-@[-`{-~]).{10,25}/);
+                await driver.findElement(By.className("passport_number")).sendKeys(passportNumber);
+            } else if (field == "nationality") {
+                const nationality = randexp(/^(?=.{5,15}$)\D*\d/);
+                await driver.findElement(By.className("nationality")).sendKeys(nationality);
+            }
+        } else if (typeField == "correct") {
+            if (field == "phone_number") {
+                const phoneNumber = randexp(/^[1-9]{8,15}$/);
+                await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
+            } else if (field == "full_name") {  
+                const fullName = randexp(/^[A-Za-z]{8,15}$/);
+                await driver.findElement(By.className("full_name")).sendKeys(fullName);
+            } else if (field == "passport_number") {                
+                const passportNumber = randexp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/);
+                await driver.findElement(By.className("passport_number")).sendKeys(passportNumber);
+            } else if (field == "nationality") {
+                const nationality = randexp(/^[^-\s][a-zA-Z_\s-]{5,15}$/);
+                await driver.findElement(By.className("nationality")).sendKeys(nationality);
+            }
         }
 
-        await driver.sleep(5000);
+        if (typeError == "see") {
+            let errorText = await driver.findElement(By.className("error")).getText();
+            expect(errorText).to.equal(error);    
+        } else if (typeError == "not see") {
+            let errorArray = await driver.findElements(By.className("error"));
+            expect(errorArray.length).to.equal(0);
+        }
     }
-});
-
-Then(/^I should (.*) see the error (.*)$/, async function() {
-
 })
 
-Then("I should not see {string}", async function (errors) {
-    let error_elements = await driver.findElements(By.className("text-red-500"));
-    let error_array = errors.split(",");
-  
-    if (error_elements.length == 7) {
-      error_elements.shift();
-    }
+// When(/^I have filled in the (.*) field for (.*)$/, async function(type, field) {
+//     if (type == "wrong"){
+//         if (field == "number") {
+//             await driver.findElement(By.className("display_name")).sendKeys("Sally Abbot");
+//             const phoneNumber = randexp(/^[A-Za-z0-9_@./#&+-]{8,15}$/);
+//             await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
+//         } else if (field == "full_name") {
+//             const fullName = randexp(/^[A-Za-z0-9_@./#&+-]{8,30}$/);
+//             await driver.findElement(By.className("full_name")).sendKeys(fullName);
+//         } else if (field == "passport_number") {
+//             const passportNumber = randexp(/^[A-Za-z0-9_@./#&+-]{20,30}$/);
+//             await driver.findElement(By.className("passport_number")).sendKeys(passportNumber);
+//         } else if (field == "nationality") {
+//             const nationality = randexp(/^[0-9_@./#&+-]{5,15}$/);
+//             await driver.findElement(By.className("nationality")).sendKeys(nationality);
+//         }
+//     } else if (type == "correct") {
+//         if (field == "number") {
+//             await driver.findElement(By.className("display_name")).sendKeys("Sally Abbot");
+//             const phoneNumber = randexp(/^[1-9]{8,15}$/);
+//             await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
+//         } else if (field == "full_name") {
+//             const fullName = randexp(/^[a-zA-Z- ]{8,30}$/);
+//             await driver.findElement(By.className("full_name")).sendKeys(fullName);
+//         } else if (field == "passport_number") {
+//             const passportNumber = randexp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/);
+//             await driver.findElement(By.className("passport_number")).sendKeys(passportNumber);
+//         } else if (field == "nationality") {
+//             const nationality = randexp(/^[^-\s][a-zA-Z_\s-]{5,15}$/);
+//             await driver.findElement(By.className("nationality")).sendKeys(nationality);
+//         }
+//     }
+// });
 
-    expect(error_elements.length).to.equal(error_array.length);
-    for (let i = 0; i < error_elements.length; i++) {
-      let error_text = await error_elements[i].getText();
-      expect(error_text).to.equal(error_array[i]);
-    }
-  });
+// Then(/^I should (.*) the error (.*)$/, async function(type, error) {
+//     if (type == "see") {
+//         let errorText = await driver.findElement(By.className("error")).getText();
+//           expect(errorText).to.equal(error);    
+//     } else if (type == "not see") {
+//         let errorArray = await driver.findElements(By.className("error"));
+//         expect(errorArray.length).to.equal(0);
+//     }
+// });
