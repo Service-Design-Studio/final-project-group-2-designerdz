@@ -23,5 +23,5 @@ Feature: Fuzzy Testing
         | page | field | error |
         | details | number | "Please enter using numbers only" |
         | passport | full_name | "Invalid full name" |
-        | passport | passport_number | "Invalid Passport Number" |
-        | passport | nationality | "Nationality should only contain text!" |
+        # | passport | passport_number | "Invalid Passport Number" |
+        # | passport | nationality | "Nationality should only contain text!" |

@@ -27,8 +27,10 @@ When(/^I have filled in the (.*) field for (.*)$/, async function(type, field) {
         if (field == "number") {
             const phoneNumber = randexp(/^[A-Z]*$/);
             await driver.findElement(By.className("phone_number")).sendKeys(phoneNumber);
+            await driver.findElement(By.className("next")).click();;
         } else if (field == "full_name") {
             const fullName = randexp(/^[A-Za-z.-]+(\s*[A-Za-z.-]+)*$/);
+            // console.log(fullName);
             // await driver.findElement(By.className("full_name")).sendKeys(fullName);
         } else if (field == "passport_number") {
             const passportNumber = randexp(/^(?!^0+$)[a-zA-Z0-9]{3,20}$/);
@@ -37,8 +39,14 @@ When(/^I have filled in the (.*) field for (.*)$/, async function(type, field) {
             const nationality = randexp(/^[^-\s][a-zA-Z_\s-]+$/);
             // await driver.findElement(By.className("nationality")).sendKeys(nationality);
         }
+
+        await driver.sleep(5000);
     }
 });
+
+Then(/^I should (.*) see the error (.*)$/, async function() {
+
+})
 
 Then("I should not see {string}", async function (errors) {
     let error_elements = await driver.findElements(By.className("text-red-500"));
