@@ -24,7 +24,6 @@ When(
             .sendKeys(fullName);
         } else if (field == "passport_number") {
           const passportNumber = randexp(/^([$-/:-?{-~!"^_`\[\]]).{10,25}/);
-          console.log(passportNumber);
           await driver
             .findElement(By.className("passport_number"))
             .sendKeys(passportNumber);

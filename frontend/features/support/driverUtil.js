@@ -2,8 +2,8 @@ const { Before, After, setDefaultTimeout } = require("@cucumber/cucumber");
 const pactum = require("pactum");
 const { Builder } = require("selenium-webdriver");
 var chrome = require("selenium-webdriver/chrome");
-// var options = new chrome.Options().headless();
-var options = new chrome.Options();
+var options = new chrome.Options().headless();
+// var options = new chrome.Options();
 require("chromedriver");
 
 const width = 411;
